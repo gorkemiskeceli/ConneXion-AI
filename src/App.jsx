@@ -7,11 +7,12 @@ import InboxPage from "./features/inbox/pages/InboxPage";
 import ContactsPage from "./features/contacts/pages/ContactsPage";
 import AiAgentStudioPage from "./features/ai-agent-studio/pages/AiAgentStudioPage";
 import KnowledgeBasePage from "./features/knowledge-base/pages/KnowledgeBasePage";
+import LandingPage from "./homepage/LandingPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Navigate to="/dashboard" replace />,
+    element: <LandingPage />,
   },
   {
     path: "/dashboard",
