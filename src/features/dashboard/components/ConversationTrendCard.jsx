@@ -1,0 +1,115 @@
+import { useState } from "react";
+import { LineChart as LineChartIcon } from "lucide-react";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
+import SectionCard from "../../../shared/components/ui/SectionCard";
+import EmptyState from "../../../shared/components/ui/EmptyState";
+import PeriodFilter from "../../../shared/components/ui/PeriodFilter";
+
+const PRIMARY = "#5B63F0";
+const SUCCESS = "#22C55E";
+
+function LegendDot({ color, label }) {
+  return (
+    <span className="flex items-center gap-2 text-xs font-medium text-slate-500">
+      <span
+        className="inline-block h-2.5 w-2.5 rounded-full"
+        style={{ backgroundColor: color }}
+      />
+      {label}
+    </span>
+  );
+}
+
+/**
+ * ConversationTrendCard — "Konuşma Trendi".
+ * data shape: [{ time, total, resolved }]
+ */
+export default function ConversationTrendCard({ data = [] }) {
+  const [period, setPeriod] = useState("today");
+
+  return (
+    <SectionCard
+      title="Konuşma Trendi"
+      headerRight={<PeriodFilter value={period} onChange={setPeriod} />}
+      bodyClassName="min-h-[260px]"
+    >
+      <div className="mb-4 flex items-center gap-5">
+        <LegendDot color={PRIMARY} label="Toplam Konuşma" />
+        <LegendDot color={SUCCESS} label="Çözülen Konuşma" />
+      </div>
+
+      {data.length === 0 ? (
+        <EmptyState
+          icon={LineChartIcon}
+          title="Grafik verisi yok"
+          description="Konuşma hacmi ve çözüm trendi burada görüntülenir."
+        />
+      ) : (
+        <div className="h-[220px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={data}
+              margin={{ top: 4, right: 8, bottom: 0, left: -18 }}
+            >
+              <defs>
+                <linearGradient id="gTotal" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={PRIMARY} stopOpacity={0.25} />
+                  <stop offset="100%" stopColor={PRIMARY} stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="gResolved" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={SUCCESS} stopOpacity={0.2} />
+                  <stop offset="100%" stopColor={SUCCESS} stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#EEF2F6" vertical={false} />
+              <XAxis
+                dataKey="time"
+                tick={{ fill: "#94A3B8", fontSize: 11 }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                tick={{ fill: "#94A3B8", fontSize: 11 }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E2E8F0",
+                  boxShadow: "0 6px 20px rgba(16,24,40,0.08)",
+                  fontSize: 12,
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="total"
+                name="Toplam Konuşma"
+                stroke={PRIMARY}
+                strokeWidth={2}
+                fill="url(#gTotal)"
+              />
+              <Area
+                type="monotone"
+                dataKey="resolved"
+                name="Çözülen Konuşma"
+                stroke={SUCCESS}
+                strokeWidth={2}
+                fill="url(#gResolved)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      )}
+    </SectionCard>
+  );
+}
