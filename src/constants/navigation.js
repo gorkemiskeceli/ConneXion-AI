@@ -109,3 +109,11 @@ export const NAV_ITEMS = [
 // Helper to filter nav by the active role.
 export const getNavForRole = (role) =>
   NAV_ITEMS.filter((item) => item.roles.includes(role));
+
+export const ROLE_LABELS = {
+  [ROLES.PLATFORM_ADMIN]: "Platform Yöneticisi",
+  [ROLES.WORKSPACE_ADMIN]: "Workspace Yöneticisi",
+  [ROLES.MANAGER]: "Yönetici",
+  [ROLES.SUPPORT_AGENT]: "Destek Temsilcisi",
+};
+
