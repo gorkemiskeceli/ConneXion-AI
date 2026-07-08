@@ -172,3 +172,85 @@ const KB_MATRIX = {
 
 export const canKnowledgeBase = (role, action) =>
   Boolean(KB_MATRIX[role]?.[action]);
+
+// --- Workflows -------------------------------------------------------------
+
+export const WORKFLOW_ACTION = {
+  VIEW: "view",
+  CREATE: "create",
+  EDIT: "edit",
+  TEST: "test",
+};
+
+const WORKFLOWS_MATRIX = {
+  [ROLES.PLATFORM_ADMIN]: { view: true, create: false, edit: false, test: false },
+  [ROLES.WORKSPACE_ADMIN]: { view: true, create: true, edit: true, test: true },
+  [ROLES.MANAGER]: { view: true, create: false, edit: false, test: true },
+  [ROLES.SUPPORT_AGENT]: { view: false, create: false, edit: false, test: false },
+};
+
+export const canWorkflows = (role, action) =>
+  Boolean(WORKFLOWS_MATRIX[role]?.[action]);
+
+// --- Reports ---------------------------------------------------------------
+
+export const REPORTS_ACTION = {
+  VIEW: "view",
+  EXPORT: "export",
+  VIEW_TEAM: "viewTeam",
+};
+
+const REPORTS_MATRIX = {
+  [ROLES.PLATFORM_ADMIN]: { view: true, export: true, viewTeam: true },
+  [ROLES.WORKSPACE_ADMIN]: { view: true, export: true, viewTeam: true },
+  [ROLES.MANAGER]: { view: true, export: true, viewTeam: true },
+  [ROLES.SUPPORT_AGENT]: { view: true, export: false, viewTeam: false },
+};
+
+export const canReports = (role, action) =>
+  Boolean(REPORTS_MATRIX[role]?.[action]);
+
+export const getReportsScope = (role) => {
+  if (role === ROLES.PLATFORM_ADMIN) return "global";
+  if (role === ROLES.WORKSPACE_ADMIN) return "workspace";
+  if (role === ROLES.MANAGER) return "team";
+  if (role === ROLES.SUPPORT_AGENT) return "personal";
+  return "personal";
+};
+
+// --- Settings --------------------------------------------------------------
+
+export const SETTINGS_ACTION = {
+  VIEW: "view",
+  EDIT: "edit",
+};
+
+const SETTINGS_MATRIX = {
+  [ROLES.PLATFORM_ADMIN]: { view: true, edit: true },
+  [ROLES.WORKSPACE_ADMIN]: { view: true, edit: true },
+  [ROLES.MANAGER]: { view: false, edit: false },
+  [ROLES.SUPPORT_AGENT]: { view: false, edit: false },
+};
+
+export const canSettings = (role, action) =>
+  Boolean(SETTINGS_MATRIX[role]?.[action]);
+
+// --- Team & Queues ---------------------------------------------------------
+
+export const TEAM_ACTION = {
+  MANAGE_TEAM: "manageTeam",
+  MANAGE_QUEUE: "manageQueue",
+  MANAGE_ASSIGNMENT: "manageAssignment",
+};
+
+const TEAM_MATRIX = {
+  [ROLES.PLATFORM_ADMIN]: { manageTeam: true, manageQueue: true, manageAssignment: true },
+  [ROLES.WORKSPACE_ADMIN]: { manageTeam: true, manageQueue: true, manageAssignment: true },
+  [ROLES.MANAGER]: { manageTeam: false, manageQueue: false, manageAssignment: true },
+  [ROLES.SUPPORT_AGENT]: { manageTeam: false, manageQueue: false, manageAssignment: false },
+};
+
+export const canTeamQueues = (role, action) =>
+  Boolean(TEAM_MATRIX[role]?.[action]);
+
+
