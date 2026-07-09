@@ -137,20 +137,13 @@ export default function Header() {
               )}
             </div>
           ) : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center">
               <button
                 onClick={() => dispatch(setLoginModalOpen(true))}
-                className="text-slate-300 hover:text-white text-xs font-mono font-bold py-1.5 px-2.5 hover:bg-slate-800/40 rounded transition-all cursor-pointer"
+                className="bg-gradient-to-r from-sky-500 to-indigo-650 hover:from-sky-400 hover:to-indigo-550 text-white rounded px-4 py-1.5 text-xs font-mono font-bold transition-all shadow-md hover:shadow-sky-550/20 hover:scale-[1.02] cursor-pointer"
                 id="header-login-btn"
               >
-                GİRİŞ YAP
-              </button>
-              <button
-                onClick={() => dispatch(setRegisterModalOpen(true))}
-                className="bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white border border-slate-700 rounded px-2.5 py-1.5 text-xs font-mono font-bold transition-all cursor-pointer"
-                id="header-register-btn"
-              >
-                KAYIT OL
+                GİRİŞ YAP / KAYIT OL
               </button>
             </div>
           )}
@@ -224,28 +217,16 @@ export default function Header() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => {
-                    dispatch(setLoginModalOpen(true));
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center justify-center rounded border border-slate-700 bg-slate-800/80 py-2 text-center text-xs font-mono font-bold text-slate-200 hover:bg-slate-700 cursor-pointer"
-                  id="mobile-login-btn"
-                >
-                  GİRİŞ YAP
-                </button>
-                <button
-                  onClick={() => {
-                    dispatch(setRegisterModalOpen(true));
-                    setMobileMenuOpen(false);
-                  }}
-                  className="flex items-center justify-center rounded bg-slate-200 py-2 text-center text-xs font-mono font-bold text-slate-950 hover:bg-white cursor-pointer"
-                  id="mobile-register-btn"
-                >
-                  KAYIT OL
-                </button>
-              </div>
+              <button
+                onClick={() => {
+                  dispatch(setLoginModalOpen(true));
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center rounded bg-gradient-to-r from-sky-500 to-indigo-600 py-2.5 text-center text-xs font-mono font-bold text-white hover:opacity-95 shadow-md cursor-pointer"
+                id="mobile-login-btn"
+              >
+                GİRİŞ YAP / KAYIT OL
+              </button>
             )}
           </div>
         </div>
