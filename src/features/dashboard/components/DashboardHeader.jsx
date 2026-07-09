@@ -25,7 +25,7 @@ export default function DashboardHeader({ userName = "" }) {
 
       <button
         type="button"
-        className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+        className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-white/40 backdrop-blur-md px-4 py-2 text-sm font-semibold text-slate-700 shadow-xs transition-all hover:bg-white/60 active:scale-95"
       >
         <Calendar className="h-4 w-4 text-slate-400" strokeWidth={1.9} />
         Bugün, {today}

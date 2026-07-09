@@ -40,7 +40,7 @@ export default function Topbar({
         <button
           type="button"
           onClick={onToggleSidebar}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-white/40 lg:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors hover:bg-white/40"
           aria-label="Menüyü aç/kapat"
         >
           <Menu className="h-5 w-5" />

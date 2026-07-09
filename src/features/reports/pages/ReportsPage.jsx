@@ -59,7 +59,7 @@ export default function ReportsPage({ role = ROLES.PLATFORM_ADMIN }) {
           {canExport && (
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/45 bg-white/20 backdrop-blur-md px-4 py-2 text-sm font-semibold text-primary shadow-xs transition-all hover:bg-primary/10 active:scale-95"
             >
               <Download className="h-4 w-4" />
               Dışa Aktar

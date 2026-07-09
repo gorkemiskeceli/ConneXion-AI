@@ -24,20 +24,14 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#fafbfe]">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#F8FAFC]">
       {/* Background Gradient Blobs */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {/* Violet/Indigo Blob top-right */}
-        <div className="absolute -right-24 -top-24 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-purple-400/20 to-indigo-600/20 blur-[100px]" />
+        {/* Soft Blue Blob behind sidebar/top-left */}
+        <div className="absolute -left-20 -top-20 h-[500px] w-[500px] rounded-full bg-[#2F6FEE]/10 blur-[130px]" />
 
-        {/* Soft Pink Blob middle-left */}
-        <div className="absolute -left-36 top-1/3 h-[600px] w-[600px] rounded-full bg-gradient-to-tr from-pink-400/15 to-violet-500/15 blur-[120px]" />
-
-        {/* Warm Orange/Yellow Blob bottom-right */}
-        <div className="absolute right-1/4 bottom-10 h-[450px] w-[450px] rounded-full bg-gradient-to-tr from-amber-300/10 to-pink-500/10 blur-[90px]" />
-
-        {/* Light Blue Blob top-left */}
-        <div className="absolute left-10 -top-10 h-[400px] w-[400px] rounded-full bg-gradient-to-tr from-sky-400/15 to-indigo-500/15 blur-[80px]" />
+        {/* Soft Navy/Slate Blob behind top-right header */}
+        <div className="absolute right-1/4 -top-40 h-[600px] w-[600px] rounded-full bg-slate-500/5 blur-[150px]" />
       </div>
 
       <Sidebar
@@ -45,9 +39,10 @@ export default function DashboardLayout({
         workspaceName={workspaceName}
         workspacePlan={workspacePlan}
         open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
       />
 
-      <div className="lg:pl-64">
+      <div className={`transition-all duration-300 ${sidebarOpen ? "lg:pl-64" : "lg:pl-24"}`}>
         <Topbar
           onToggleSidebar={() => setSidebarOpen((v) => !v)}
           workspaceName={workspaceName}
@@ -59,7 +54,7 @@ export default function DashboardLayout({
           <Outlet />
         </main>
 
-        <footer className="flex items-center justify-between border-t border-slate-200 px-4 py-4 text-xs text-slate-400 lg:px-8">
+        <footer className="flex items-center justify-between border-t border-slate-200/40 px-4 py-4 text-xs text-slate-400 lg:px-8">
           <span>© {new Date().getFullYear()} AI Chatbot — Müşteri Hizmetleri</span>
           <span className="font-mono">v1.0.0</span>
         </footer>

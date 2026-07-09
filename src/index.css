@@ -10,14 +10,14 @@
   }
 
   body {
-    @apply bg-surface font-sans text-slate-800;
+    @apply bg-surface font-sans text-slate-500;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    @apply font-heading;
+    @apply font-heading text-slate-900;
   }
 
   /* Utility labels / data use the mono face */
@@ -26,32 +26,49 @@
   }
 }
 
-/* Glassmorphism Styles (Inspo Design) */
-.shadow-card,
-.bg-white.shadow-card {
-  border: 1px solid rgba(255, 255, 255, 0.45) !important;
-  background-color: rgba(255, 255, 255, 0.45) !important;
-  backdrop-filter: blur(16px) !important;
-  -webkit-backdrop-filter: blur(16px) !important;
-  box-shadow: 0 10px 30px -5px rgba(27, 37, 96, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+/* Design System Overrides (Image Inspo) */
+.shadow-card, .bg-white.shadow-card {
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background-color: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.08) !important;
+  border-radius: 24px !important;
+  transition: all 0.3s ease-in-out !important;
 }
 
-/* Glassmorphic inputs, textareas, and selects inside dashboard */
-.lg\:pl-64 input,
-.lg\:pl-64 select,
-.lg\:pl-64 textarea {
+.shadow-card:hover, .bg-white.shadow-card:hover {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  box-shadow: 0 12px 40px 0 rgba(15, 23, 42, 0.1) !important;
+  transform: scale(1.002) translateY(-1px) !important;
+}
+
+/* Inputs, textareas, and selects inside main content */
+main input, main select {
   background-color: rgba(255, 255, 255, 0.5) !important;
-  border-color: rgba(255, 255, 255, 0.6) !important;
-  backdrop-filter: blur(4px) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(226, 232, 240, 0.45) !important;
+  border-radius: 9999px !important;
   transition: all 0.2s ease-in-out !important;
 }
 
-.lg\:pl-64 input:focus,
-.lg\:pl-64 select:focus,
-.lg\:pl-64 textarea:focus {
-  background-color: rgba(255, 255, 255, 0.9) !important;
-  border-color: #5B63F0 !important;
-  box-shadow: 0 0 0 3px rgba(91, 99, 240, 0.15) !important;
+main textarea {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(226, 232, 240, 0.45) !important;
+  border-radius: 16px !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+main input:focus, main select:focus, main textarea:focus {
+  background-color: #ffffff !important;
+  border-color: #2F6FEE !important;
+  box-shadow: 0 0 0 3px rgba(47, 111, 238, 0.15) !important;
+}
+
+/* Low opacity borders/dividers overrides */
+.border-slate-100, .border-slate-200 {
+  border-color: rgba(226, 232, 240, 0.45) !important;
 }
 
 /* Pinned details drawer should stay opaque for contrast */

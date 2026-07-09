@@ -40,7 +40,7 @@ export default function WorkflowsPage({ role = ROLES.PLATFORM_ADMIN }) {
         {canCreate && (
           <button
             type="button"
-            className="inline-flex w-fit items-center gap-2 rounded-lg bg-primary px-3.5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-600"
+            className="inline-flex w-fit items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/10 transition-all hover:bg-primary-600 active:scale-95"
           >
             <Plus className="h-4 w-4" strokeWidth={2} />
             Yeni Workflow
