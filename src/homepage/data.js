@@ -1,6 +1,6 @@
 export const FAQ_ITEMS = [
   {
-    question: "SaaSPrecise verilerimizi nasıl koruyor?",
+    question: "ConneXion-AI verilerimizi nasıl koruyor?",
     answer: "Verileriniz aktarılırken ve durağan durumdayken AES-256 ve TLS 1.3 standartlarında uçtan uca şifrelenir. Verileriniz sunucularımızda asla kalıcı olarak saklanmaz veya temel yapay zeka modellerinin eğitimi için kullanılmaz.",
   },
   {

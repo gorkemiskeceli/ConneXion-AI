@@ -86,7 +86,7 @@ export default function PlaygroundView() {
   };
 
   const quickPills = [
-    { label: "API Taslağı", prompt: "SaaSPrecise API'sini kullanarak Node.js ile nasıl analiz isteği gönderebilirim? Örnek bir istek şeması göster." },
+    { label: "API Taslağı", prompt: "ConneXion-AI API'sini kullanarak Node.js ile nasıl analiz isteği gönderebilirim? Örnek bir istek şeması göster." },
     { label: "Veri Güvenliği", prompt: "Verilerimizin güvenliğini nasıl sağlıyorsunuz? SOC-2, HIPAA ve veri maskeleme prosedürlerini detaylandır." },
     { label: "Sağlık Triyajı", prompt: "Sağlık AI Asistanı hasta triyaj akışlarında nasıl karar destek sunar? Bir hasta ön kabul örneği hazırla." },
     { label: "Sözleşme Analizi", prompt: "Hukuk AI Asistanı sözleşmelerdeki riskli maddeleri nasıl yakalar? Örnek bir kiralama sözleşmesi riski bul." }
@@ -193,7 +193,7 @@ export default function PlaygroundView() {
                   <Bot className="h-4.5 w-4.5" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-bold text-slate-100 tracking-wider">PRECISE AI ASSISTANT</h3>
+                   <h3 className="text-xs font-bold text-slate-100 tracking-wider">CONNEXION-AI ASSISTANT</h3>
                   <span className="text-[9px] text-sky-400 block font-mono font-bold mt-0.5">// GEMINI 3.5 FLASH ENGINE</span>
                 </div>
               </div>

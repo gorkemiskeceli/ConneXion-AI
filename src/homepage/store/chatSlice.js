@@ -5,7 +5,7 @@ const initialState = {
     {
       id: 'f1',
       sender: 'assistant',
-      text: 'Merhaba! SaaSPrecise Canlı Destek ekibine hoş geldiniz. Size nasıl yardımcı olabilirim?',
+      text: 'Merhaba! ConneXion-AI Canlı Destek ekibine hoş geldiniz. Size nasıl yardımcı olabilirim?',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ],
@@ -14,7 +14,7 @@ const initialState = {
     {
       id: 'p1',
       sender: 'assistant',
-      text: 'Merhaba! Ben Precise AI Assistant. Sektörel bilgi tabanım ve anlık veri entegrasyonumla donatıldım. Finansal veri analizi, hukuki belge inceleme veya sağlık raporu kategorizasyonu konularında beni test edebilirsiniz.',
+      text: 'Merhaba! Ben ConneXion-AI Asistanı. Sektörel bilgi tabanım ve anlık veri entegrasyonumla donatıldım. Finansal veri analizi, hukuki belge inceleme veya sağlık raporu kategorizasyonu konularında beni test edebilirsiniz.',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ],

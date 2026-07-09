@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" fill="none">
+  <!-- Rounded square background -->
+  <rect x="1.5" y="1.5" width="41" height="41" rx="9" fill="white" stroke="#e2e8f0" stroke-width="1.2"/>
+  
+  <defs>
+    <linearGradient id="cx-fav-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9" />
+      <stop offset="50%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Centered CX graphic -->
+  <path 
+    d="M 33 29 L 21 15 A 7 7 0 0 0 21 29 L 33 15" 
+    stroke="url(#cx-fav-gradient)" 
+    stroke-width="3" 
+    stroke-linecap="round" 
+    stroke-linejoin="round" 
+  />
+  <circle cx="21" cy="15" r="1.8" fill="white" stroke="url(#cx-fav-gradient)" stroke-width="1.5" />
+  <circle cx="21" cy="29" r="1.8" fill="white" stroke="url(#cx-fav-gradient)" stroke-width="1.5" />
+  <circle cx="33" cy="15" r="1.8" fill="white" stroke="url(#cx-fav-gradient)" stroke-width="1.5" />
+  <circle cx="33" cy="29" r="1.8" fill="white" stroke="url(#cx-fav-gradient)" stroke-width="1.5" />
+</svg>

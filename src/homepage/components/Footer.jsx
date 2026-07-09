@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setActivePage, setFloatingChatOpen } from '../store/uiSlice.js';
 import { Sparkles, Linkedin, Twitter, Github, Mail, ShieldCheck } from 'lucide-react';
+import Logo from '../../components/Logo';
 
 export default function Footer() {
   const dispatch = useDispatch();
@@ -25,10 +26,8 @@ export default function Footer() {
               className="flex items-center space-x-2 text-base font-bold tracking-tight text-white cursor-pointer"
               id="footer-logo"
             >
-              <div className="flex h-7 w-7 items-center justify-center rounded bg-sky-500 text-white font-bold text-sm">
-                S
-              </div>
-              <span>SaaS<span className="text-sky-400 font-extrabold">Precise</span></span>
+              <Logo className="h-6 w-auto" />
+              <span>ConneXion-<span className="text-sky-400 font-extrabold">AI</span></span>
             </div>
             <p className="text-slate-400 leading-relaxed text-[11px]">
               En karmaşık ve düzenlemeye tabi sektörel süreçleri, %99.4 doğruluk oranına sahip yapay zeka entegrasyonuyla otomatikleştirin.
@@ -106,7 +105,7 @@ export default function Footer() {
               Maslak Finans Merkezi, A Blok No: 42/8<br />
               Sarıyer / İstanbul<br />
               <span className="flex items-center mt-2 font-mono">
-                <Mail className="h-3.5 w-3.5 mr-1.5 text-sky-400" /> info@saasprecise.com
+                <Mail className="h-3.5 w-3.5 mr-1.5 text-sky-400" /> info@aichatbot.com
               </span>
             </p>
             <div className="flex space-x-2.5">
@@ -126,7 +125,7 @@ export default function Footer() {
 
         {/* Divider */}
         <div className="border-t border-slate-800 pt-6 flex flex-col md:flex-row justify-between items-center text-[11px] text-slate-500 mb-6">
-          <p>© {new Date().getFullYear()} SaaSPrecise Inc. Tüm hakları saklıdır.</p>
+          <p>© {new Date().getFullYear()} ConneXion-AI Inc. Tüm hakları saklıdır.</p>
           <div className="flex space-x-6 mt-3 md:mt-0">
             <a href="#privacy" className="hover:text-slate-300 transition-colors cursor-not-allowed">Gizlilik Politikası</a>
             <a href="#terms" className="hover:text-slate-300 transition-colors cursor-not-allowed">Kullanım Şartları</a>

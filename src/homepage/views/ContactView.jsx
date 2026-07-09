@@ -60,7 +60,7 @@ export default function ContactView() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">Mesajınız Başarıyla İletildi!</h3>
                 <p className="text-xs text-slate-500 max-w-md mx-auto">
-                  SaaSPrecise destek ekibine ulaştınız. Sorunuza veya demo talebinize kurumsal e-posta adresiniz üzerinden 2 saat içinde yanıt vereceğiz.
+                  ConneXion-AI destek ekibine ulaştınız. Sorunuza veya demo talebinize kurumsal e-posta adresiniz üzerinden 2 saat içinde yanıt vereceğiz.
                 </p>
                 <button
                   type="button"
@@ -193,7 +193,7 @@ export default function ContactView() {
                   </div>
                   <div>
                     <h4 className="text-[10px] font-mono font-bold text-slate-900 uppercase tracking-wider">// E-POSTA</h4>
-                    <p className="text-xs text-slate-500 leading-normal mt-0.5">info@saasprecise.com</p>
+                    <p className="text-xs text-slate-500 leading-normal mt-0.5">info@aichatbot.com</p>
                   </div>
                 </div>
 
@@ -222,7 +222,7 @@ export default function ContactView() {
                   <div className="mx-auto h-7 w-7 bg-sky-500 text-white rounded-full flex items-center justify-center animate-bounce shadow-xs border border-sky-400">
                     <MapPin className="h-3.5 w-3.5" />
                   </div>
-                  <span className="font-bold text-slate-900 text-xs block">SaaSPrecise Maslak Ofisi</span>
+                  <span className="font-bold text-slate-900 text-xs block">ConneXion-AI Maslak Ofisi</span>
                   <span className="text-[10px] text-slate-400 block leading-tight">İstanbul Metro Maslak Durağına 2 Dk Yürüme Mesafesinde</span>
                 </div>
               </div>

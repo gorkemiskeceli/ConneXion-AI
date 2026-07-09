@@ -70,7 +70,7 @@ function DashboardWrapper() {
           role={role}
           userName={currentUser?.name || "Ahmet Yılmaz"}
           userRoleLabel={roleLabels[role]}
-          workspaceName="Precise Corp"
+          workspaceName="ConneXion-AI Corp"
           workspacePlan="Enterprise"
         />
         <EmbedChatWidget />

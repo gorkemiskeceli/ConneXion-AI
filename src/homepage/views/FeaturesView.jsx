@@ -11,32 +11,32 @@ export default function FeaturesView() {
   const [activeTab, setActiveTab] = useState('curl');
 
   const codeSnippets = {
-    curl: `curl -X POST "https://api.saasprecise.com/v1/analyze" \\
-  -H "Authorization: Bearer $PRECISE_API_KEY" \\
+    curl: `curl -X POST "https://api.aichatbot.com/v1/analyze" \\
+  -H "Authorization: Bearer $AICHATBOT_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
     "sector": "hukuk",
     "document_text": "Sözleşme bedeli 14 gün içinde ödenmezse %2 faiz uygulanacaktır.",
     "mask_pii": true
   }'`,
-    node: `import { SaaSPreciseClient } from '@saasprecise/sdk';
+    node: `import { AIChatbotClient } from '@aichatbot/sdk';
 
-const precise = new SaaSPreciseClient({
-  apiKey: process.env.PRECISE_API_KEY
+const chatbot = new AIChatbotClient({
+  apiKey: process.env.AICHATBOT_API_KEY
 });
 
-const result = await precise.analyze({
+const result = await chatbot.analyze({
   sector: 'hukuk',
   documentText: 'Sözleşme bedeli 14 gün içinde ödenmezse %2 faiz uygulanacaktır.',
   maskPii: true
 });
 
 console.log(result.accuracy); // -> 0.994`,
-    python: `from saasprecise import SaaSPrecise
+    python: `from aichatbot import AIChatbot
 
-precise = SaaSPrecise(api_key="your_api_key")
+chatbot = AIChatbot(api_key="your_api_key")
 
-response = precise.analyze(
+response = chatbot.analyze(
     sector="hukuk",
     document_text="Sözleşme bedeli 14 gün içinde ödenmezse %2 faiz uygulanacaktır.",
     mask_pii=True
@@ -70,7 +70,7 @@ print(response.get('accuracy')) # -> 0.994`
             </div>
             <h2 className="text-lg font-bold text-slate-900">Gerçek Zamanlı Öngörü Motoru</h2>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Gelen veriyi anında analiz eden, yapay zeka halüsinasyonlarını ortadan kaldıran özel doğrulama katmanımızdır. SaaSPrecise, genel amaçlı bir asistan değildir; sektörel bilgi tabanı ve mantıksal doğrulama mekanizmalarıyla çalışır.
+              Gelen veriyi anında analiz eden, yapay zeka halüsinasyonlarını ortadan kaldıran özel doğrulama katmanımızdır. ConneXion-AI, genel amaçlı bir asistan değildir; sektörel bilgi tabanı ve mantıksal doğrulama mekanizmalarıyla çalışır.
             </p>
             
             <ul className="space-y-2.5 text-xs text-slate-600">
@@ -124,7 +124,7 @@ print(response.get('accuracy')) # -> 0.994`
             </div>
             <h2 className="text-lg font-bold text-slate-900">Güvenli ve Şifreli Altyapı</h2>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Verilerinize saygı duyuyoruz. SaaSPrecise üzerinde işlenen hiçbir veri üçüncü taraf modellerin eğitimi amacıyla kullanılmaz. Tüm süreçler tamamen izole edilmiş kurumsal alanlarda çalışır.
+              Verilerinize saygı duyuyoruz. ConneXion-AI üzerinde işlenen hiçbir veri üçüncü taraf modellerin eğitimi amacıyla kullanılmaz. Tüm süreçler tamamen izole edilmiş kurumsal alanlarda çalışır.
             </p>
 
             <div className="grid grid-cols-2 gap-3">
@@ -153,7 +153,7 @@ print(response.get('accuracy')) # -> 0.994`
             <div className="space-y-3">
               <div className="flex items-center space-x-1.5 text-sky-400 text-xs font-mono font-bold">
                 <Terminal className="h-4 w-4" />
-                <span>// PRECISE_SECURITY_SHIELD://ACTIVE</span>
+                <span>// AICHATBOT_SECURITY_SHIELD://ACTIVE</span>
               </div>
               
               <h3 className="text-base font-bold">Veri Maskeleme Sistemi</h3>
@@ -187,7 +187,7 @@ print(response.get('accuracy')) # -> 0.994`
               </div>
               <h2 className="text-lg font-bold text-slate-900">Sorunsuz API Entegrasyonu</h2>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Geliştiriciler tarafından, geliştiriciler için tasarlandı. Basit REST mimarimiz ve hafif SDK'larımız sayesinde, sistemlerinize SaaSPrecise asistanlarını entegre etmek birkaç satır koddan ibarettir.
+                Geliştiriciler tarafından, geliştiriciler için tasarlandı. Basit REST mimarimiz ve hafif SDK'larımız sayesinde, sistemlerinize ConneXion-AI asistanlarını entegre etmek birkaç satır koddan ibarettir.
               </p>
 
               <div className="space-y-2.5 text-xs text-slate-600">

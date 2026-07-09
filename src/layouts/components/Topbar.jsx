@@ -9,9 +9,71 @@ import {
   HelpCircle,
   ChevronDown,
   LogOut,
+  X,
+  BookOpen,
+  FileText,
+  Activity,
+  MessageSquare,
 } from "lucide-react";
 
 import Avatar from "../../shared/components/ui/Avatar";
+
+const searchItems = [
+  // Dashboard
+  { label: "Dashboard / Ana Sayfa", path: "/dashboard", keywords: ["dashboard", "ana", "sayfa", "home", "ozet", "kontrol", "paneli"] },
+  { label: "Konuşma Trendleri (Dashboard)", path: "/dashboard", keywords: ["konusma", "trend", "trendleri", "grafik", "analiz", "dashboard"] },
+  { label: "Acil Kuyruk (Dashboard)", path: "/dashboard", keywords: ["acil", "kuyruk", "bekleyen", "kuyruklar", "dashboard", "oncelikli"] },
+  { label: "Son Etkinlikler (Dashboard)", path: "/dashboard", keywords: ["son", "etkinlik", "etkinlikler", "aktivite", "logs", "dashboard"] },
+  { label: "Temsilci Performansı (Dashboard)", path: "/dashboard", keywords: ["temsilci", "performans", "performansi", "skor", "dashboard"] },
+  { label: "Aktif Temsilciler (Dashboard)", path: "/dashboard", keywords: ["aktif", "temsilci", "temsilciler", "cevrimici", "online", "dashboard"] },
+  
+  // Gelen Kutusu (Inbox)
+  { label: "Gelen Kutusu (Inbox)", path: "/dashboard/inbox", keywords: ["inbox", "gelen", "kutusu", "mesaj", "destek", "sohbet", "chat", "bilet", "ticket"] },
+  { label: "Konuşma Listesi (Inbox)", path: "/dashboard/inbox", keywords: ["konusma", "listesi", "inbox", "mesajlar", "aktif", "sohbetler"] },
+  { label: "Müşteri Bilgi Paneli (Inbox)", path: "/dashboard/inbox", keywords: ["musteri", "bilgi", "paneli", "detay", "karti", "inbox", "telefon", "email"] },
+  { label: "Yapay Zeka Destek Özeti (Inbox)", path: "/dashboard/inbox", keywords: ["yapay", "zeka", "ozet", "ai", "summary", "inbox", "tavsiye"] },
+  { label: "Müşteri Notları (Inbox)", path: "/dashboard/inbox", keywords: ["musteri", "not", "notlar", "notlari", "inbox", "ajanda"] },
+
+  // Kişiler (Contacts)
+  { label: "Kişiler & Rehber (Contacts)", path: "/dashboard/contacts", keywords: ["contacts", "kisi", "rehber", "musteri", "user", "kullanici", "listesi"] },
+  { label: "Yeni Kişi Oluştur (Contacts)", path: "/dashboard/contacts", keywords: ["yeni", "kisi", "ekle", "olustur", "contacts", "rehber"] },
+  { label: "Kişileri İçe/Dışa Aktar (Contacts)", path: "/dashboard/contacts", keywords: ["ice", "aktar", "disa", "csv", "excel", "contacts", "rehber"] },
+
+  // AI Agent Studio
+  { label: "AI Agent Studio (Asistanlar)", path: "/dashboard/ai-agent", keywords: ["agent", "studio", "yapay", "zeka", "asistan", "bot", "tanimlama", "prompt"] },
+  { label: "Model Seçimi (AI Agent)", path: "/dashboard/ai-agent", keywords: ["model", "secimi", "llm", "gpt", "gemini", "agent", "asistan"] },
+  { label: "Sistem Talimatı / Prompt (AI Agent)", path: "/dashboard/ai-agent", keywords: ["sistem", "talimati", "prompt", "editoru", "agent", "asistan"] },
+  { label: "Test Konsolu / Playground (AI Agent)", path: "/dashboard/ai-agent", keywords: ["test", "konsolu", "playground", "deneme", "agent", "asistan"] },
+
+  // Bilgi Tabanı (Knowledge Base)
+  { label: "Bilgi Tabanı (Knowledge Base)", path: "/dashboard/knowledge-base", keywords: ["knowledge", "base", "bilgi", "tabani", "dokuman", "veri", "kaynak", "makale"] },
+  { label: "Dosya & Veri Kaynağı Yükle (Knowledge Base)", path: "/dashboard/knowledge-base", keywords: ["dosya", "yukle", "pdf", "text", "knowledge", "dokuman"] },
+  { label: "Soru-Cevap / FAQ (Knowledge Base)", path: "/dashboard/knowledge-base", keywords: ["soru", "cevap", "faq", "sss", "knowledge", "base"] },
+
+  // İş Akışları (Workflows)
+  { label: "İş Akışları (Workflows)", path: "/dashboard/workflows", keywords: ["workflows", "akis", "otomasyon", "tetikleyici", "kural"] },
+  { label: "Yeni Otomasyon Kuralı Ekle (Workflows)", path: "/dashboard/workflows", keywords: ["yeni", "otomasyon", "kural", "ekle", "workflows", "tetikleyici"] },
+  { label: "Olay Tetikleyicileri (Workflows)", path: "/dashboard/workflows", keywords: ["olay", "tetikleyici", "tetikleyiciler", "rules", "workflows"] },
+
+  // Takım & Kuyruklar (Team & Queues)
+  { label: "Takım & Kuyruk Yönetimi", path: "/dashboard/team", keywords: ["team", "takim", "kuyruk", "departman", "atama", "yonetimi"] },
+  { label: "Destek Kuyruğu Dağılımı (Team & Queues)", path: "/dashboard/team", keywords: ["destek", "kuyrugu", "dagilim", "atama", "yonlendirme", "team"] },
+
+  // Raporlar (Reports)
+  { label: "Raporlar & Analitik (Reports)", path: "/dashboard/reports", keywords: ["reports", "rapor", "analiz", "istatistik", "grafik", "performans"] },
+  { label: "Müşteri Memnuniyeti / CSAT (Reports)", path: "/dashboard/reports", keywords: ["musteri", "memnuniyeti", "csat", "skor", "reports", "rapor"] },
+  { label: "Ortalama Yanıt Süresi (Reports)", path: "/dashboard/reports", keywords: ["ortalama", "yanit", "sureleri", "cozum", "reports", "rapor"] },
+  
+  // Ayarlar (Settings)
+  { label: "Workspace Ayarları (Settings)", path: "/dashboard/settings?section=workspace", keywords: ["settings", "ayarlar", "workspace", "profil", "logo", "marka"] },
+  { label: "Kullanıcı Yönetimi (Settings)", path: "/dashboard/settings?section=users", keywords: ["settings", "ayarlar", "kullanici", "kullanicilar", "davet", "users"] },
+  { label: "Rol Yetkilendirme (Settings)", path: "/dashboard/settings?section=roles", keywords: ["settings", "ayarlar", "rol", "roller", "yetki", "roles"] },
+  { label: "Çalışma Saatleri (Settings)", path: "/dashboard/settings?section=hours", keywords: ["settings", "ayarlar", "saat", "saatleri", "calisma", "tatil", "hours"] },
+  { label: "Widget Yapılandırması (Settings)", path: "/dashboard/settings?section=widget", keywords: ["settings", "ayarlar", "widget", "sohbet", "tasarim", "renk"] },
+  { label: "Bildirim Ayarları (Settings)", path: "/dashboard/settings?section=notifications", keywords: ["settings", "ayarlar", "bildirim", "e-posta", "notifications"] },
+  { label: "API Entegrasyonları (Settings)", path: "/dashboard/settings?section=integrations", keywords: ["settings", "ayarlar", "slack", "webhook", "api", "entegrasyon", "integrations"] },
+  { label: "Denetim Günlükleri (Audit Logs)", path: "/dashboard/settings?section=audit", keywords: ["settings", "ayarlar", "audit", "logs", "denetim", "islem", "gecmisi"] },
+];
 
 /**
  * Topbar — fixed header above the workspace.
@@ -28,14 +90,57 @@ export default function Topbar({
   notificationCount = 0,
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      title: "Yeni Destek Talebi",
+      message: "Ahmet Yılmaz 'Kayıt Hatası' başlığıyla yeni bir bilet oluşturdu.",
+      time: "5 dk önce",
+      read: false,
+    },
+    {
+      id: 2,
+      title: "Sistem Uyarısı",
+      message: "Günlük API çağrı limitinizin %85'ine ulaştınız.",
+      time: "2 saat önce",
+      read: false,
+    },
+    {
+      id: 3,
+      title: "Entegrasyon Tamamlandı",
+      message: "Slack entegrasyonu başarıyla aktif edildi.",
+      time: "1 gün önce",
+      read: true,
+    },
+  ]);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const searchRef = useRef(null);
+  const bellRef = useRef(null);
+  const helpRef = useRef(null);
+  const toastTimeoutRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
+      if (bellRef.current && !bellRef.current.contains(event.target)) {
+        setNotificationOpen(false);
+      }
+      if (helpRef.current && !helpRef.current.contains(event.target)) {
+        setHelpOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -48,6 +153,58 @@ export default function Topbar({
     dispatch(logoutUser());
     navigate("/");
   };
+
+  const markAsRead = (id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
+  const markAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  };
+
+  const deleteNotification = (id) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+  };
+
+  const showToast = (message) => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+    setToast(message);
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast(null);
+    }, 3000);
+  };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const normalizeText = (text) => {
+    if (!text) return "";
+    return text
+      .toLowerCase()
+      .replace(/ı/g, 'i')
+      .replace(/ş/g, 's')
+      .replace(/ğ/g, 'g')
+      .replace(/ü/g, 'u')
+      .replace(/ö/g, 'o')
+      .replace(/ç/g, 'c')
+      .trim();
+  };
+
+  const filteredResults = searchQuery
+    ? searchItems.filter(item => {
+        const normalizedQuery = normalizeText(searchQuery);
+        const normalizedLabel = normalizeText(item.label);
+        return (
+          normalizedLabel.includes(normalizedQuery) ||
+          item.keywords.some(keyword => normalizeText(keyword).includes(normalizedQuery))
+        );
+      })
+    : [];
 
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 lg:px-6">
@@ -73,34 +230,223 @@ export default function Topbar({
 
       {/* Right */}
       <div className="flex items-center gap-1.5">
-        <button
-          type="button"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100"
-          aria-label="Ara"
-        >
-          <Search className="h-5 w-5" strokeWidth={1.9} />
-        </button>
-
-        <button
-          type="button"
-          className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100"
-          aria-label="Bildirimler"
-        >
-          <Bell className="h-5 w-5" strokeWidth={1.9} />
-          {notificationCount > 0 && (
-            <span className="absolute right-1.5 top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-white">
-              {notificationCount}
-            </span>
+        <div className="relative" ref={searchRef}>
+          {searchOpen ? (
+            <div className="flex items-center gap-2 rounded-lg bg-slate-50 border border-slate-200 px-3 py-1.5 w-64 animate-in slide-in-from-right duration-200">
+              <Search className="h-4 w-4 text-slate-400 animate-pulse" />
+              <input 
+                type="text" 
+                placeholder="Menü veya sayfa arayın..."
+                autoFocus
+                className="w-full bg-transparent text-xs text-slate-700 outline-none"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    setSearchOpen(false);
+                    setSearchQuery("");
+                  }
+                }}
+              />
+              {searchQuery ? (
+                <button onClick={() => setSearchQuery("")} className="text-slate-400 hover:text-slate-655 cursor-pointer">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              ) : (
+                <button onClick={() => setSearchOpen(false)} className="text-slate-400 hover:text-slate-655 cursor-pointer">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 cursor-pointer"
+              aria-label="Ara"
+            >
+              <Search className="h-5 w-5" strokeWidth={1.9} />
+            </button>
           )}
-        </button>
 
-        <button
-          type="button"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100"
-          aria-label="Yardım"
-        >
-          <HelpCircle className="h-5 w-5" strokeWidth={1.9} />
-        </button>
+          {searchOpen && searchQuery && (
+            <div className="absolute right-0 mt-2 w-64 rounded-xl border border-slate-200 bg-white p-1.5 shadow-2xl z-50">
+              <div className="px-2.5 py-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">// ARAMA SONUÇLARI</div>
+              <div className="mt-1 space-y-0.5 max-h-60 overflow-y-auto">
+                {filteredResults.length > 0 ? (
+                  filteredResults.map((res, index) => (
+                    <button
+                      key={`${res.path}-${index}`}
+                      onClick={() => {
+                        navigate(res.path);
+                        setSearchQuery("");
+                        setSearchOpen(false);
+                      }}
+                      className="w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-50 hover:text-primary-600 transition-colors font-medium cursor-pointer"
+                    >
+                      <span>{res.label}</span>
+                      <span className="text-[9px] text-slate-400 font-mono uppercase tracking-wider font-bold">// GİT</span>
+                    </button>
+                  ))
+                ) : (
+                  <div className="px-2.5 py-3 text-center text-xs text-slate-400">Sonuç bulunamadı</div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="relative" ref={bellRef}>
+          <button
+            type="button"
+            onClick={() => setNotificationOpen(!notificationOpen)}
+            className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 cursor-pointer animate-in fade-in"
+            aria-label="Bildirimler"
+          >
+            <Bell className="h-5 w-5" strokeWidth={1.9} />
+            {unreadCount > 0 && (
+              <span className="absolute right-1.5 top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold text-white animate-pulse">
+                {unreadCount}
+              </span>
+            )}
+          </button>
+
+          {notificationOpen && (
+            <div className="absolute right-0 mt-2 w-80 rounded-xl border border-slate-200 bg-white p-2 shadow-2xl z-50 animate-in fade-in slide-in-from-top-1">
+              <div className="flex items-center justify-between border-b border-slate-100 px-2.5 pb-2 pt-1">
+                <span className="text-xs font-bold text-slate-800">Bildirimler ({unreadCount})</span>
+                {unreadCount > 0 && (
+                  <button 
+                    onClick={markAllAsRead} 
+                    className="text-[10px] font-semibold text-primary hover:text-primary-700 cursor-pointer"
+                  >
+                    Tümünü Okundu İşaretle
+                  </button>
+                )}
+              </div>
+              
+              <div className="max-h-72 overflow-y-auto mt-1.5 space-y-1">
+                {notifications.length > 0 ? (
+                  notifications.map((n) => (
+                    <div 
+                      key={n.id} 
+                      onClick={() => markAsRead(n.id)}
+                      className={`group relative flex items-start gap-2.5 rounded-lg p-2.5 transition-colors cursor-pointer ${
+                        n.read ? 'hover:bg-slate-50' : 'bg-slate-50/50 hover:bg-slate-50'
+                      }`}
+                    >
+                      {!n.read && (
+                        <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
+                      )}
+                      <div className="flex-1 space-y-0.5 pr-4">
+                        <h4 className="text-xs font-bold text-slate-900">{n.title}</h4>
+                        <p className="text-[11px] text-slate-500 leading-normal">{n.message}</p>
+                        <span className="text-[9px] text-slate-400 font-mono block">{n.time}</span>
+                      </div>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteNotification(n.id);
+                        }}
+                        className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 p-0.5 text-slate-400 hover:text-red-500 transition-opacity rounded hover:bg-slate-200 cursor-pointer"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <div className="py-6 text-center text-xs text-slate-400">Bildirim bulunmuyor</div>
+                )}
+              </div>
+              
+              {notifications.length > 0 && (
+                <div className="border-t border-slate-100 pt-2 pb-1 mt-1 text-center">
+                  <button 
+                    onClick={clearAllNotifications}
+                    className="text-[10px] font-bold text-slate-400 hover:text-slate-650 uppercase tracking-wider font-mono cursor-pointer"
+                  >
+                    // TÜMÜNÜ TEMİZLE
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="relative" ref={helpRef}>
+          <button
+            type="button"
+            onClick={() => setHelpOpen(!helpOpen)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 cursor-pointer"
+            aria-label="Yardım"
+          >
+            <HelpCircle className="h-5 w-5" strokeWidth={1.9} />
+          </button>
+
+          {helpOpen && (
+            <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white p-1.5 shadow-2xl z-50 animate-in fade-in slide-in-from-top-1">
+              <div className="px-2.5 py-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">// YARDIM & DESTEK</div>
+              <div className="mt-1 space-y-0.5">
+                <a
+                  href="#docs"
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    setHelpOpen(false); 
+                    showToast("Kullanım kılavuzuna yönlendiriliyorsunuz...");
+                    setTimeout(() => navigate("/dashboard/knowledge-base"), 800);
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-50 hover:text-primary-600 transition-colors font-medium cursor-pointer"
+                >
+                  <FileText className="h-4 w-4 text-slate-400" />
+                  <span>Kullanım Kılavuzu</span>
+                </a>
+                
+                <a
+                  href="#api"
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    setHelpOpen(false); 
+                    showToast("API entegrasyonlarına yönlendiriliyorsunuz...");
+                    setTimeout(() => navigate("/dashboard/settings?section=integrations"), 800);
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-50 hover:text-primary-600 transition-colors font-medium cursor-pointer"
+                >
+                  <BookOpen className="h-4 w-4 text-slate-400" />
+                  <span>API Referansı</span>
+                </a>
+
+                <a
+                  href="#ticket"
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    setHelpOpen(false); 
+                    showToast("Destek talebi sayfasına yönlendiriliyorsunuz...");
+                    setTimeout(() => navigate("/dashboard/inbox"), 800);
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-50 hover:text-primary-600 transition-colors font-medium cursor-pointer"
+                >
+                  <MessageSquare className="h-4 w-4 text-slate-400" />
+                  <span>Destek Talebi Aç</span>
+                </a>
+
+                <a
+                  href="#status"
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    setHelpOpen(false); 
+                    showToast("Sistem durumu kontrol ediliyor...");
+                    setTimeout(() => showToast("Sistem Durumu: Çevrimiçi (99.98% SLA)"), 1500);
+                  }}
+                  className="flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-left text-xs text-slate-700 hover:bg-slate-50 hover:text-primary-600 transition-colors font-medium cursor-pointer"
+                >
+                  <Activity className="h-4 w-4 text-slate-400" />
+                  <span>Sistem Durumu (99.98%)</span>
+                </a>
+              </div>
+            </div>
+          )}
+        </div>
 
         <div className="mx-1 h-6 w-px bg-slate-200" />
 
@@ -138,6 +484,14 @@ export default function Topbar({
           )}
         </div>
       </div>
+
+      {/* Toast Alert Notification */}
+      {toast && (
+        <div className="fixed top-20 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-xs font-semibold text-white shadow-2xl animate-in slide-in-from-top-4 duration-300">
+          <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span>{toast}</span>
+        </div>
+      )}
     </header>
   );
 }

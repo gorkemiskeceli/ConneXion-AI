@@ -8,6 +8,7 @@ import {
   logoutUser 
 } from '../store/authSlice.js';
 import { Sparkles, Menu, X, Play, LogOut, ChevronDown, User as UserIcon } from 'lucide-react';
+import Logo from '../../components/Logo';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -40,21 +41,13 @@ export default function Header() {
         <div className="flex items-center space-x-4">
           <div 
             onClick={() => handleNavClick('home')}
-            className="flex cursor-pointer items-center space-x-2.5"
+            className="flex cursor-pointer items-center space-x-2"
             id="brand-logo-container"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded bg-sky-500 text-white font-bold text-base shadow-sm">
-              S
-            </div>
-            <span className="font-sans text-base font-semibold tracking-tight text-white">
-              SaaS<span className="text-sky-400 font-mono text-xs ml-1.5">Precise v3.5</span>
+            <Logo className="h-7 w-auto" />
+            <span className="font-sans text-base font-semibold tracking-tight text-white flex items-center">
+              ConneXion-AI<span className="text-sky-400 font-mono text-xs ml-1.5">v1.0.0</span>
             </span>
-          </div>
-
-          {/* Connection Status Dot (High Density Style) */}
-          <div className="hidden lg:flex items-center space-x-2 text-[11px] font-medium text-slate-300 border-l border-slate-700/80 pl-4">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="font-mono text-slate-300">Connected: production-env</span>
           </div>
         </div>
 
