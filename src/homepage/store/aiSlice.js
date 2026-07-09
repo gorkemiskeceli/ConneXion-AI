@@ -3,7 +3,10 @@ import { callHuggingFaceAI } from '../../services/aiService';
 
 export const sendMessageToAI = createAsyncThunk(
   'ai/sendMessage',
-  async ({ systemPrompt, userMessage }, { rejectWithValue }) => {
+  async ({ systemPrompt, userMessage, isBlocked }, { rejectWithValue }) => {
+    if (isBlocked) {
+      return "Üzgünüm, bu konuda yardımcı olamıyorum. Belirttiğiniz ifadeler asistan politikalarımıza uygun değildir.";
+    }
     const result = await callHuggingFaceAI(systemPrompt, userMessage);
     if (result.error) {
       return rejectWithValue(result.error);

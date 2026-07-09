@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Plus, GitBranch } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, GitBranch, Trash2 } from "lucide-react";
 
 import StudioSection from "../StudioSection";
 import FormField from "../../../../shared/components/ui/FormField";
@@ -8,31 +8,139 @@ import Select from "../../../../shared/components/ui/Select";
 import Toggle from "../../../../shared/components/ui/Toggle";
 import EmptyState from "../../../../shared/components/ui/EmptyState";
 import { HANDOFF_CONDITIONS } from "../../constants/aiStudioConfig";
+import { useUpdateAiAgentMutation, useAddHandoffRuleMutation, useDeleteHandoffRuleMutation } from "../../../../services/api";
 
 /**
  * HandoffRulesSection — when and how to transfer to a human agent.
  * rules: { id, condition, target }
  */
-export default function HandoffRulesSection({ canEdit, rules = [] }) {
+export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [] }) {
   const [flags, setFlags] = useState({});
-  const setFlag = (id, value) =>
+  const [confidence, setConfidence] = useState("");
+  const [targetTeam, setTargetTeam] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  // Custom rule form state
+  const [isAdding, setIsAdding] = useState(false);
+  const [condition, setCondition] = useState("");
+  const [target, setTarget] = useState("");
+
+  const [updateAiAgent, { isLoading, isSuccess, isError }] = useUpdateAiAgentMutation();
+  const [addHandoffRule] = useAddHandoffRuleMutation();
+  const [deleteHandoffRule] = useDeleteHandoffRuleMutation();
+
+  // Sync state with incoming agent prop
+  useEffect(() => {
+    if (agent) {
+      setFlags(agent.handoffFlags || {});
+      setConfidence(agent.handoffConfidence || "");
+      setTargetTeam(agent.handoffTargetTeam || "");
+    }
+  }, [agent]);
+
+  // Show success alert temporarily
+  useEffect(() => {
+    if (isSuccess) {
+      setShowSuccess(true);
+      const timer = setTimeout(() => setShowSuccess(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess]);
+
+  const setFlag = (id, value) => {
     setFlags((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSave = async () => {
+    if (!agent) return;
+    try {
+      await updateAiAgent({
+        id: agent.id,
+        handoffFlags: flags,
+        handoffConfidence: confidence !== "" ? Number(confidence) : "",
+        handoffTargetTeam: targetTeam,
+      }).unwrap();
+    } catch (err) {
+      console.error("Failed to save handoff rules config:", err);
+    }
+  };
+
+  const handleAddRule = async (e) => {
+    e.preventDefault();
+    if (!condition.trim() || !target) return;
+
+    try {
+      await addHandoffRule({
+        id: `hr_${Date.now()}`,
+        condition: condition.trim(),
+        target,
+      }).unwrap();
+
+      setCondition("");
+      setTarget("");
+      setIsAdding(false);
+    } catch (err) {
+      console.error("Failed to add custom rule:", err);
+    }
+  };
+
+  const handleDeleteRule = async (id) => {
+    if (window.confirm("Bu özel aktarım kuralını silmek istediğinize emin misiniz?")) {
+      try {
+        await deleteHandoffRule(id).unwrap();
+      } catch (err) {
+        console.error("Failed to delete custom rule:", err);
+      }
+    }
+  };
+
+  if (!agent) {
+    return (
+      <div className="flex h-full items-center justify-center p-6 text-slate-400">
+        Yükleniyor veya seçili asistan bulunamadı...
+      </div>
+    );
+  }
 
   return (
     <StudioSection
       title="Aktarım Kuralları"
       description="Konuşmanın ne zaman bir temsilciye devredileceğini tanımlayın."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={handleSave}
     >
       <div className="max-w-2xl space-y-5">
-        <div className="divide-y divide-slate-100 rounded-xl border border-slate-100">
+        {/* Success Alert Banner */}
+        {showSuccess && (
+          <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3.5 text-sm text-emerald-800 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
+            <div className="flex items-center gap-2">
+              <svg className="h-4 w-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="font-medium">Aktarım ayarları başarıyla kaydedildi!</span>
+            </div>
+          </div>
+        )}
+
+        {/* Error Alert Banner */}
+        {isError && (
+          <div className="rounded-xl bg-rose-50 border border-rose-200 p-3.5 text-sm text-rose-800 animate-in fade-in">
+            <div className="flex items-center gap-2">
+              <svg className="h-4 w-4 text-rose-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span className="font-medium">Kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.</span>
+            </div>
+          </div>
+        )}
+
+        <div className="divide-y divide-slate-100 rounded-xl border border-slate-100 bg-white">
           {HANDOFF_CONDITIONS.map((opt) => (
             <div key={opt.id} className="p-4">
               <Toggle
                 checked={Boolean(flags[opt.id])}
                 onChange={(v) => setFlag(opt.id, v)}
-                disabled={!canEdit}
+                disabled={!canEdit || isLoading}
                 label={opt.label}
                 description={opt.description}
               />
@@ -52,15 +160,27 @@ export default function HandoffRulesSection({ canEdit, rules = [] }) {
               min={0}
               max={100}
               placeholder="Örn. 60"
-              disabled={!canEdit}
+              disabled={!canEdit || isLoading}
+              value={confidence}
+              onChange={(e) => setConfidence(e.target.value)}
             />
           </FormField>
 
           <FormField label="Hedef Ekip" htmlFor="target-team">
-            <Select id="target-team" defaultValue="" disabled={!canEdit}>
+            <Select
+              id="target-team"
+              value={targetTeam}
+              onChange={(e) => setTargetTeam(e.target.value)}
+              disabled={!canEdit || isLoading}
+            >
               <option value="" disabled>
                 Ekip seçin
               </option>
+              {queues.map((q) => (
+                <option key={q.id} value={q.name}>
+                  {q.name}
+                </option>
+              ))}
             </Select>
           </FormField>
         </div>
@@ -70,9 +190,10 @@ export default function HandoffRulesSection({ canEdit, rules = [] }) {
             <h4 className="text-sm font-semibold text-slate-700">
               Özel Kurallar
             </h4>
-            {canEdit && (
+            {canEdit && !isAdding && (
               <button
                 type="button"
+                onClick={() => setIsAdding(true)}
                 className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
               >
                 <Plus className="h-4 w-4" />
@@ -80,6 +201,56 @@ export default function HandoffRulesSection({ canEdit, rules = [] }) {
               </button>
             )}
           </div>
+
+          {/* Inline Add Rule Form */}
+          {isAdding && (
+            <form onSubmit={handleAddRule} className="mb-3 space-y-3 rounded-xl border border-slate-200 p-4 bg-slate-50/50 animate-in fade-in duration-250">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 mb-1">Koşul</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Örn. Kullanıcı iade dediğinde"
+                    value={condition}
+                    onChange={(e) => setCondition(e.target.value)}
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 mb-1">Hedef Ekip</label>
+                  <select
+                    required
+                    value={target}
+                    onChange={(e) => setTarget(e.target.value)}
+                    className="w-full rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="" disabled>Ekip seçin</option>
+                    {queues.map((q) => (
+                      <option key={q.id} value={q.name}>
+                        {q.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex justify-end gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setIsAdding(false)}
+                  className="rounded-lg border border-slate-200 px-3 py-1.5 font-medium text-slate-600 hover:bg-slate-100 transition-colors"
+                >
+                  İptal
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-lg bg-primary px-3 py-1.5 font-medium text-white hover:bg-primary-600 transition-colors"
+                >
+                  Ekle
+                </button>
+              </div>
+            </form>
+          )}
 
           {rules.length === 0 ? (
             <EmptyState
@@ -92,12 +263,24 @@ export default function HandoffRulesSection({ canEdit, rules = [] }) {
               {rules.map((rule) => (
                 <li
                   key={rule.id}
-                  className="flex items-center justify-between rounded-xl border border-slate-100 px-4 py-3 text-sm"
+                  className="flex items-center justify-between rounded-xl border border-slate-100 px-4 py-2 bg-white"
                 >
-                  <span className="text-slate-700">{rule.condition}</span>
-                  <span className="font-mono text-xs text-slate-400">
-                    → {rule.target}
-                  </span>
+                  <div className="min-w-0 flex-1 flex items-center">
+                    <span className="text-slate-700 text-sm font-medium">{rule.condition}</span>
+                    <span className="ml-2 font-mono text-xs text-slate-400">
+                      → {rule.target}
+                    </span>
+                  </div>
+                  {canEdit && (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteRule(rule.id)}
+                      className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                      aria-label="Kuralı Sil"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -107,3 +290,4 @@ export default function HandoffRulesSection({ canEdit, rules = [] }) {
     </StudioSection>
   );
 }
+
