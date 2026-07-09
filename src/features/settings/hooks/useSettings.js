@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useGetUsersQuery, useGetAuditLogsQuery } from "../../../services/api";
-
+/*düzeltme */
 /**
  * useSettings — UI state + data seam for Settings.
  *
