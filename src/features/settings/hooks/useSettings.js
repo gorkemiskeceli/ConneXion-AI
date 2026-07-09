@@ -1,24 +1,23 @@
 import { useState } from "react";
+import { useGetUsersQuery, useGetAuditLogsQuery } from "../../../services/api";
 
 /**
  * useSettings — UI state + data seam for Settings.
  *
- * Ships empty (no mock data). Wire users + audit logs to Redux/JSON Server
- * later; keep shapes stable.
- *
- * user:  { id, name, email, role, status, lastLogin }
- * audit: { id, time, user, action, detail }
+ * Fetches users list and audit logs from the RTK Query API.
  */
 export default function useSettings({ initialSection = "workspace" } = {}) {
   const [activeSection, setActiveSection] = useState(initialSection);
 
-  const users = [];
-  const auditLogs = [];
+  const { data: users = [], isLoading: usersLoading, error } = useGetUsersQuery();
+  const { data: auditLogs = [], isLoading: auditLoading } = useGetAuditLogsQuery();
 
   return {
     activeSection,
     setActiveSection,
     users,
     auditLogs,
+    isLoading: usersLoading || auditLoading,
+    error,
   };
 }

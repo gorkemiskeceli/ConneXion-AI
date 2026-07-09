@@ -1,14 +1,14 @@
 import { useState } from "react";
+import {
+  useGetKnowledgeArticlesQuery,
+  useGetKbCategoryCountsQuery,
+} from "../../../services/api";
 
 /**
  * useKnowledgeBase — UI state + data seam for the Knowledge Base.
  *
- * Ships empty (no mock data). Wire articles + category counts to
- * Redux/JSON Server later; keep the article shape stable.
- *
- * article: {
- *   id, title, excerpt, content, category, status, author, updatedAt
- * }
+ * Fetches articles and category counts using RTK Query.
+ * Supports search, category filters, status filters, and active article viewing.
  */
 export default function useKnowledgeBase() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -16,12 +16,28 @@ export default function useKnowledgeBase() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedArticleId, setSelectedArticleId] = useState(null);
 
-  // Server state — replace later.
-  const articles = [];
-  const categoryCounts = {}; // { faq: 0, products: 0, ... }
+  const { data: rawArticles = [], isLoading: articlesLoading, error } = useGetKnowledgeArticlesQuery();
+  const { data: categoryCounts = {} } = useGetKbCategoryCountsQuery();
+
+  // Filter articles locally based on selected options
+  const articles = rawArticles.filter((article) => {
+    const matchesCategory =
+      activeCategory === "all" || article.category === activeCategory;
+
+    const matchesSearch =
+      !search ||
+      article.title?.toLowerCase().includes(search.toLowerCase()) ||
+      article.excerpt?.toLowerCase().includes(search.toLowerCase()) ||
+      article.content?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || article.status === statusFilter;
+
+    return matchesCategory && matchesSearch && matchesStatus;
+  });
 
   const selectedArticle =
-    articles.find((a) => a.id === selectedArticleId) ?? null;
+    rawArticles.find((a) => a.id === selectedArticleId) ?? null;
 
   return {
     activeCategory,
@@ -35,5 +51,7 @@ export default function useKnowledgeBase() {
     articles,
     categoryCounts,
     selectedArticle,
+    isLoading: articlesLoading,
+    error,
   };
 }

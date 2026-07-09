@@ -1,21 +1,22 @@
 import { useState } from "react";
+import { useGetReportsQuery } from "../../../services/api";
 
 /**
  * useReports — UI state + analytics data seam.
  *
- * Ships empty (no mock data). Wire to Redux/JSON Server later, scoped by role
- * (global / workspace / team / personal). Keep shapes stable.
+ * Reads from the RTK Query API, matching the contract every chart expects.
  */
 export default function useReports() {
   const [range, setRange] = useState("30d");
+  const { data, isLoading, error } = useGetReportsQuery();
 
-  // Server state — all empty until wired.
-  const kpis = {}; // { totalConversations: { value, deltaLabel, deltaType }, ... }
-  const conversationVolume = []; // [{ label, count }]
-  const aiPerformance = []; // [{ label, resolved, handoff }]
-  const responseTimes = []; // [{ label, firstResponse, resolution }]
-  const satisfaction = []; // [{ label, csat }]
-  const teamPerformance = []; // [{ label, resolved }]
+  // Server state — all empty until loaded.
+  const kpis = data?.kpis || {};
+  const conversationVolume = data?.conversationVolume || [];
+  const aiPerformance = data?.aiPerformance || [];
+  const responseTimes = data?.responseTimes || [];
+  const satisfaction = data?.satisfaction || [];
+  const teamPerformance = data?.teamPerformance || [];
 
   return {
     range,
@@ -26,5 +27,7 @@ export default function useReports() {
     responseTimes,
     satisfaction,
     teamPerformance,
+    isLoading,
+    error,
   };
 }
