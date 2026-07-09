@@ -1,5 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const getInitialLogo = () => {
+  if (typeof window === 'undefined') return null;
+  try {
+    return localStorage.getItem('connexion_custom_logo') || null;
+  } catch {
+    return null;
+  }
+};
+
 const initialState = {
   activePage: 'home',
   pricingBillingPeriod: 'monthly',
@@ -7,6 +16,7 @@ const initialState = {
   demoModalOpen: false,
   demoModalService: null,
   floatingChatOpen: false,
+  customLogo: getInitialLogo(),
 };
 
 export const uiSlice = createSlice({
@@ -32,6 +42,18 @@ export const uiSlice = createSlice({
     setFloatingChatOpen: (state, action) => {
       state.floatingChatOpen = action.payload;
     },
+    setCustomLogo: (state, action) => {
+      state.customLogo = action.payload;
+      if (typeof window !== 'undefined') {
+        try {
+          if (action.payload) {
+            localStorage.setItem('connexion_custom_logo', action.payload);
+          } else {
+            localStorage.removeItem('connexion_custom_logo');
+          }
+        } catch {}
+      }
+    },
   },
 });
 
@@ -42,6 +64,7 @@ export const {
   setDemoModal,
   toggleFloatingChat,
   setFloatingChatOpen,
+  setCustomLogo,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
