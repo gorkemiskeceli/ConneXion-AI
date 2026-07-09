@@ -1,39 +1,33 @@
+import { useGetDashboardQuery } from "../../../services/api";
+
 /**
  * useDashboardData — the single data seam for the Platform Admin dashboard.
  *
- * Ships empty by design (no mock data). When you're ready, replace the body
- * with a Redux selector + JSON Server thunk, e.g.:
- *
- *   const data = useSelector(selectDashboard);
- *   useEffect(() => { dispatch(fetchDashboard()); }, [dispatch]);
- *   return data;
- *
- * The shape below is the contract every panel expects — keep it stable.
+ * Reads from the RTK Query API, matching the contract every dashboard panel expects.
  */
 export default function useDashboardData() {
+  const { data, isLoading, error } = useGetDashboardQuery();
+
   return {
     // KPI values keyed by the ids in dashboardConfig → KPI_CARDS.
-    // e.g. { activeConversations: { value: "28", deltaLabel: "12% dünden", deltaType: "up" } }
-    kpis: {},
+    kpis: data?.kpis || {},
 
-    // Recent platform changes / events / logs (replaces channel breakdown).
-    // [{ id, type, actor, action, target, timestamp }]
-    recentActivity: [],
+    // Recent platform changes / events / logs.
+    recentActivity: data?.recentActivity || [],
 
     // Conversation trend series for the area chart.
-    // [{ time: "00:00", total: 0, resolved: 0 }]
-    conversationTrend: [],
+    conversationTrend: data?.conversationTrend || [],
 
     // Urgent queue items.
-    // [{ id, name, message, waitLabel, priority }]
-    urgentQueue: [],
+    urgentQueue: data?.urgentQueue || [],
 
     // Agent performance rows.
-    // [{ id, name, assigned, resolved, aiResolutionRate, csat }]
-    agentPerformance: [],
+    agentPerformance: data?.agentPerformance || [],
 
-    // Active agents (replaces active channels).
-    // [{ id, name, roleLabel, presence }]
-    activeAgents: [],
+    // Active agents.
+    activeAgents: data?.activeAgents || [],
+
+    isLoading,
+    error,
   };
 }

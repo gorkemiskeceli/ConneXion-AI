@@ -1,24 +1,24 @@
 import { useState } from "react";
+import { useGetWorkflowsQuery } from "../../../services/api";
 
 /**
  * useWorkflows — UI state + data seam for the workflow builder.
  *
- * Ships empty (no mock data, interface only — execution is simulated later).
- * Wire workflows to Redux/JSON Server; keep the shape stable.
- *
- * workflow: {
- *   id, name, status, lastRun,
- *   nodes: [{ id, type: "trigger"|"condition"|"action", title }]
- * }
+ * Fetches workflows using RTK Query and filters by search.
  */
 export default function useWorkflows() {
   const [search, setSearch] = useState("");
   const [selectedWorkflowId, setSelectedWorkflowId] = useState(null);
 
-  const workflows = []; // ← server state
+  const { data: rawWorkflows = [], isLoading, error } = useGetWorkflowsQuery();
+
+  // Filter workflows locally by search text
+  const workflows = rawWorkflows.filter((w) =>
+    w.name?.toLowerCase().includes(search.toLowerCase())
+  );
 
   const selectedWorkflow =
-    workflows.find((w) => w.id === selectedWorkflowId) ?? null;
+    rawWorkflows.find((w) => w.id === selectedWorkflowId) ?? null;
 
   return {
     search,
@@ -27,5 +27,7 @@ export default function useWorkflows() {
     selectedWorkflowId,
     setSelectedWorkflowId,
     selectedWorkflow,
+    isLoading,
+    error,
   };
 }

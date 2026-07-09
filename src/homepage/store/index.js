@@ -3,6 +3,7 @@ import uiReducer from './uiSlice.js';
 import chatReducer from './chatSlice.js';
 import authReducer from './authSlice.js';
 import aiReducer from './aiSlice.js';
+import { api } from '../../services/api.js';
 
 export const store = configureStore({
   reducer: {
@@ -10,5 +11,9 @@ export const store = configureStore({
     chat: chatReducer,
     auth: authReducer,
     ai: aiReducer,
+    [api.reducerPath]: api.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
 });
+

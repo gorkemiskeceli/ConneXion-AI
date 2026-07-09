@@ -1,11 +1,15 @@
 import { useState } from "react";
+import {
+  useGetConversationsQuery,
+  useGetMessagesQuery,
+  useGetCustomersQuery,
+} from "../../../services/api";
 
 /**
  * useInbox — data + UI-state seam for the Inbox.
  *
- * Ships empty (no mock data). Replace the empty consts with a Redux selector
- * + JSON Server thunk later; keep every shape below stable so the three
- * columns keep working.
+ * Reads conversations, messages, and customers from the RTK Query API.
+ * Integrates search, status tab filters, message threads, and customer notes.
  */
 export default function useInbox() {
   // UI state (stays local even after data is wired).
@@ -13,31 +17,53 @@ export default function useInbox() {
   const [search, setSearch] = useState("");
   const [activeConversationId, setActiveConversationId] = useState(null);
 
-  // Server state — swap for real data later.
-  const conversations = [];
-  // { id, name, preview, time, unread, status, priority, channel }
+  const { data: rawConversations = [], isLoading: isConvLoading, error: convError } = useGetConversationsQuery();
+  const { data: rawCustomers = [] } = useGetCustomersQuery();
+
+  const { data: messages = [], isLoading: isMsgLoading } = useGetMessagesQuery(
+    activeConversationId,
+    { skip: !activeConversationId }
+  );
+
+  // 1. Filter conversations by tab (filter) and search query
+  const conversations = rawConversations.filter((c) => {
+    const matchesSearch =
+      !search ||
+      c.name?.toLowerCase().includes(search.toLowerCase()) ||
+      c.preview?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesTab =
+      filter === "all" ||
+      (filter === "open" && c.status === "open") ||
+      (filter === "pending" && c.status === "pending") ||
+      (filter === "closed" && c.status === "closed");
+
+    return matchesSearch && matchesTab;
+  });
 
   const activeConversation =
-    conversations.find((c) => c.id === activeConversationId) ?? null;
+    rawConversations.find((c) => c.id === activeConversationId) ?? null;
 
-  const messages = [];
-  // { id, sender: SENDER, type: MESSAGE_TYPE, text, duration, transcript, timestamp }
+  // Retrieve full customer object (including notes) from the customers array
+  const fullCustomer = activeConversation
+    ? rawCustomers.find((cus) => cus.id === activeConversation.customerId)
+    : null;
 
-  const customer = null;
-  // { name, email, phone, location, since, tags: [] }
+  // Use embedded customer details if full customer is not loaded yet
+  const customer = fullCustomer || activeConversation?.customer || null;
+  const notes = fullCustomer?.notes || [];
 
-  const notes = [];
-  // { id, author, text, timestamp }
-
-  const aiSummary = "";
-  const aiSuggestions = [];
-  // ["Önerilen yanıt 1", ...]
+  const aiSummary = activeConversation?.aiSummary || "";
+  const aiSuggestions = activeConversation?.aiSuggestions || [];
 
   return {
     filter,
     setFilter,
     search,
-    setSearch,
+    setSearch: (val) => {
+      setSearch(val);
+      // Optional: you can clear selected conversation on search if desired
+    },
     activeConversationId,
     setActiveConversationId,
     conversations,
@@ -47,5 +73,7 @@ export default function useInbox() {
     notes,
     aiSummary,
     aiSuggestions,
+    isLoading: isConvLoading || isMsgLoading,
+    error: convError,
   };
 }
