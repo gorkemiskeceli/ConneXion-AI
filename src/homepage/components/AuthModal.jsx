@@ -27,6 +27,7 @@ export default function AuthModal() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Clear errors and form when modals open/close
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function AuthModal() {
     setFormData({ name: '', email: '', password: '' });
     setIsSuccess(false);
     setIsLoading(false);
+    setIsLoggingIn(false);
   }, [loginOpen, registerOpen, dispatch]);
 
   const handleClose = () => {
@@ -43,11 +45,18 @@ export default function AuthModal() {
 
   // Redirect to dashboard on successful login/registration
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser && isLoggingIn) {
       navigate('/dashboard');
       handleClose();
+      setIsLoggingIn(false);
     }
-  }, [currentUser, navigate]);
+  }, [currentUser, isLoggingIn, navigate]);
+
+  useEffect(() => {
+    if (authError) {
+      setIsLoggingIn(false);
+    }
+  }, [authError]);
 
   const handleToggleMode = () => {
     if (loginOpen) {
@@ -61,6 +70,7 @@ export default function AuthModal() {
     e.preventDefault();
     setIsLoading(true);
     dispatch(clearAuthError());
+    setIsLoggingIn(true);
 
     // Simulate small latency for premium feels
     setTimeout(() => {

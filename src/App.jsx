@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import { store } from "./homepage/store/index.js";
 
@@ -16,6 +16,7 @@ import ReportsPage from "./features/reports/pages/ReportsPage";
 import SettingsPage from "./features/settings/pages/SettingsPage";
 import LandingPage from "./homepage/LandingPage";
 
+import EmbedChatWidget from "./components/widget/EmbedChatWidget";
 import { ROLES } from "./constants/navigation";
 
 // Context for dynamic role management
@@ -35,6 +36,10 @@ function DashboardWrapper() {
   useEffect(() => {
     localStorage.setItem("saasprecise_active_role", role);
   }, [role]);
+
+  if (!currentUser) {
+    return <Navigate to="/" replace />;
+  }
 
   const roleLabels = {
     [ROLES.PLATFORM_ADMIN]: "Platform Admin",
@@ -68,6 +73,7 @@ function DashboardWrapper() {
           workspaceName="Precise Corp"
           workspacePlan="Enterprise"
         />
+        <EmbedChatWidget />
       </div>
     </RoleContext.Provider>
   );
