@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Plus, X, ImagePlus } from "lucide-react";
+import { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Plus, X, ImagePlus, Trash2 } from "lucide-react";
 
 import SettingsSection from "../SettingsSection";
 import WidgetPreview from "../WidgetPreview";
@@ -9,6 +10,7 @@ import Textarea from "../../../../shared/components/ui/Textarea";
 import Select from "../../../../shared/components/ui/Select";
 import Toggle from "../../../../shared/components/ui/Toggle";
 import { WIDGET_POSITIONS } from "../../constants/settingsConfig";
+import { setCustomLogo } from "../../../../homepage/store/uiSlice";
 
 /**
  * WidgetSection — configure the embedded website chat widget.
@@ -18,6 +20,10 @@ import { WIDGET_POSITIONS } from "../../constants/settingsConfig";
  * The live preview reflects the current brand color, message and questions.
  */
 export default function WidgetSection({ canEdit }) {
+  const dispatch = useDispatch();
+  const customLogo = useSelector((state) => state.ui.customLogo);
+  const fileInputRef = useRef(null);
+
   const [brandColor, setBrandColor] = useState("#5B63F0");
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [questions, setQuestions] = useState([""]);
@@ -28,6 +34,24 @@ export default function WidgetSection({ canEdit }) {
   const addQuestion = () => setQuestions((prev) => [...prev, ""]);
   const removeQuestion = (i) =>
     setQuestions((prev) => prev.filter((_, idx) => idx !== i));
+
+  const handleLogoUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        dispatch(setCustomLogo(reader.result));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveLogo = () => {
+    dispatch(setCustomLogo(null));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   return (
     <SettingsSection
@@ -40,13 +64,39 @@ export default function WidgetSection({ canEdit }) {
         {/* Form */}
         <div className="max-w-xl space-y-5">
           <FormField label="Logo">
-            <button
-              type="button"
-              disabled={!canEdit}
-              className="flex h-16 w-16 items-center justify-center rounded-xl border border-dashed border-slate-300 text-slate-400 transition-colors hover:border-primary-200 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              <ImagePlus className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                disabled={!canEdit}
+                onClick={() => fileInputRef.current?.click()}
+                className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border border-dashed border-slate-300 text-slate-400 transition-colors hover:border-primary-200 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {customLogo ? (
+                  <img src={customLogo} alt="Logo" className="h-full w-full object-contain p-1" />
+                ) : (
+                  <ImagePlus className="h-5 w-5" />
+                )}
+              </button>
+
+              {customLogo && canEdit && (
+                <button
+                  type="button"
+                  onClick={handleRemoveLogo}
+                  className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Logoyu Kaldır
+                </button>
+              )}
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleLogoUpload}
+                accept="image/*"
+                className="hidden"
+              />
+            </div>
           </FormField>
 
           <FormField label="Marka Rengi" htmlFor="brand-color">

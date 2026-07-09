@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
-import { Bot, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
+import Logo from "../../components/Logo";
 
 import { getNavForRole } from "../../constants/navigation";
 
@@ -26,12 +27,10 @@ export default function Sidebar({
     >
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 py-5">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-primary shadow-lg shadow-primary/30">
-          <Bot className="h-5 w-5 text-white" strokeWidth={2} />
-        </span>
+        <Logo className="h-8 w-auto" />
         <div className="leading-tight">
           <p className="font-heading text-[15px] font-bold text-white">
-            AI Chatbot
+            ConneXion-AI
           </p>
           <p className="font-mono text-[10px] uppercase tracking-wide text-slate-400">
             Müşteri Hizmetleri

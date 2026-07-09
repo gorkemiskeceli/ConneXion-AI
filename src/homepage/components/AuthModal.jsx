@@ -137,7 +137,7 @@ export default function AuthModal() {
               <div className="flex items-center space-x-2">
                 <Sparkles className="h-4.5 w-4.5 text-sky-400" />
                 <span className="font-mono text-xs font-bold text-slate-300 tracking-wider uppercase">
-                  SaaSPrecise v3.5
+                  ConneXion-AI v1.0.0
                 </span>
               </div>
               <button
@@ -211,7 +211,7 @@ export default function AuthModal() {
                       <div className="space-y-1">
                         <h4 className="text-sm font-semibold text-slate-100 font-sans">Şifrenizi mi Unuttunuz?</h4>
                         <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
-                          SaaSPrecise hesabınızla ilişkili e-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.
+                          ConneXion-AI hesabınızla ilişkili e-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.
                         </p>
                       </div>
 
