@@ -24,8 +24,18 @@ import { canAiStudio, AI_STUDIO_ACTION } from "../../../constants/permissions";
  * Interface only — no real AI. Empty by design.
  */
 export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
-  const { activeTab, setActiveTab, agents, knowledgeSources, handoffRules, logs } =
-    useAiAgentStudio();
+  const {
+    activeTab,
+    setActiveTab,
+    agents,
+    selectedAgent,
+    selectedAgentId,
+    setSelectedAgentId,
+    knowledgeSources,
+    handoffRules,
+    logs,
+    queues,
+  } = useAiAgentStudio();
 
   const canEdit = canAiStudio(role, AI_STUDIO_ACTION.EDIT);
   const canCreate = canAiStudio(role, AI_STUDIO_ACTION.CREATE_AGENT);
@@ -34,19 +44,26 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
   const renderSection = () => {
     switch (activeTab) {
       case "general":
-        return <GeneralSection canEdit={canEdit} />;
+        return <GeneralSection canEdit={canEdit} agent={selectedAgent} />;
       case "instructions":
-        return <InstructionsSection canEdit={canEdit} />;
+        return <InstructionsSection canEdit={canEdit} agent={selectedAgent} />;
       case "knowledge":
         return (
           <KnowledgeSourcesSection canEdit={canEdit} sources={knowledgeSources} />
         );
       case "guardrails":
-        return <GuardrailsSection canEdit={canEdit} />;
+        return <GuardrailsSection canEdit={canEdit} agent={selectedAgent} />;
       case "handoff":
-        return <HandoffRulesSection canEdit={canEdit} rules={handoffRules} />;
+        return (
+          <HandoffRulesSection
+            canEdit={canEdit}
+            rules={handoffRules}
+            agent={selectedAgent}
+            queues={queues}
+          />
+        );
       case "playground":
-        return <TestPlaygroundSection enabled={canPlayground} />;
+        return <TestPlaygroundSection enabled={canPlayground} agent={selectedAgent} />;
       case "logs":
         return <AiLogsSection logs={logs} />;
       default:
@@ -69,7 +86,11 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
 
         <div className="flex items-center gap-3">
           <div className="w-52">
-            <Select defaultValue="" aria-label="Agent seç">
+            <Select
+              value={selectedAgentId || ""}
+              onChange={(e) => setSelectedAgentId(e.target.value)}
+              aria-label="Agent seç"
+            >
               <option value="" disabled>
                 {agents.length ? "Agent seçin" : "Agent yok"}
               </option>

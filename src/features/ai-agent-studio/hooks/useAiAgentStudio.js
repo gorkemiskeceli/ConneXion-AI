@@ -4,6 +4,7 @@ import {
   useGetKnowledgeSourcesQuery,
   useGetHandoffRulesQuery,
   useGetAiLogsQuery,
+  useGetQueuesQuery,
 } from "../../../services/api";
 
 /**
@@ -20,6 +21,7 @@ export default function useAiAgentStudio() {
   const { data: knowledgeSources = [] } = useGetKnowledgeSourcesQuery();
   const { data: handoffRules = [] } = useGetHandoffRulesQuery();
   const { data: logs = [] } = useGetAiLogsQuery();
+  const { data: queues = [] } = useGetQueuesQuery();
 
   // Automatically select the first agent once data finishes loading
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function useAiAgentStudio() {
     knowledgeSources,
     handoffRules,
     logs,
+    queues,
     isLoading: agentsLoading,
     error,
   };
