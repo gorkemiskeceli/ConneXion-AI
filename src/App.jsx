@@ -30,6 +30,9 @@ export function useActiveRole() {
 function DashboardWrapper() {
   const currentUser = useSelector((state) => state.auth.user);
   const [role, setRole] = useState(() => {
+    if (currentUser && currentUser.role) {
+      return currentUser.role;
+    }
     return localStorage.getItem("saasprecise_active_role") || ROLES.PLATFORM_ADMIN;
   });
 
