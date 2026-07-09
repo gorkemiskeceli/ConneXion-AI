@@ -25,3 +25,49 @@
     @apply font-mono uppercase tracking-wide;
   }
 }
+
+/* Glassmorphism Styles (Inspo Design) */
+.shadow-card, .bg-white.shadow-card {
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  background-color: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  box-shadow: 0 10px 30px -5px rgba(27, 37, 96, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Glassmorphic inputs, textareas, and selects inside dashboard */
+.lg\:pl-64 input, .lg\:pl-64 select, .lg\:pl-64 textarea {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.lg\:pl-64 input:focus, .lg\:pl-64 select:focus, .lg\:pl-64 textarea:focus {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border-color: #5B63F0 !important;
+  box-shadow: 0 0 0 3px rgba(91, 99, 240, 0.15) !important;
+}
+
+/* Pinned details drawer should stay opaque for contrast */
+aside.absolute.right-0 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* Scrollbar styling for high-end look */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.15);
+}
+
