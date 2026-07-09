@@ -29,13 +29,13 @@ export default function DashboardLayout({
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {/* Violet/Indigo Blob top-right */}
         <div className="absolute -right-24 -top-24 h-[500px] w-[500px] rounded-full bg-gradient-to-tr from-purple-400/20 to-indigo-600/20 blur-[100px]" />
-        
+
         {/* Soft Pink Blob middle-left */}
         <div className="absolute -left-36 top-1/3 h-[600px] w-[600px] rounded-full bg-gradient-to-tr from-pink-400/15 to-violet-500/15 blur-[120px]" />
-        
+
         {/* Warm Orange/Yellow Blob bottom-right */}
         <div className="absolute right-1/4 bottom-10 h-[450px] w-[450px] rounded-full bg-gradient-to-tr from-amber-300/10 to-pink-500/10 blur-[90px]" />
-        
+
         {/* Light Blue Blob top-left */}
         <div className="absolute left-10 -top-10 h-[400px] w-[400px] rounded-full bg-gradient-to-tr from-sky-400/15 to-indigo-500/15 blur-[80px]" />
       </div>

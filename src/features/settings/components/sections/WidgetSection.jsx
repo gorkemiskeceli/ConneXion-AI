@@ -34,7 +34,7 @@ export default function WidgetSection({ canEdit }) {
       title="Widget Yapılandırması"
       description="Web sitenize gömülü sohbet widget'ını özelleştirin."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={() => { }}
     >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
         {/* Form */}

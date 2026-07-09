@@ -8,9 +8,9 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
-  
+
   const { messages, loading, error } = useSelector((state) => state.ai);
-  
+
   const messagesEndRef = useRef(null);
 
   // Auto scroll to bottom when messages or window open state changes
@@ -49,7 +49,7 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
       {/* Chat Window */}
       {isOpen && (
         <div className="absolute bottom-16 right-0 flex h-[500px] w-96 max-h-[calc(100vh-140px)] flex-col rounded-2xl border border-slate-200 bg-white/95 shadow-2xl backdrop-blur-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
-          
+
           {/* Header */}
           <div className="flex items-center justify-between rounded-t-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-3.5 text-white">
             <div className="flex items-center gap-2.5">
@@ -96,17 +96,15 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
                     </div>
                   )}
                   <div
-                    className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm shadow-sm ${
-                      isAssistant
+                    className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm shadow-sm ${isAssistant
                         ? "bg-slate-50 border border-slate-100 text-slate-800 rounded-tl-none"
                         : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-tr-none"
-                    }`}
+                      }`}
                   >
                     <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
                     <span
-                      className={`block mt-1 text-[9px] text-right font-medium ${
-                        isAssistant ? "text-slate-400" : "text-violet-200"
-                      }`}
+                      className={`block mt-1 text-[9px] text-right font-medium ${isAssistant ? "text-slate-400" : "text-violet-200"
+                        }`}
                     >
                       {msg.timestamp}
                     </span>
@@ -154,7 +152,7 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 

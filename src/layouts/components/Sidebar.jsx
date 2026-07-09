@@ -19,9 +19,8 @@ export default function Sidebar({
 
   return (
     <aside
-      className={`${
-        open ? "flex" : "hidden"
-      } fixed inset-y-0 left-0 z-30 w-64 flex-col border-r border-white/30 bg-white/30 backdrop-blur-xl lg:flex`}
+      className={`${open ? "flex" : "hidden"
+        } fixed inset-y-0 left-0 z-30 w-64 flex-col border-r border-white/30 bg-white/30 backdrop-blur-xl lg:flex`}
     >
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-white/20">
@@ -46,10 +45,9 @@ export default function Sidebar({
             to={to}
             end={to.endsWith("/dashboard")}
             className={({ isActive }) =>
-              `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
-                isActive
-                  ? "bg-white/80 text-primary shadow-sm border border-white/80"
-                  : "text-slate-600 hover:bg-white/30 hover:text-slate-900 border border-transparent"
+              `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${isActive
+                ? "bg-white/80 text-primary shadow-sm border border-white/80"
+                : "text-slate-600 hover:bg-white/30 hover:text-slate-900 border border-transparent"
               }`
             }
           >
