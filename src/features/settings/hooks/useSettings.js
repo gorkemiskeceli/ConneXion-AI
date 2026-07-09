@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { useGetUsersQuery, useGetAuditLogsQuery } from "../../../services/api";
 
 /**
  * useSettings — UI state + data seam for Settings.
@@ -27,8 +28,8 @@ export default function useSettings({ initialSection = "workspace" } = {}) {
     setSearchParams({ section });
   };
 
-  const users = [];
-  const auditLogs = [];
+  const { data: users = [] } = useGetUsersQuery();
+  const { data: auditLogs = [] } = useGetAuditLogsQuery();
 
   return {
     activeSection,
