@@ -14,6 +14,16 @@ import { PATHS } from "../../../constants/paths";
 export default function RecentActivityCard({ items = [] }) {
   const [period, setPeriod] = useState("today");
 
+  const filteredItems = items.filter((item) => {
+    if (period === "today") {
+      return item.timestamp?.includes("bugün");
+    }
+    if (period === "week") {
+      return item.timestamp?.includes("bugün") || item.timestamp?.includes("dün");
+    }
+    return true;
+  });
+
   return (
     <SectionCard
       title="Son Etkinlikler"
@@ -21,7 +31,7 @@ export default function RecentActivityCard({ items = [] }) {
       footerLink={{ label: "Tümünü Gör", to: PATHS.auditLogs }}
       bodyClassName="min-h-[260px]"
     >
-      {items.length === 0 ? (
+      {filteredItems.length === 0 ? (
         <EmptyState
           icon={History}
           title="Kayıt bulunmuyor"
@@ -29,7 +39,7 @@ export default function RecentActivityCard({ items = [] }) {
         />
       ) : (
         <ul className="space-y-4">
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <li key={item.id} className="flex gap-3">
               <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-50 text-primary-600">
                 <Activity className="h-4 w-4" strokeWidth={1.9} />
@@ -53,5 +63,6 @@ export default function RecentActivityCard({ items = [] }) {
         </ul>
       )}
     </SectionCard>
+
   );
 }
