@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 export default function Logo({ className = "h-8 w-auto", ...props }) {
   const customLogo = useSelector((state) => state.ui.customLogo);
-  /*deneme */
+
   if (customLogo) {
     return (
       <img
