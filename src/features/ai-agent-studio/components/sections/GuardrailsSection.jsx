@@ -11,7 +11,7 @@ import { useUpdateAiAgentMutation } from "../../../../services/api";
 /**
  * GuardrailsSection — safety limits for the agent.
  */
-export default function GuardrailsSection({ canEdit, agent }) {
+export default function GuardrailsSection({ canEdit, agent, onReset }) {
   const [flags, setFlags] = useState({});
   const [blockedTerms, setBlockedTerms] = useState("");
   const [maxLength, setMaxLength] = useState("");
@@ -69,6 +69,7 @@ export default function GuardrailsSection({ canEdit, agent }) {
       description="Asistanın uyması gereken güvenlik ve içerik sınırlarını belirleyin."
       canEdit={canEdit}
       onSave={handleSave}
+      onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
         {/* Success Alert Banner */}

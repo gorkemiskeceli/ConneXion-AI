@@ -14,7 +14,7 @@ import { useUpdateAiAgentMutation, useAddHandoffRuleMutation, useDeleteHandoffRu
  * HandoffRulesSection — when and how to transfer to a human agent.
  * rules: { id, condition, target }
  */
-export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [] }) {
+export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [], onReset }) {
   const [flags, setFlags] = useState({});
   const [confidence, setConfidence] = useState("");
   const [targetTeam, setTargetTeam] = useState("");
@@ -108,6 +108,7 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
       description="Konuşmanın ne zaman bir temsilciye devredileceğini tanımlayın."
       canEdit={canEdit}
       onSave={handleSave}
+      onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
         {/* Success Alert Banner */}

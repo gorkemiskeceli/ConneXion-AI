@@ -11,6 +11,7 @@ export default function StudioSection({
   description,
   canEdit = false,
   onSave,
+  onReset,
   children,
 }) {
   return (
@@ -26,16 +27,27 @@ export default function StudioSection({
 
       <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
 
-      {canEdit && onSave && (
-        <div className="flex justify-end border-t border-slate-100 px-6 py-3">
-          <button
-            type="button"
-            onClick={onSave}
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
-          >
-            <Save className="h-4 w-4" />
-            Kaydet
-          </button>
+      {canEdit && (onSave || onReset) && (
+        <div className="flex justify-end gap-3 border-t border-slate-100 px-6 py-3">
+          {onReset && (
+            <button
+              type="button"
+              onClick={onReset}
+              className="inline-flex items-center gap-2 rounded-lg border border-zinc-700/80 px-4 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-red-500/80 hover:text-red-600"
+            >
+              Varsayılana Sıfırla
+            </button>
+          )}
+          {onSave && (
+            <button
+              type="button"
+              onClick={onSave}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
+            >
+              <Save className="h-4 w-4" />
+              Kaydet
+            </button>
+          )}
         </div>
       )}
     </div>
