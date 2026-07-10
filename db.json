@@ -131,6 +131,15 @@
       "lastLogin": "Dün 13:23",
       "queue": "İade & İptal",
       "activeCount": 2
+    },
+    {
+      "name": "Hasan Doğan",
+      "email": "hasan@example.com",
+      "role": "support_agent",
+      "availability": "online",
+      "queue": "Teknik Destek",
+      "activeCount": 0,
+      "id": "IUARZx7"
     }
   ],
   "customers": [

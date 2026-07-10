@@ -87,6 +87,74 @@ aside.absolute.right-0 {
   background: transparent;
 }
 
+/* Print Styles for PDF Generation */
+@media print {
+  /* Hide non-report layout elements */
+  aside,
+  header,
+  footer,
+  nav,
+  button,
+  select,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+  }
+
+  /* Reset main layout offsets and margins */
+  main,
+  div[class*="lg:pl-"],
+  div[class*="transition-all"] {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    left: 0 !important;
+    position: static !important;
+    transform: none !important;
+  }
+
+  /* Optimize cards for printing */
+  .shadow-card,
+  section,
+  div[class*="rounded-"] {
+    background: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    border-radius: 12px !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 16px !important;
+  }
+
+  /* Force grid elements to display side-by-side */
+  .grid {
+    display: grid !important;
+    gap: 16px !important;
+  }
+
+  /* KPI cards grid: 3 columns for print layout */
+  div[class*="grid-cols-1"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  /* Charts grid: 2 columns */
+  div[class*="lg:grid-cols-2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  /* Headers */
+  h1 {
+    font-size: 20pt !important;
+    margin-bottom: 8px !important;
+  }
+}
+
+
 ::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, 0.08);
   border-radius: 99px;

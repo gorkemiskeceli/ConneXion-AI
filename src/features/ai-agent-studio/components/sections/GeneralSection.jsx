@@ -11,7 +11,7 @@ import { LANGUAGE_OPTIONS, TONE_OPTIONS } from "../../constants/aiStudioConfig";
 /**
  * GeneralSection — agent name, description, language, tone and status.
  */
-export default function GeneralSection({ canEdit }) {
+export default function GeneralSection({ canEdit, onSave }) {
   const [active, setActive] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ export default function GeneralSection({ canEdit }) {
       title="Genel"
       description="Asistanın temel kimliğini ve davranış tonunu tanımlayın."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={onSave}
     >
       <div className="max-w-2xl space-y-5">
         <FormField label="Asistan Adı" htmlFor="agent-name">

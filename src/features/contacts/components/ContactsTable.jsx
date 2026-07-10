@@ -59,6 +59,8 @@ export default function ContactsTable({
   sort,
   onSort,
   onSelect,
+  onEdit,
+  onDelete,
   page = 1,
   totalPages = 1,
   onPageChange,
@@ -149,6 +151,7 @@ export default function ContactsTable({
                         {canEdit && (
                           <button
                             type="button"
+                            onClick={() => onEdit?.(contact)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                             aria-label="Düzenle"
                           >
@@ -158,6 +161,7 @@ export default function ContactsTable({
                         {canDelete && (
                           <button
                             type="button"
+                            onClick={() => onDelete?.(contact.id)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600"
                             aria-label="Sil"
                           >

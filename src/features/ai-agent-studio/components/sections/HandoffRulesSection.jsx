@@ -13,7 +13,7 @@ import { HANDOFF_CONDITIONS } from "../../constants/aiStudioConfig";
  * HandoffRulesSection — when and how to transfer to a human agent.
  * rules: { id, condition, target }
  */
-export default function HandoffRulesSection({ canEdit, rules = [] }) {
+export default function HandoffRulesSection({ canEdit, rules = [], onSave }) {
   const [flags, setFlags] = useState({});
   const setFlag = (id, value) =>
     setFlags((prev) => ({ ...prev, [id]: value }));
@@ -23,7 +23,7 @@ export default function HandoffRulesSection({ canEdit, rules = [] }) {
       title="Aktarım Kuralları"
       description="Konuşmanın ne zaman bir temsilciye devredileceğini tanımlayın."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={onSave}
     >
       <div className="max-w-2xl space-y-5">
         <div className="divide-y divide-slate-100 rounded-xl border border-slate-100">

@@ -23,6 +23,7 @@ export default function ConversationThread({
   conversation,
   messages = [],
   aiSuggestions = [],
+  onSend,
 }) {
   const [draft, setDraft] = useState("");
   const status = CONVERSATION_STATUS[conversation.status] ?? CONVERSATION_STATUS.open;
@@ -85,7 +86,12 @@ export default function ConversationThread({
           canAddNote={canInbox(role, INBOX_ACTION.ADD_NOTE)}
           value={draft}
           onChange={setDraft}
-          onSend={() => setDraft("")}
+          onSend={() => {
+            if (draft.trim()) {
+              onSend?.(draft);
+              setDraft("");
+            }
+          }}
         />
       </div>
     </div>

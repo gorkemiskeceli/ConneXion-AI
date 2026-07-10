@@ -10,7 +10,7 @@ import { GUARDRAIL_OPTIONS } from "../../constants/aiStudioConfig";
 /**
  * GuardrailsSection — safety limits for the agent.
  */
-export default function GuardrailsSection({ canEdit }) {
+export default function GuardrailsSection({ canEdit, onSave }) {
   const [flags, setFlags] = useState({});
 
   const setFlag = (id, value) =>
@@ -21,7 +21,7 @@ export default function GuardrailsSection({ canEdit }) {
       title="Guardrails"
       description="Asistanın uyması gereken güvenlik ve içerik sınırlarını belirleyin."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={onSave}
     >
       <div className="max-w-2xl space-y-5">
         <div className="divide-y divide-slate-100 rounded-xl border border-slate-100">

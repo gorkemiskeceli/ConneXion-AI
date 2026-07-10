@@ -9,6 +9,7 @@ import Textarea from "../../../../shared/components/ui/Textarea";
 import Select from "../../../../shared/components/ui/Select";
 import Toggle from "../../../../shared/components/ui/Toggle";
 import { WIDGET_POSITIONS } from "../../constants/settingsConfig";
+import { useToast } from "../../../../shared/components/ui/Toast";
 
 /**
  * WidgetSection — configure the embedded website chat widget.
@@ -17,7 +18,8 @@ import { WIDGET_POSITIONS } from "../../constants/settingsConfig";
  * follows the general Settings edit permission (Platform + Workspace Admin).
  * The live preview reflects the current brand color, message and questions.
  */
-export default function WidgetSection({ canEdit }) {
+export default function WidgetSection({ canEdit, onSave }) {
+  const { showToast } = useToast();
   const [brandColor, setBrandColor] = useState("#5B63F0");
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [questions, setQuestions] = useState([""]);
@@ -34,7 +36,7 @@ export default function WidgetSection({ canEdit }) {
       title="Widget Yapılandırması"
       description="Web sitenize gömülü sohbet widget'ını özelleştirin."
       canEdit={canEdit}
-      onSave={() => { }}
+      onSave={onSave}
     >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
         {/* Form */}
@@ -43,6 +45,7 @@ export default function WidgetSection({ canEdit }) {
             <button
               type="button"
               disabled={!canEdit}
+              onClick={() => showToast("Logo yükleme işlevi simüle edildi.", "info")}
               className="flex h-16 w-16 items-center justify-center rounded-xl border border-dashed border-slate-300 text-slate-400 transition-colors hover:border-primary-200 hover:text-primary-600 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <ImagePlus className="h-5 w-5" />

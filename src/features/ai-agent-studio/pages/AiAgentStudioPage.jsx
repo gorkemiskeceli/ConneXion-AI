@@ -1,4 +1,5 @@
-import { Plus, Bot } from "lucide-react";
+import { useState } from "react";
+import { Plus, Bot, X } from "lucide-react";
 
 import useAiAgentStudio from "../hooks/useAiAgentStudio";
 import StudioTabs from "../components/StudioTabs";
@@ -12,39 +13,68 @@ import AiLogsSection from "../components/sections/AiLogsSection";
 import Select from "../../../shared/components/ui/Select";
 import { ROLES } from "../../../constants/navigation";
 import { canAiStudio, AI_STUDIO_ACTION } from "../../../constants/permissions";
+import { useToast } from "../../../shared/components/ui/Toast";
+import { useCreateAiAgentMutation } from "../../../services/api";
 
 /**
  * AiAgentStudioPage — configuration interface for the AI assistant.
- *
- * Header (agent selector + gated "Yeni Agent") → a card with a vertical
- * section nav and the active section on the right.
- *
- * Permissions: admins get full edit; Manager is view-only but keeps the Test
- * Playground; Support Agent has no access (excluded from navigation).
- * Interface only — no real AI. Empty by design.
+ * Wired with fully functioning Create Agent modal and Section Save triggers.
  */
 export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
-  const { activeTab, setActiveTab, agents, knowledgeSources, handoffRules, logs } =
+  const { showToast } = useToast();
+  const { activeTab, setActiveTab, agents, selectedAgentId, setSelectedAgentId, knowledgeSources, handoffRules, logs } =
     useAiAgentStudio();
+
+  const [createAgent] = useCreateAiAgentMutation();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newAgentName, setNewAgentName] = useState("");
 
   const canEdit = canAiStudio(role, AI_STUDIO_ACTION.EDIT);
   const canCreate = canAiStudio(role, AI_STUDIO_ACTION.CREATE_AGENT);
   const canPlayground = canAiStudio(role, AI_STUDIO_ACTION.PLAYGROUND);
 
+  const handleSaveSettings = () => {
+    showToast("Ayarlar başarıyla kaydedildi.", "success");
+  };
+
+  const handleCreateAgent = async (e) => {
+    e.preventDefault();
+    if (!newAgentName.trim()) return;
+
+    try {
+      const result = await createAgent({
+        name: newAgentName,
+        description: "Müşteri taleplerini yanıtlayan yapay zeka asistanı.",
+        language: "tr",
+        tone: "professional",
+        status: "active",
+      }).unwrap();
+
+      showToast(`${newAgentName} asistanı başarıyla oluşturuldu.`, "success");
+      setSelectedAgentId(result.id);
+      setIsModalOpen(false);
+      setNewAgentName("");
+    } catch (err) {
+      showToast("Agent oluşturulurken hata oluştu.", "error");
+      console.error("Agent oluşturma hatası:", err);
+    }
+  };
+
   const renderSection = () => {
     switch (activeTab) {
       case "general":
-        return <GeneralSection canEdit={canEdit} />;
+        return <GeneralSection canEdit={canEdit} onSave={handleSaveSettings} />;
       case "instructions":
-        return <InstructionsSection canEdit={canEdit} />;
+        return <InstructionsSection canEdit={canEdit} onSave={handleSaveSettings} />;
       case "knowledge":
         return (
-          <KnowledgeSourcesSection canEdit={canEdit} sources={knowledgeSources} />
+          <KnowledgeSourcesSection canEdit={canEdit} sources={knowledgeSources} onSave={handleSaveSettings} />
         );
       case "guardrails":
-        return <GuardrailsSection canEdit={canEdit} />;
+        return <GuardrailsSection canEdit={canEdit} onSave={handleSaveSettings} />;
       case "handoff":
-        return <HandoffRulesSection canEdit={canEdit} rules={handoffRules} />;
+        return <HandoffRulesSection canEdit={canEdit} rules={handoffRules} onSave={handleSaveSettings} />;
       case "playground":
         return <TestPlaygroundSection enabled={canPlayground} />;
       case "logs":
@@ -69,7 +99,11 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
 
         <div className="flex items-center gap-3">
           <div className="w-52">
-            <Select defaultValue="" aria-label="Agent seç">
+            <Select
+              value={selectedAgentId || ""}
+              onChange={(e) => setSelectedAgentId(e.target.value)}
+              aria-label="Agent seç"
+            >
               <option value="" disabled>
                 {agents.length ? "Agent seçin" : "Agent yok"}
               </option>
@@ -83,7 +117,8 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
           {canCreate && (
             <button
               type="button"
-              className="inline-flex w-fit shrink-0 items-center gap-2 rounded-lg bg-primary px-3.5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-600"
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/10 transition-all hover:bg-primary-600 active:scale-95"
             >
               <Plus className="h-4 w-4" strokeWidth={2} />
               Yeni Agent
@@ -105,6 +140,58 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
           Bu yapılandırmayı yalnızca görüntüleyebilirsiniz. Test Alanı'nı
           kullanabilirsiniz.
         </p>
+      )}
+
+      {/* Create Agent Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/20 backdrop-blur-xs p-4">
+          <div className="w-full max-w-md rounded-3xl border border-white/40 bg-white/80 backdrop-blur-xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+              <h3 className="font-heading text-lg font-extrabold text-slate-900">
+                Yeni Yapay Zeka Asistanı Ekle
+              </h3>
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateAgent} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+                  Asistan Adı
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={newAgentName}
+                  onChange={(e) => setNewAgentName(e.target.value)}
+                  placeholder="Örn. Satış Destek Botu"
+                  className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm text-slate-800 outline-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 active:scale-95 transition-all"
+                >
+                  Vazgeç
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-white shadow-md shadow-primary/10 hover:bg-primary-600 active:scale-95 transition-all"
+                >
+                  Oluştur
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

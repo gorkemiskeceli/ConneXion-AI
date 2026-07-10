@@ -6,13 +6,13 @@ import Textarea from "../../../../shared/components/ui/Textarea";
 /**
  * InstructionsSection — the agent's behavior instructions and canned messages.
  */
-export default function InstructionsSection({ canEdit }) {
+export default function InstructionsSection({ canEdit, onSave }) {
   return (
     <StudioSection
       title="Talimatlar"
       description="Asistanın nasıl davranacağını belirleyen talimatları yazın."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={onSave}
     >
       <div className="max-w-2xl space-y-5">
         <FormField
