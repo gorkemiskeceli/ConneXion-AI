@@ -23,8 +23,11 @@ export default function ConversationThread({
   conversation,
   messages = [],
   aiSuggestions = [],
+  onSendMessage,
+  onResolveTicket,
 }) {
   const [draft, setDraft] = useState("");
+  const [toast, setToast] = useState("");
   const status = CONVERSATION_STATUS[conversation.status] ?? CONVERSATION_STATUS.open;
 
   const actions = [
@@ -34,8 +37,25 @@ export default function ConversationThread({
     { key: INBOX_ACTION.CLOSE, label: "Kapat", icon: CheckCircle2 },
   ].filter((a) => canInbox(role, a.key));
 
+  const handleResolve = () => {
+    onResolveTicket?.(conversation.id);
+    setToast("Destek talebi düzeltildi olarak işaretlendi!");
+    setTimeout(() => setToast(""), 3000);
+  };
+
   return (
-    <div className="flex h-full flex-col">
+    <div className="relative flex h-full flex-col">
+      {/* Toast Alert Notification inside Thread */}
+      {toast && (
+        <div className="absolute right-6 top-16 z-50 flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-xs font-semibold text-emerald-800 shadow-xl animate-in fade-in slide-in-from-top-4 duration-300">
+          <span className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+          </span>
+          {toast}
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-5 py-3">
         <div className="flex min-w-0 items-center gap-3">
@@ -51,11 +71,22 @@ export default function ConversationThread({
         </div>
 
         <div className="flex items-center gap-1.5">
+          {conversation.channel === "ticket" && conversation.status !== "closed" && (
+            <button
+              type="button"
+              onClick={handleResolve}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-250 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-100 transition-colors cursor-pointer mr-1"
+            >
+              <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" strokeWidth={2.2} />
+              Düzeltildi
+            </button>
+          )}
+
           {actions.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               type="button"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-2.5 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50"
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={1.9} />
               <span className="hidden xl:inline">{label}</span>
@@ -73,7 +104,16 @@ export default function ConversationThread({
             className="h-full"
           />
         ) : (
-          messages.map((m) => <MessageBubble key={m.id} message={m} />)
+          messages.map((m) => {
+            const selfSender = role === "support_agent" ? "agent" : "customer";
+            return (
+              <MessageBubble 
+                key={m.id} 
+                message={m} 
+                self={m.sender === selfSender} 
+              />
+            );
+          })
         )}
       </div>
 
@@ -85,7 +125,11 @@ export default function ConversationThread({
           canAddNote={canInbox(role, INBOX_ACTION.ADD_NOTE)}
           value={draft}
           onChange={setDraft}
-          onSend={() => setDraft("")}
+          onSend={() => {
+            if (!draft.trim()) return;
+            onSendMessage?.(draft);
+            setDraft("");
+          }}
         />
       </div>
     </div>

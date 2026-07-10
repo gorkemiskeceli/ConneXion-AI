@@ -35,7 +35,9 @@ export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
     setFilter,
     search,
     setSearch,
-  } = useInbox();
+    onSendMessage,
+    onResolveTicket,
+  } = useInbox(role);
 
   return (
     <div className="h-[calc(100vh-10rem)] min-h-[560px] overflow-hidden rounded-2xl bg-white shadow-card">
@@ -60,6 +62,8 @@ export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
               conversation={activeConversation}
               messages={messages}
               aiSuggestions={aiSuggestions}
+              onSendMessage={onSendMessage}
+              onResolveTicket={onResolveTicket}
             />
           ) : (
             <EmptyState

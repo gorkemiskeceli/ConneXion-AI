@@ -8,6 +8,7 @@ import {
   UsersRound,
   BarChart3,
   Settings,
+  HelpCircle,
 } from "lucide-react";
 
 import { PATHS } from "./paths";
@@ -97,6 +98,12 @@ export const NAV_ITEMS = [
       ROLES.MANAGER,
       ROLES.SUPPORT_AGENT,
     ],
+  },
+  {
+    label: "Destek",
+    to: PATHS.support,
+    icon: HelpCircle,
+    roles: [ROLES.PLATFORM_ADMIN, ROLES.WORKSPACE_ADMIN, ROLES.MANAGER],
   },
   {
     label: "Settings",

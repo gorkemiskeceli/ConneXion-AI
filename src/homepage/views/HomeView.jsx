@@ -144,6 +144,48 @@ export default function HomeView() {
         </div>
       </section>
 
+      {/* Infinite Scrolling Marquee Banner */}
+      <div className="w-full overflow-hidden bg-slate-900 border-y border-slate-800 py-3.5 select-none relative z-10 flex">
+        <div className="animate-marquee whitespace-nowrap flex gap-12 text-slate-200">
+          <div className="flex shrink-0 items-center gap-12 text-xs font-mono font-bold tracking-wider uppercase">
+            <span className="text-sky-400">✦ Neden ConneXion-AI?</span>
+            <span className="text-slate-700">//</span>
+            <span>Diğer yapay zeka çözümlerine kıyasla %40 daha bütçe dostu fiyatlandırma!</span>
+            <span className="text-slate-700">//</span>
+            <span className="text-sky-400">✦ Sektörel dikey modeller</span>
+            <span className="text-slate-700">//</span>
+            <span>Hukuk, finans ve sağlık terminolojilerine özel %98 model doğruluk payı!</span>
+            <span className="text-slate-700">//</span>
+            <span className="text-sky-400">✦ %100 güvenlik</span>
+            <span className="text-slate-700">//</span>
+            <span>Uçtan uca şifreleme, hassas veri maskeleme ve HIPAA/SOC-2 uyumluluğu!</span>
+            <span className="text-slate-700">//</span>
+            <span className="text-sky-400">✦ Hızlı entegrasyon</span>
+            <span className="text-slate-700">//</span>
+            <span>Bulut veya kendi sunucunuzda (On-Premise) saniyeler içinde anında kurulum!</span>
+            <span className="text-slate-700">//</span>
+          </div>
+          <div className="flex shrink-0 items-center gap-12 text-xs font-mono font-bold tracking-wider uppercase" aria-hidden="true">
+            <span className="text-sky-400">✦ Neden ConneXion-AI?</span>
+            <span className="text-slate-700">//</span>
+            <span>Diğer yapay zeka çözümlerine kıyasla %40 daha bütçe dostu fiyatlandırma!</span>
+            <span className="text-slate-700">//</span>
+            <span className="text-sky-400">✦ Sektörel dikey modeller</span>
+            <span className="text-slate-700">//</span>
+            <span>Hukuk, finans ve sağlık terminolojilerine özel %98 model doğruluk payı!</span>
+            <span className="text-slate-700">//</span>
+            <span className="text-sky-400">✦ %100 güvenlik</span>
+            <span className="text-slate-700">//</span>
+            <span>Uçtan uca şifreleme, hassas veri maskeleme ve HIPAA/SOC-2 uyumluluğu!</span>
+            <span className="text-slate-700">//</span>
+            <span className="text-sky-400">✦ Hızlı entegrasyon</span>
+            <span className="text-slate-700">//</span>
+            <span>Bulut veya kendi sunucunuzda (On-Premise) saniyeler içinde anında kurulum!</span>
+            <span className="text-slate-700">//</span>
+          </div>
+        </div>
+      </div>
+
       {/* Sektörel Başarı (Industry Success Cards) */}
       <section className="py-12 bg-white border-y border-slate-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
