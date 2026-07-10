@@ -8,8 +8,8 @@ import { useUpdateAiAgentMutation } from "../../../../services/api";
 /**
  * InstructionsSection — behavioral rules & canned messages.
  */
-export default function InstructionsSection({ canEdit, agent }) {
-  const [instructions, setInstructions] = useState("");
+export default function InstructionsSection({ canEdit, agent, onReset }) {
+  const [customInstructions, setCustomInstructions] = useState("");
   const [greeting, setGreeting] = useState("");
   const [fallback, setFallback] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
@@ -19,7 +19,7 @@ export default function InstructionsSection({ canEdit, agent }) {
   // Sync state with selected agent
   useEffect(() => {
     if (agent) {
-      setInstructions(agent.instructions || "");
+      setCustomInstructions(agent.customInstructions || agent.instructions || "");
       setGreeting(agent.greeting || "");
       setFallback(agent.fallback || "");
     }
@@ -39,7 +39,8 @@ export default function InstructionsSection({ canEdit, agent }) {
     try {
       await updateAiAgent({
         id: agent.id,
-        instructions,
+        instructions: customInstructions, // for legacy fallback
+        customInstructions,
         greeting,
         fallback,
       }).unwrap();
@@ -62,6 +63,7 @@ export default function InstructionsSection({ canEdit, agent }) {
       description="Asistanınızın nasıl davranacağını, konuşacağını ve yanıtlayacağını tanımlayın."
       canEdit={canEdit}
       onSave={handleSave}
+      onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
         {/* Success Alert Banner */}
@@ -98,8 +100,8 @@ export default function InstructionsSection({ canEdit, agent }) {
             placeholder="Sen bir müşteri destek temsilcisisin. Kibar ol..."
             rows={6}
             disabled={!canEdit || isLoading}
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
+            value={customInstructions}
+            onChange={(e) => setCustomInstructions(e.target.value)}
           />
         </FormField>
 

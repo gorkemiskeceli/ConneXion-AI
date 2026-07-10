@@ -1,16 +1,24 @@
 import { getSystemPrompt } from '../config/agentConfig';
+import { getCleanPageText } from './domScraper';
 
 /**
  * Service to call Hugging Face Inference API via our local backend proxy.
  */
 export async function callHuggingFaceAI(systemPrompt = getSystemPrompt(), userMessage) {
   try {
+    const scrapedDomText = getCleanPageText();
+    let finalSystemPrompt = systemPrompt;
+
+    if (scrapedDomText && !finalSystemPrompt.includes("[HOST WEBSITE LIVE SCREEN CONTENT]")) {
+      finalSystemPrompt += `\n\n[HOST WEBSITE LIVE SCREEN CONTENT]\n${scrapedDomText}`;
+    }
+
     const response = await fetch('/api/chat', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ systemPrompt, userMessage })
+      body: JSON.stringify({ systemPrompt: finalSystemPrompt, userMessage })
     });
 
     if (!response.ok) {

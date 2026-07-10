@@ -71,6 +71,14 @@ export const api = createApi({
 
     // AI Agent Studio
     getAiAgents: builder.query({ query: () => "/aiAgents", providesTags: ["AiAgent"] }),
+    createAiAgent: builder.mutation({
+      query: (agent) => ({
+        url: "/aiAgents",
+        method: "POST",
+        body: agent,
+      }),
+      invalidatesTags: ["AiAgent"],
+    }),
     updateAiAgent: builder.mutation({
       query: (agent) => ({
         url: `/aiAgents/${agent.id}`,
@@ -109,6 +117,14 @@ export const api = createApi({
     getAuditLogs: builder.query({ query: () => "/auditLogs", providesTags: ["AuditLog"] }),
     getWorkspaceSettings: builder.query({ query: () => "/workspaceSettings", providesTags: ["Settings"] }),
     getWidgetSettings: builder.query({ query: () => "/widgetSettings", providesTags: ["Settings"] }),
+    updateWidgetSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/widgetSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
     getBusinessHours: builder.query({ query: () => "/businessHours", providesTags: ["Settings"] }),
     getNotificationSettings: builder.query({ query: () => "/notificationSettings", providesTags: ["Settings"] }),
   }),
@@ -134,9 +150,11 @@ export const {
   useGetAuditLogsQuery,
   useGetWorkspaceSettingsQuery,
   useGetWidgetSettingsQuery,
+  useUpdateWidgetSettingsMutation,
   useGetBusinessHoursQuery,
   useGetNotificationSettingsQuery,
   useUpdateAiAgentMutation,
+  useCreateAiAgentMutation,
   useAddKnowledgeSourceMutation,
   useDeleteKnowledgeSourceMutation,
   useAddHandoffRuleMutation,
