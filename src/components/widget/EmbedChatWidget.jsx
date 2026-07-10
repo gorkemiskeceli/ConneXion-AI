@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MessageSquare, Send, X, Bot, Sparkles, AlertCircle, Trash2 } from "lucide-react";
 import { sendMessageToAI, clearChat, clearError } from "../../homepage/store/aiSlice";
 import { getSystemPrompt } from "../../config/agentConfig";
+import { useGetAiAgentsQuery } from "../../services/api";
 
 export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,6 +13,34 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
   const { messages, loading, error } = useSelector((state) => state.ai);
 
   const messagesEndRef = useRef(null);
+
+  const { data: agents = [] } = useGetAiAgentsQuery();
+  const activeAgent = agents.find((a) => a.active);
+
+  const languageMap = { tr: "Turkish", en: "English", auto: "Turkish" };
+  const toneMap = {
+    professional: "Professional, polite, concise, and helpful",
+    friendly: "Friendly, warm, polite, and helper",
+    formal: "Formal, respectful, and standard",
+    concise: "Concise, extremely short, and plain",
+  };
+
+  const dynamicSystemPrompt = activeAgent
+    ? `
+You are the official support assistant named "${activeAgent.name}".
+Description: ${activeAgent.description || ""}
+Role: Customer Support Agent
+Tone: ${toneMap[activeAgent.tone] || activeAgent.tone || "Friendly"}
+Language: ${languageMap[activeAgent.language] || activeAgent.language || "Turkish"}
+
+STRICT GUARDRAILS:
+${activeAgent.blockedTerms ? `- Do not reply to or discuss these blocked terms/topics: ${activeAgent.blockedTerms}` : ""}
+${activeAgent.maxLength ? `- Keep your response under ${activeAgent.maxLength} characters.` : ""}
+
+INSTRUCTIONS:
+${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin olmadığında konuşmayı bir temsilciye aktar."}
+    `.trim()
+    : systemPrompt;
 
   // Auto scroll to bottom when messages or window open state changes
   useEffect(() => {
@@ -26,7 +55,14 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
 
     const userMessage = input.trim();
     setInput("");
-    dispatch(sendMessageToAI({ systemPrompt, userMessage }));
+
+    // Guardrails Check (Local filter)
+    const isBlocked = activeAgent && activeAgent.blockedTerms && activeAgent.blockedTerms.split(",")
+      .map(t => t.trim().toLowerCase())
+      .filter(Boolean)
+      .some(term => userMessage.toLowerCase().includes(term));
+
+    dispatch(sendMessageToAI({ systemPrompt: dynamicSystemPrompt, userMessage, isBlocked }));
   };
 
   const handleClearChat = () => {
@@ -58,10 +94,12 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
               </div>
               <div>
                 <h3 className="text-sm font-semibold tracking-wide flex items-center gap-1.5">
-                  ConneXion-AI Assistant
+                  {activeAgent ? activeAgent.name : "ConneXion-AI Assistant"}
                   <Sparkles className="h-3 w-3 text-violet-200 animate-pulse" />
                 </h3>
-                <span className="text-[10px] text-violet-100 font-medium">ConneXion-AI • Aktif</span>
+                <span className="text-[10px] text-violet-100 font-medium">
+                  {activeAgent ? `${activeAgent.name} • Aktif` : "ConneXion-AI • Aktif"}
+                </span>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -83,6 +121,7 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
 
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            
             {messages.map((msg) => {
               const isAssistant = msg.sender === "assistant";
               return (
@@ -101,7 +140,11 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
                         : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-tr-none"
                       }`}
                   >
-                    <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                    <p className="leading-relaxed whitespace-pre-wrap">
+                      {msg.id === "ai-init"
+                        ? (activeAgent && activeAgent.greeting ? activeAgent.greeting : msg.text)
+                        : msg.text}
+                    </p>
                     <span
                       className={`block mt-1 text-[9px] text-right font-medium ${isAssistant ? "text-slate-400" : "text-violet-200"
                         }`}
@@ -166,7 +209,11 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               disabled={loading}
-              placeholder={loading ? "Asistan yanıt veriyor..." : "Bir şeyler yazın..."}
+              placeholder={
+                loading
+                  ? "Asistan yanıt veriyor..."
+                  : "Bir şeyler yazın..."
+              }
               className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs text-slate-800 outline-none placeholder:text-slate-400 focus:border-violet-500 focus:bg-white transition-all disabled:opacity-50"
             />
             <button

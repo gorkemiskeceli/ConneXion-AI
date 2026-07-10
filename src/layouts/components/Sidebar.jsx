@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { ChevronsUpDown } from "lucide-react";
-
+import Logo from "../../components/Logo";
 import { getNavForRole } from "../../constants/navigation";
 
 /**
@@ -38,13 +38,11 @@ export default function Sidebar({
       >
         {/* Brand Logo */}
         <div className={`flex items-center gap-3 py-5 border-b border-white/5 transition-all duration-300 ${open ? "px-5" : "justify-center px-0"}`}>
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-sky-500 text-white font-bold text-base shadow-sm">
-            S
-          </div>
+          <Logo className="h-8 w-auto shrink-0" />
           {open && (
             <div className="leading-tight animate-in fade-in duration-300">
               <span className="font-sans text-sm font-semibold tracking-tight text-white">
-                SaaS<span className="text-sky-400 font-mono text-[10px] ml-1">Precise v3.5</span>
+                ConneXion-AI
               </span>
               <p className="font-mono text-[9px] uppercase tracking-wider text-slate-400 mt-0.5">
                 Müşteri Hizmetleri

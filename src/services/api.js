@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Base URL comes from .env (VITE_API_URL), falls back to local JSON Server.
-const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:4000";
+// Base URL comes from .env (VITE_API_URL or VITE_JSON_SERVER_URL), falls back to local JSON Server port 3000.
+const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_JSON_SERVER_URL || "http://localhost:3000";
 
 /**
  * api — the single RTK Query service for all server state.
@@ -53,9 +53,32 @@ export const api = createApi({
     getKnowledgeArticles: builder.query({ query: () => "/knowledgeArticles", providesTags: ["Article"] }),
     getKbCategoryCounts: builder.query({ query: () => "/kbCategoryCounts" }),
     getKnowledgeSources: builder.query({ query: () => "/knowledgeSources", providesTags: ["KnowledgeSource"] }),
+    addKnowledgeSource: builder.mutation({
+      query: (source) => ({
+        url: "/knowledgeSources",
+        method: "POST",
+        body: source,
+      }),
+      invalidatesTags: ["KnowledgeSource"],
+    }),
+    deleteKnowledgeSource: builder.mutation({
+      query: (id) => ({
+        url: `/knowledgeSources/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["KnowledgeSource"],
+    }),
 
     // AI Agent Studio
     getAiAgents: builder.query({ query: () => "/aiAgents", providesTags: ["AiAgent"] }),
+    updateAiAgent: builder.mutation({
+      query: (agent) => ({
+        url: `/aiAgents/${agent.id}`,
+        method: "PATCH",
+        body: agent,
+      }),
+      invalidatesTags: ["AiAgent"],
+    }),
     getAiLogs: builder.query({ query: () => "/aiLogs", providesTags: ["AiLog"] }),
     getHandoffRules: builder.query({ query: () => "/handoffRules", providesTags: ["HandoffRule"] }),
     createAiAgent: builder.mutation({
@@ -66,13 +89,20 @@ export const api = createApi({
       }),
       invalidatesTags: ["AiAgent"],
     }),
-    updateAiAgent: builder.mutation({
-      query: ({ id, ...body }) => ({
-        url: `/aiAgents/${id}`,
-        method: "PUT",
-        body,
+    addHandoffRule: builder.mutation({
+      query: (rule) => ({
+        url: "/handoffRules",
+        method: "POST",
+        body: rule,
       }),
-      invalidatesTags: ["AiAgent"],
+      invalidatesTags: ["HandoffRule"],
+    }),
+    deleteHandoffRule: builder.mutation({
+      query: (id) => ({
+        url: `/handoffRules/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["HandoffRule"],
     }),
 
     // Workflows
@@ -289,7 +319,6 @@ export const {
   useGetWidgetSettingsQuery,
   useGetBusinessHoursQuery,
   useGetNotificationSettingsQuery,
-
   // Mutation hooks
   useCreateCustomerMutation,
   useUpdateCustomerMutation,
@@ -314,4 +343,8 @@ export const {
   useUpdateNotificationSettingsMutation,
   useCreateAiAgentMutation,
   useUpdateAiAgentMutation,
+  useAddKnowledgeSourceMutation,
+  useDeleteKnowledgeSourceMutation,
+  useAddHandoffRuleMutation,
+  useDeleteHandoffRuleMutation,
 } = api;

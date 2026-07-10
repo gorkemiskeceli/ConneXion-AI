@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useGetUsersQuery, useGetAuditLogsQuery } from "../../../services/api";
 
 /**
@@ -7,14 +8,28 @@ import { useGetUsersQuery, useGetAuditLogsQuery } from "../../../services/api";
  * Fetches users list and audit logs from the RTK Query API.
  */
 export default function useSettings({ initialSection = "workspace" } = {}) {
-  const [activeSection, setActiveSection] = useState(initialSection);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const querySection = searchParams.get("section");
+  const [activeSection, setActiveSection] = useState(querySection || initialSection);
+
+  useEffect(() => {
+    const targetSection = querySection || initialSection;
+    if (targetSection !== activeSection) {
+      setActiveSection(targetSection);
+    }
+  }, [querySection, initialSection, activeSection]);
+
+  const handleSectionChange = (section) => {
+    setActiveSection(section);
+    setSearchParams({ section });
+  };
 
   const { data: users = [], isLoading: usersLoading, error } = useGetUsersQuery();
   const { data: auditLogs = [], isLoading: auditLoading } = useGetAuditLogsQuery();
 
   return {
     activeSection,
-    setActiveSection,
+    setActiveSection: handleSectionChange,
     users,
     auditLogs,
     isLoading: usersLoading || auditLoading,

@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { MessageSquare, Send } from "lucide-react";
 
 /**
@@ -10,6 +11,8 @@ export default function WidgetPreview({
   suggestedQuestions = [],
   logoText = "AI",
 }) {
+  const customLogo = useSelector((state) => state.ui.customLogo);
+
   return (
     <div className="rounded-2xl border border-slate-100 bg-slate-50 p-6">
       <p className="mb-4 font-mono text-[11px] uppercase tracking-wide text-slate-400">
@@ -23,9 +26,13 @@ export default function WidgetPreview({
           className="flex items-center gap-3 px-4 py-3 text-white"
           style={{ backgroundColor: brandColor }}
         >
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/20 font-heading text-xs font-bold">
-            {logoText}
-          </span>
+          {customLogo ? (
+            <img src={customLogo} alt="Logo" className="h-8 w-8 rounded-full object-contain bg-white p-0.5" />
+          ) : (
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/20 font-heading text-xs font-bold">
+              {logoText}
+            </span>
+          )}
           <div className="leading-tight">
             <p className="text-sm font-semibold">Destek Asistanı</p>
             <p className="text-[11px] text-white/80">Çevrimiçi</p>

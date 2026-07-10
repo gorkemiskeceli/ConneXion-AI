@@ -35,7 +35,7 @@ export default function HomeView() {
             <div className="space-y-6 lg:col-span-6 text-center lg:text-left">
               <div className="inline-flex items-center space-x-2 rounded bg-sky-50 px-2.5 py-1 text-[11px] font-mono font-bold text-sky-800 border border-sky-150 shadow-2xs">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                <span>PRECISE ENGINE v3.5 // PRODUCTION READY</span>
+                <span>CONNEXION-AI ENGINE v1.0 // PRODUCTION READY</span>
               </div>
               
               <h1 className="font-sans text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#1e293b] leading-tight">
@@ -101,7 +101,7 @@ export default function HomeView() {
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-500 block" />
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 block" />
                   </div>
-                  <span className="text-[9px] text-slate-500 uppercase tracking-wider">PRECISE-SYSTEM-DASHBOARD.SH</span>
+                  <span className="text-[9px] text-slate-500 uppercase tracking-wider">CONNEXION-AI-SYSTEM-DASHBOARD.SH</span>
                   <span className="w-10" />
                 </div>
 
@@ -242,7 +242,7 @@ export default function HomeView() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">Gerçek Zamanlı Karar Destek Motoru</h3>
                 <p className="text-xs text-slate-500 mt-1.5">
-                  İş akışlarınızı anlık olarak analiz edin. SaaSPrecise milisaniyeler içinde bağlamı sorgular, güvenlik kontrollerini yapar ve en doğru aksiyon planını sunar.
+                  İş akışlarınızı anlık olarak analiz edin. ConneXion-AI milisaniyeler içinde bağlamı sorgular, güvenlik kontrollerini yapar ve en doğru aksiyon planını sunar.
                 </p>
               </div>
               <div className="mt-5 pt-5 border-t border-slate-100 flex items-center space-x-6 text-[11px] font-mono text-slate-500">
@@ -303,7 +303,7 @@ export default function HomeView() {
               <h2 className="text-[11px] font-mono font-bold uppercase tracking-wider text-sky-600 mb-1">// OTOMASYON GÜCÜ</h2>
               <h3 className="text-2xl font-black text-slate-900">En Karmaşık İş Akışlarınızı Otomatikleştirin</h3>
               <p className="text-xs text-slate-500 mt-2">
-                SaaSPrecise sadece soruları yanıtlamakla kalmaz, aynı zamanda API'ler üzerinden sistemlerinizde işlem yapabilir.
+                ConneXion-AI sadece soruları yanıtlamakla kalmaz, aynı zamanda API'ler üzerinden sistemlerinizde işlem yapabilir.
               </p>
             </div>
           </div>
@@ -388,7 +388,7 @@ export default function HomeView() {
                 Bölgeler Arası Birleşik Veri Yönetişimi
               </h3>
               <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Verilerinizin nerede barındırılacağına siz karar verin. SaaSPrecise, AB (GDPR), ABD (HIPAA) ve Türkiye yerel sunucu mevzuatlarına uygun bağımsız veri lokasyonları sunarak regülatif riskleri sıfırlar.
+                Verilerinizin nerede barındırılacağına siz karar verin. ConneXion-AI, AB (GDPR), ABD (HIPAA) ve Türkiye yerel sunucu mevzuatlarına uygun bağımsız veri lokasyonları sunarak regülatif riskleri sıfırlar.
               </p>
               
               <div className="grid grid-cols-2 gap-4 mt-6">
@@ -454,7 +454,7 @@ export default function HomeView() {
                 Tam Operasyonel Hassasiyete Ulaşmaya Hazır Mısınız?
               </h2>
               <p className="text-xs text-slate-300 max-w-xl mx-auto leading-relaxed">
-                SaaSPrecise yapay zeka modelleriyle müşteri memnuniyetinizi artırın, operasyonel yüklerinizi hafifletin ve hata payını sıfıra indirin.
+                ConneXion-AI yapay zeka modelleriyle müşteri memnuniyetinizi artırın, operasyonel yüklerinizi hafifletin ve hata payını sıfıra indirin.
               </p>
               
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">

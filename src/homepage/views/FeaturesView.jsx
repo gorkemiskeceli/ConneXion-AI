@@ -19,24 +19,24 @@ export default function FeaturesView() {
     "document_text": "Sözleşme bedeli 14 gün içinde ödenmezse %2 faiz uygulanacaktır.",
     "mask_pii": true
   }'`,
-    node: `import { SaaSPreciseClient } from '@saasprecise/sdk';
+    node: `import { ConneXionClient } from '@connexion-ai/sdk';
 
-const precise = new SaaSPreciseClient({
-  apiKey: process.env.PRECISE_API_KEY
+const connexion = new ConneXionClient({
+  apiKey: process.env.CONNEXION_API_KEY
 });
 
-const result = await precise.analyze({
+const result = await connexion.analyze({
   sector: 'hukuk',
   documentText: 'Sözleşme bedeli 14 gün içinde ödenmezse %2 faiz uygulanacaktır.',
   maskPii: true
 });
 
 console.log(result.accuracy); // -> 0.994`,
-    python: `from saasprecise import SaaSPrecise
+    python: `from connexion_ai import ConneXion
 
-precise = SaaSPrecise(api_key="your_api_key")
+connexion = ConneXion(api_key="your_api_key")
 
-response = precise.analyze(
+response = connexion.analyze(
     sector="hukuk",
     document_text="Sözleşme bedeli 14 gün içinde ödenmezse %2 faiz uygulanacaktır.",
     mask_pii=True
@@ -70,7 +70,7 @@ print(response.get('accuracy')) # -> 0.994`
             </div>
             <h2 className="text-lg font-bold text-slate-900">Gerçek Zamanlı Öngörü Motoru</h2>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Gelen veriyi anında analiz eden, yapay zeka halüsinasyonlarını ortadan kaldıran özel doğrulama katmanımızdır. SaaSPrecise, genel amaçlı bir asistan değildir; sektörel bilgi tabanı ve mantıksal doğrulama mekanizmalarıyla çalışır.
+              Gelen veriyi anında analiz eden, yapay zeka halüsinasyonlarını ortadan kaldıran özel doğrulama katmanımızdır. ConneXion-AI, genel amaçlı bir asistan değildir; sektörel bilgi tabanı ve mantıksal doğrulama mekanizmalarıyla çalışır.
             </p>
             
             <ul className="space-y-2.5 text-xs text-slate-600">
@@ -124,7 +124,7 @@ print(response.get('accuracy')) # -> 0.994`
             </div>
             <h2 className="text-lg font-bold text-slate-900">Güvenli ve Şifreli Altyapı</h2>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Verilerinize saygı duyuyoruz. SaaSPrecise üzerinde işlenen hiçbir veri üçüncü taraf modellerin eğitimi amacıyla kullanılmaz. Tüm süreçler tamamen izole edilmiş kurumsal alanlarda çalışır.
+              Verilerinize saygı duyuyoruz. ConneXion-AI üzerinde işlenen hiçbir veri üçüncü taraf modellerin eğitimi amacıyla kullanılmaz. Tüm süreçler tamamen izole edilmiş kurumsal alanlarda çalışır.
             </p>
 
             <div className="grid grid-cols-2 gap-3">
@@ -187,7 +187,7 @@ print(response.get('accuracy')) # -> 0.994`
               </div>
               <h2 className="text-lg font-bold text-slate-900">Sorunsuz API Entegrasyonu</h2>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Geliştiriciler tarafından, geliştiriciler için tasarlandı. Basit REST mimarimiz ve hafif SDK'larımız sayesinde, sistemlerinize SaaSPrecise asistanlarını entegre etmek birkaç satır koddan ibarettir.
+                Geliştiriciler tarafından, geliştiriciler için tasarlandı. Basit REST mimarimiz ve hafif SDK'larımız sayesinde, sistemlerinize ConneXion-AI asistanlarını entegre etmek birkaç satır koddan ibarettir.
               </p>
 
               <div className="space-y-2.5 text-xs text-slate-600">

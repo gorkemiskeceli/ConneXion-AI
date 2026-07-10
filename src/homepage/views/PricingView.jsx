@@ -143,7 +143,7 @@ export default function PricingView() {
         <section className="max-w-3xl mx-auto py-8" id="faq-section">
           <div className="text-center mb-8">
             <span className="inline-flex items-center space-x-1 rounded bg-sky-50 px-2 py-0.5 text-[11px] font-mono font-bold text-sky-800 border border-sky-150">// SIKÇA SORULAN SORULAR</span>
-            <p className="text-xs text-slate-500 mt-1">SaaSPrecise güvenlik, teknik özellikler ve fiyatlandırma hakkında merak edilenler.</p>
+            <p className="text-xs text-slate-500 mt-1">ConneXion-AI güvenlik, teknik özellikler ve fiyatlandırma hakkında merak edilenler.</p>
           </div>
 
           <div className="space-y-2.5">

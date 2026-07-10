@@ -55,7 +55,7 @@ export default function DashboardLayout({
         </main>
 
         <footer className="flex items-center justify-between border-t border-slate-200/40 px-4 py-4 text-xs text-slate-400 lg:px-8">
-          <span>© {new Date().getFullYear()} AI Chatbot — Müşteri Hizmetleri</span>
+          <span>© {new Date().getFullYear()} ConneXion-AI — Müşteri Hizmetleri</span>
           <span className="font-mono">v1.0.0</span>
         </footer>
       </div>

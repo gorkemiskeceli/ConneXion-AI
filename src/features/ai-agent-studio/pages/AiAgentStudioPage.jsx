@@ -22,8 +22,18 @@ import { useCreateAiAgentMutation } from "../../../services/api";
  */
 export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
   const { showToast } = useToast();
-  const { activeTab, setActiveTab, agents, selectedAgentId, setSelectedAgentId, knowledgeSources, handoffRules, logs } =
-    useAiAgentStudio();
+  const {
+    activeTab,
+    setActiveTab,
+    agents,
+    selectedAgent,
+    selectedAgentId,
+    setSelectedAgentId,
+    knowledgeSources,
+    handoffRules,
+    logs,
+    queues,
+  } = useAiAgentStudio();
 
   const [createAgent] = useCreateAiAgentMutation();
 
@@ -64,19 +74,27 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
   const renderSection = () => {
     switch (activeTab) {
       case "general":
-        return <GeneralSection canEdit={canEdit} onSave={handleSaveSettings} />;
+        return <GeneralSection canEdit={canEdit} agent={selectedAgent} onSave={handleSaveSettings} />;
       case "instructions":
-        return <InstructionsSection canEdit={canEdit} onSave={handleSaveSettings} />;
+        return <InstructionsSection canEdit={canEdit} agent={selectedAgent} onSave={handleSaveSettings} />;
       case "knowledge":
         return (
           <KnowledgeSourcesSection canEdit={canEdit} sources={knowledgeSources} onSave={handleSaveSettings} />
         );
       case "guardrails":
-        return <GuardrailsSection canEdit={canEdit} onSave={handleSaveSettings} />;
+        return <GuardrailsSection canEdit={canEdit} agent={selectedAgent} onSave={handleSaveSettings} />;
       case "handoff":
-        return <HandoffRulesSection canEdit={canEdit} rules={handoffRules} onSave={handleSaveSettings} />;
+        return (
+          <HandoffRulesSection
+            canEdit={canEdit}
+            rules={handoffRules}
+            agent={selectedAgent}
+            queues={queues}
+            onSave={handleSaveSettings}
+          />
+        );
       case "playground":
-        return <TestPlaygroundSection enabled={canPlayground} />;
+        return <TestPlaygroundSection enabled={canPlayground} agent={selectedAgent} />;
       case "logs":
         return <AiLogsSection logs={logs} />;
       default:
