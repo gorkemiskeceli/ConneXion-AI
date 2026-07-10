@@ -6,6 +6,7 @@ import {
   Layers, CheckCircle2, Globe, Database, Cpu, Play
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import TokenComparison from '../components/TokenComparison.jsx';
 
 export default function HomeView() {
   const dispatch = useDispatch();
@@ -143,6 +144,9 @@ export default function HomeView() {
           </div>
         </div>
       </section>
+
+      {/* Premium comparison benchmark section */}
+      <TokenComparison />
 
       {/* Sektörel Başarı (Industry Success Cards) */}
       <section className="py-12 bg-white border-y border-slate-200">
