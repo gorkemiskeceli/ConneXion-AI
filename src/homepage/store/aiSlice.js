@@ -3,7 +3,10 @@ import { callHuggingFaceAI } from '../../services/aiService';
 
 export const sendMessageToAI = createAsyncThunk(
   'ai/sendMessage',
-  async ({ systemPrompt, userMessage }, { rejectWithValue }) => {
+  async ({ systemPrompt, userMessage, isBlocked }, { rejectWithValue }) => {
+    if (isBlocked) {
+      return "Üzgünüm, bu konuda yardımcı olamıyorum. Belirttiğiniz ifadeler asistan politikalarımıza uygun değildir.";
+    }
     const result = await callHuggingFaceAI(systemPrompt, userMessage);
     if (result.error) {
       return rejectWithValue(result.error);
@@ -30,8 +33,10 @@ const aiSlice = createSlice({
   initialState,
   reducers: {
     clearChat: (state) => {
+      // Keep only initial greeting message when clearing
       state.messages = [initialState.messages[0]];
       state.error = null;
+      state.loading = false;
     },
     clearError: (state) => {
       state.error = null;
@@ -42,9 +47,9 @@ const aiSlice = createSlice({
       .addCase(sendMessageToAI.pending, (state, action) => {
         state.loading = true;
         state.error = null;
-        // Add user message immediately
+        // Append user message immediately
         state.messages.push({
-          id: `user-${Date.now()}`,
+          id: `${Date.now()}-user`,
           sender: 'user',
           text: action.meta.arg.userMessage,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -52,8 +57,9 @@ const aiSlice = createSlice({
       })
       .addCase(sendMessageToAI.fulfilled, (state, action) => {
         state.loading = false;
+        // Append assistant response
         state.messages.push({
-          id: `ai-${Date.now()}`,
+          id: `${Date.now()}-ai`,
           sender: 'assistant',
           text: action.payload,
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -61,7 +67,7 @@ const aiSlice = createSlice({
       })
       .addCase(sendMessageToAI.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'An unknown error occurred.';
+        state.error = action.payload || 'Bilinmeyen bir bağlantı hatası oluştu.';
       });
   }
 });

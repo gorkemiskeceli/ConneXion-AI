@@ -1,51 +1,108 @@
+import { useState, useEffect } from "react";
+
 import StudioSection from "../StudioSection";
 import FormField from "../../../../shared/components/ui/FormField";
-import Input from "../../../../shared/components/ui/Input";
 import Textarea from "../../../../shared/components/ui/Textarea";
+import { useUpdateAiAgentMutation } from "../../../../services/api";
+import { useToast } from "../../../../shared/components/ui/Toast";
 
 /**
- * InstructionsSection — the agent's behavior instructions and canned messages.
+ * InstructionsSection — behavioral rules & canned messages.
  */
-export default function InstructionsSection({ canEdit }) {
+export default function InstructionsSection({ canEdit, agent, onReset }) {
+  const { showToast } = useToast();
+  const [customInstructions, setCustomInstructions] = useState("");
+  const [greeting, setGreeting] = useState("");
+  const [fallback, setFallback] = useState("");
+
+  const [updateAiAgent, { isLoading }] = useUpdateAiAgentMutation();
+
+  // Sync state with selected agent
+  useEffect(() => {
+    if (agent) {
+      setCustomInstructions(agent.customInstructions || agent.instructions || "");
+      setGreeting(agent.greeting || "");
+      setFallback(agent.fallback || "");
+    }
+  }, [agent]);
+
+  const handleSave = async () => {
+    if (!agent) return;
+    try {
+      await updateAiAgent({
+        id: agent.id,
+        instructions: customInstructions, // for legacy fallback
+        customInstructions,
+        greeting,
+        fallback,
+      }).unwrap();
+      showToast("Talimatlar başarıyla kaydedildi.", "success");
+    } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
+      console.error("Failed to update instructions:", err);
+    }
+  };
+
+  if (!agent) {
+    return (
+      <div className="flex h-full items-center justify-center p-6 text-slate-400">
+        Yükleniyor veya seçili asistan bulunamadı...
+      </div>
+    );
+  }
+
   return (
     <StudioSection
       title="Talimatlar"
-      description="Asistanın nasıl davranacağını belirleyen talimatları yazın."
+      description="Asistanınızın nasıl davranacağını, konuşacağını ve yanıtlayacağını tanımlayın."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={handleSave}
+      onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
+
         <FormField
           label="Sistem Talimatları"
-          hint="Asistanın rolünü, sınırlarını ve yanıt tarzını tanımlayın."
-          htmlFor="instructions"
+          hint="Karakterini, kurallarını ve yanıt şablonlarını buraya yazın."
+          htmlFor="sys-instructions"
         >
           <Textarea
-            id="instructions"
-            rows={8}
-            placeholder="Örn. Sen bir müşteri destek asistanısın. Kibar ve yardımsever bir dille yanıt ver..."
-            disabled={!canEdit}
-          />
-        </FormField>
-
-        <FormField label="Karşılama Mesajı" htmlFor="greeting">
-          <Textarea
-            id="greeting"
-            rows={2}
-            placeholder="Örn. Merhaba! Size nasıl yardımcı olabilirim?"
-            disabled={!canEdit}
+            id="sys-instructions"
+            placeholder="Sen bir müşteri destek temsilcisisin. Kibar ol..."
+            rows={6}
+            disabled={!canEdit || isLoading}
+            value={customInstructions}
+            onChange={(e) => setCustomInstructions(e.target.value)}
           />
         </FormField>
 
         <FormField
-          label="Yedek (Fallback) Mesajı"
-          hint="Asistan yanıt üretemediğinde gösterilir."
-          htmlFor="fallback"
+          label="Karşılama Mesajı"
+          hint="Sohbet başladığında gönderilen ilk mesaj."
+          htmlFor="greeting-msg"
         >
-          <Input
-            id="fallback"
-            placeholder="Örn. Bu konuda bir temsilciye aktarıyorum."
-            disabled={!canEdit}
+          <Textarea
+            id="greeting-msg"
+            placeholder="Merhaba! Size bugün nasıl yardımcı olabilirim?"
+            rows={3}
+            disabled={!canEdit || isLoading}
+            value={greeting}
+            onChange={(e) => setGreeting(e.target.value)}
+          />
+        </FormField>
+
+        <FormField
+          label="Yedek Mesaj (Fallback)"
+          hint="Sorunun cevabı bulunamadığında veya hata oluştuğunda gönderilecek mesaj."
+          htmlFor="fallback-msg"
+        >
+          <Textarea
+            id="fallback-msg"
+            placeholder="Üzgünüm, bu konuda yeterli bilgiye sahip değilim. Sizi hemen canlı bir temsilciye aktarıyorum."
+            rows={3}
+            disabled={!canEdit || isLoading}
+            value={fallback}
+            onChange={(e) => setFallback(e.target.value)}
           />
         </FormField>
       </div>

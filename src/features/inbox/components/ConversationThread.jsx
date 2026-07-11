@@ -23,7 +23,7 @@ export default function ConversationThread({
   conversation,
   messages = [],
   aiSuggestions = [],
-  onSendMessage,
+  onSend,
   onResolveTicket,
 }) {
   const [draft, setDraft] = useState("");
@@ -126,9 +126,10 @@ export default function ConversationThread({
           value={draft}
           onChange={setDraft}
           onSend={() => {
-            if (!draft.trim()) return;
-            onSendMessage?.(draft);
-            setDraft("");
+            if (draft.trim()) {
+              onSend?.(draft);
+              setDraft("");
+            }
           }}
         />
       </div>

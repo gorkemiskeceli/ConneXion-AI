@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-router-dom";
 import { Provider, useSelector } from "react-redux";
 import { store } from "./homepage/store/index.js";
+import { ToastProvider } from "./shared/components/ui/Toast";
 
 // Layout and Core Pages
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -54,31 +55,18 @@ function DashboardWrapper() {
 
   return (
     <RoleContext.Provider value={{ role, setRole }}>
-      <div className="relative">
-        {/* Floating Role Switcher Widget - Premium Preview Feature */}
-        <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-xl bg-white p-2.5 shadow-2xl border border-slate-200 transition-all hover:scale-105 duration-300">
-          <span className="text-[10px] font-bold text-slate-500 font-mono uppercase tracking-wider">Rol Seçimi:</span>
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-800 outline-none focus:border-primary transition-all cursor-pointer"
-          >
-            <option value={ROLES.PLATFORM_ADMIN}>Platform Admin</option>
-            <option value={ROLES.WORKSPACE_ADMIN}>Workspace Admin</option>
-            <option value={ROLES.MANAGER}>Manager</option>
-            <option value={ROLES.SUPPORT_AGENT}>Support Agent</option>
-          </select>
+      <ToastProvider>
+        <div className="relative">
+          <DashboardLayout
+            role={role}
+            userName={currentUser?.name || "Ahmet Yılmaz"}
+            userRoleLabel={roleLabels[role]}
+            workspaceName="ConneXion-AI Corp"
+            workspacePlan="Enterprise"
+          />
+          <EmbedChatWidget />
         </div>
-
-        <DashboardLayout
-          role={role}
-          userName={currentUser?.name || "Ahmet Yılmaz"}
-          userRoleLabel={roleLabels[role]}
-          workspaceName="ConneXion-AI Corp"
-          workspacePlan="Enterprise"
-        />
-        <EmbedChatWidget />
-      </div>
+      </ToastProvider>
     </RoleContext.Provider>
   );
 }

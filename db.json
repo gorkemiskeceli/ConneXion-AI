@@ -131,6 +131,15 @@
       "lastLogin": "Dün 13:23",
       "queue": "İade & İptal",
       "activeCount": 2
+    },
+    {
+      "name": "Hasan Doğan",
+      "email": "hasan@example.com",
+      "role": "support_agent",
+      "availability": "online",
+      "queue": "Teknik Destek",
+      "activeCount": 0,
+      "id": "IUARZx7"
     }
   ],
   "customers": [
@@ -1013,34 +1022,17 @@
       }
     },
     {
-      "id": "conv_002",
       "customerId": "cus_003",
       "name": "Umut Aslan",
-      "email": "umut.aslan@example.com",
-      "preview": "Ürünüm hasarlı geldi.",
-      "time": "12 dk",
-      "unread": 1,
       "status": "pending",
-      "priority": "medium",
-      "channel": "web",
-      "assignedAgentId": "usr_008",
       "aiSummary": "Fatura kopyası talep edildi; e-posta ile iletilecek.",
       "aiSuggestions": [
         "Siparişiniz yola çıktı, takip numaranız:",
         "Bir temsilciye aktarıyorum."
       ],
-      "customer": {
-        "name": "Umut Aslan",
-        "email": "umut.aslan@example.com",
-        "phone": "+90 539 651 27 95",
-        "location": "İzmir, Türkiye",
-        "since": "11 Oca 2024",
-        "tags": [
-          "Kurumsal",
-          "Teknik",
-          "Öncelikli"
-        ]
-      }
+      "preview": "Bir temsilciye aktarıyorum.",
+      "lastActivity": "19:10",
+      "id": "conv_002"
     },
     {
       "id": "conv_003",
@@ -3445,6 +3437,27 @@
       "type": "text",
       "text": "İşleminizi oluşturdum, birkaç dakika içinde tamamlanacak.",
       "timestamp": "14:29"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "19:10",
+      "id": "ZOiTlHO"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "Siparişiniz yola çıktı, takip numaranız:",
+      "timestamp": "19:10",
+      "id": "5ycd7ll"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "Bir temsilciye aktarıyorum.",
+      "timestamp": "19:10",
+      "id": "eF2gEVj"
     }
   ],
   "teamPerformance": [
@@ -3856,7 +3869,11 @@
       "active": true,
       "instructions": "Sen Acme'nin müşteri destek asistanısın. Kibar, kısa ve yardımsever yanıtlar ver. Emin olmadığında konuşmayı bir temsilciye aktar.",
       "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
-      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum."
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "companyDescription": "Genel müşteri destek asistanı.",
+      "keywords": [],
+      "themeColor": "#5cf0b7",
+      "themeTextColor": "#ffffff"
     },
     {
       "id": "agt_002",
@@ -4371,6 +4388,11 @@
         "value": "%72",
         "deltaLabel": "9% dünden",
         "deltaType": "up"
+      },
+      "totalTokensUsed": {
+        "value": "152340",
+        "deltaLabel": "347.6K limit kaldı",
+        "deltaType": "neutral"
       }
     },
     "recentActivity": [

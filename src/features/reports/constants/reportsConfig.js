@@ -27,7 +27,7 @@ export const REPORT_KPIS = [
 
 // Shared chart palette.
 export const CHART_COLORS = {
-  primary: "#5B63F0",
+  primary: "#2F6FEE",
   success: "#22C55E",
   amber: "#F59E0B",
   sky: "#0EA5E9",

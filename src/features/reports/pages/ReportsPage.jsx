@@ -1,4 +1,5 @@
 import { Download } from "lucide-react";
+import html2pdf from "html2pdf.js";
 
 import useReports from "../hooks/useReports";
 import RangeFilter from "../components/RangeFilter";
@@ -41,8 +42,29 @@ export default function ReportsPage({ role = ROLES.PLATFORM_ADMIN }) {
   const canExport = canReports(role, REPORTS_ACTION.EXPORT);
   const canViewTeam = canReports(role, REPORTS_ACTION.VIEW_TEAM);
 
+  const handleExport = () => {
+    const element = document.getElementById("reports-content-to-export");
+    
+    // Hide controls during render to keep PDF clean
+    const noPrintElements = document.querySelectorAll(".no-print-pdf");
+    noPrintElements.forEach(el => el.style.display = "none");
+
+    const opt = {
+      margin:       [0.4, 0.4, 0.4, 0.4],
+      filename:     `rapor-analizi-${range}.pdf`,
+      image:        { type: "jpeg", quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true, logging: false },
+      jsPDF:        { unit: "in", format: "a4", orientation: "landscape" }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+      // Restore hidden controls
+      noPrintElements.forEach(el => el.style.display = "");
+    });
+  };
+
   return (
-    <div className="mx-auto max-w-[1600px]">
+    <div id="reports-content-to-export" className="mx-auto max-w-[1600px] p-4">
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -54,12 +76,13 @@ export default function ReportsPage({ role = ROLES.PLATFORM_ADMIN }) {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 no-print-pdf">
           <RangeFilter value={range} onChange={setRange} />
           {canExport && (
             <button
               type="button"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+              onClick={handleExport}
+              className="inline-flex items-center gap-2 rounded-full border border-primary/45 bg-white/20 backdrop-blur-md px-4 py-2 text-sm font-semibold text-primary shadow-xs transition-all hover:bg-primary/10 active:scale-95"
             >
               <Download className="h-4 w-4" />
               Dışa Aktar

@@ -34,7 +34,7 @@ export default function AgentPerformanceCard({ rows = [] }) {
   return (
     <SectionCard
       title="Temsilci Performansı"
-      footerLink={{ label: "Tüm Performansı Gör", to: PATHS.reports }}
+      footerLink={{ label: "Tüm Performansı Gör", to: `${PATHS.team}?tab=performance` }}
     >
       {rows.length === 0 ? (
         <EmptyState
