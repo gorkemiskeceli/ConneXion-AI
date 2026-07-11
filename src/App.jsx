@@ -14,6 +14,7 @@ import KnowledgeBasePage from "./features/knowledge-base/pages/KnowledgeBasePage
 import WorkflowsPage from "./features/workflows/pages/WorkflowsPage";
 import TeamQueuesPage from "./features/team-queues/pages/TeamQueuesPage";
 import ReportsPage from "./features/reports/pages/ReportsPage";
+import SupportPage from "./features/support/pages/SupportPage";
 import SettingsPage from "./features/settings/pages/SettingsPage";
 import LandingPage from "./homepage/LandingPage";
 
@@ -93,6 +94,7 @@ const router = createBrowserRouter([
       { path: "workflows", element: <RoleRoute Component={WorkflowsPage} /> },
       { path: "team", element: <RoleRoute Component={TeamQueuesPage} /> },
       { path: "reports", element: <RoleRoute Component={ReportsPage} /> },
+      { path: "support", element: <RoleRoute Component={SupportPage} /> },
       { path: "settings", element: <RoleRoute Component={SettingsPage} initialSection="workspace" /> },
       { path: "settings/audit-logs", element: <RoleRoute Component={SettingsPage} initialSection="audit" /> },
     ],

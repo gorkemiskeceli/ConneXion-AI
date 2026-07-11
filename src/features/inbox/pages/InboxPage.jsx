@@ -30,13 +30,20 @@ export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
     setFilter,
     search,
     setSearch,
-  } = useInbox();
+    onSendMessage,
+    onResolveTicket,
+  } = useInbox(role);
 
   const [createMessage] = useCreateMessageMutation();
   const [updateConversation] = useUpdateConversationMutation();
 
   const handleSendMessage = async (text) => {
     if (!activeConversationId || !activeConversation) return;
+
+    if (activeConversation.channel === "ticket") {
+      onSendMessage?.(text);
+      return;
+    }
 
     const newMessage = {
       conversationId: activeConversationId,
@@ -87,6 +94,7 @@ export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
               messages={messages}
               aiSuggestions={aiSuggestions}
               onSend={handleSendMessage}
+              onResolveTicket={onResolveTicket}
             />
           ) : (
             <EmptyState

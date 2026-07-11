@@ -69,6 +69,11 @@ const searchItems = [
   { label: "Müşteri Memnuniyeti / CSAT (Reports)", path: "/dashboard/reports", keywords: ["musteri", "memnuniyeti", "csat", "skor", "reports", "rapor"] },
   { label: "Ortalama Yanıt Süresi (Reports)", path: "/dashboard/reports", keywords: ["ortalama", "yanit", "sureleri", "cozum", "reports", "rapor"] },
   
+  // Destek (Support)
+  { label: "Destek Yönetimi (Support)", path: "/dashboard/support", keywords: ["support", "destek", "yardim", "talep", "bilet", "ticket"] },
+  { label: "Yeni Destek Talebi (Support)", path: "/dashboard/support", keywords: ["yeni", "destek", "talebi", "ac", "ekle", "olustur", "ticket", "support"] },
+  { label: "Yardım SSS Kılavuzu (Support)", path: "/dashboard/support", keywords: ["sss", "faq", "kilavuz", "yardim", "makale", "support"] },
+  
   // Ayarlar (Settings)
   { label: "Workspace Ayarları (Settings)", path: "/dashboard/settings?section=workspace", keywords: ["settings", "ayarlar", "workspace", "profil", "logo", "marka"] },
   { label: "Kullanıcı Yönetimi (Settings)", path: "/dashboard/settings?section=users", keywords: ["settings", "ayarlar", "kullanici", "kullanicilar", "davet", "users"] },

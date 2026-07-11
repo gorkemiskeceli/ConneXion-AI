@@ -1,71 +1,194 @@
-import { useState } from "react";
-import {
-  useGetConversationsQuery,
-  useGetMessagesQuery,
-  useGetCustomersQuery,
-} from "../../../services/api";
+import { useState, useMemo, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
+import { addMessageToTicket, updateTicketStatus } from "../../../homepage/store/supportSlice";
 
 /**
  * useInbox — data + UI-state seam for the Inbox.
- *
- * Reads conversations, messages, and customers from the RTK Query API.
- * Integrates search, status tab filters, message threads, and customer notes.
  */
-export default function useInbox() {
+export default function useInbox(role) {
+  const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const ticketIdFromUrl = searchParams.get("id");
+
   // UI state (stays local even after data is wired).
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
-  const [activeConversationId, setActiveConversationId] = useState(null);
+  const [activeConversationId, setActiveConversationId] = useState(ticketIdFromUrl || null);
 
-  const { data: rawConversations = [], isLoading: isConvLoading, error: convError } = useGetConversationsQuery();
-  const { data: rawCustomers = [] } = useGetCustomersQuery();
+  // Sync state if URL changes
+  useEffect(() => {
+    if (ticketIdFromUrl) {
+      setActiveConversationId(ticketIdFromUrl);
+    }
+  }, [ticketIdFromUrl]);
 
-  const { data: messages = [], isLoading: isMsgLoading } = useGetMessagesQuery(
-    activeConversationId,
-    { skip: !activeConversationId }
-  );
+  const handleSelectConversation = (id) => {
+    setActiveConversationId(id);
+    if (id) {
+      setSearchParams({ id });
+    } else {
+      setSearchParams({});
+    }
+  };
 
-  // 1. Filter conversations by tab (filter) and search query
-  const conversations = rawConversations.filter((c) => {
-    const matchesSearch =
-      !search ||
-      c.name?.toLowerCase().includes(search.toLowerCase()) ||
-      c.preview?.toLowerCase().includes(search.toLowerCase());
+  // Read support tickets from Redux
+  const tickets = useSelector((state) => state.support.tickets);
 
-    const matchesTab =
-      filter === "all" ||
-      (filter === "open" && c.status === "open") ||
-      (filter === "pending" && c.status === "pending") ||
-      (filter === "closed" && c.status === "closed");
+  // Filter tickets by active user role to prevent cross-workspace visibility
+  const roleFilteredTickets = useMemo(() => {
+    if (role === "platform_admin" || role === "support_agent") {
+      return tickets;
+    }
+    if (role === "workspace_admin") {
+      // Workspace Admin only sees "Acme Corp" tickets
+      return tickets.filter((t) => t.customer.includes("Acme Corp"));
+    }
+    if (role === "manager") {
+      // Manager only sees "TrendSoft" tickets
+      return tickets.filter((t) => t.customer.includes("TrendSoft"));
+    }
+    return [];
+  }, [tickets, role]);
 
-    return matchesSearch && matchesTab;
-  });
+  // Map tickets to conversation format
+  // { id, name, preview, time, unread, status, priority, channel }
+  const ticketConversations = useMemo(() => {
+    return roleFilteredTickets.map((t) => ({
+      id: t.id,
+      name: t.customer,
+      preview: `${t.category}: ${t.subject}`,
+      time: t.date,
+      unread: t.status === "open" ? 1 : 0,
+      status: t.status === "resolved" ? "closed" : t.status,
+      priority: t.priority,
+      channel: "ticket",
+    }));
+  }, [roleFilteredTickets]);
 
-  const activeConversation =
-    rawConversations.find((c) => c.id === activeConversationId) ?? null;
+  // Combined conversations list
+  const conversations = useMemo(() => {
+    return ticketConversations.filter((c) => {
+      const matchesSearch =
+        c.name.toLowerCase().includes(search.toLowerCase()) ||
+        c.preview.toLowerCase().includes(search.toLowerCase()) ||
+        c.id.toLowerCase().includes(search.toLowerCase());
 
-  // Retrieve full customer object (including notes) from the customers array
-  const fullCustomer = activeConversation
-    ? rawCustomers.find((cus) => cus.id === activeConversation.customerId)
-    : null;
+      const matchesFilter =
+        filter === "all"
+          ? true
+          : filter === "closed"
+          ? c.status === "closed"
+          : filter === "pending"
+          ? c.status === "pending"
+          : c.status !== "closed"; // "mine" and "unassigned" fallback to open tickets
 
-  // Use embedded customer details if full customer is not loaded yet
-  const customer = fullCustomer || activeConversation?.customer || null;
-  const notes = fullCustomer?.notes || [];
+      return matchesSearch && matchesFilter;
+    });
+  }, [ticketConversations, search, filter]);
 
-  const aiSummary = activeConversation?.aiSummary || "";
-  const aiSuggestions = activeConversation?.aiSuggestions || [];
+  const activeConversation = useMemo(() => {
+    return conversations.find((c) => c.id === activeConversationId) ?? null;
+  }, [conversations, activeConversationId]);
+
+  // Construct messages dynamically based on Redux ticket messages
+  const messages = useMemo(() => {
+    if (!activeConversation) return [];
+    const ticketObj = tickets.find((t) => t.id === activeConversation.id);
+    if (!ticketObj) return [];
+    
+    return ticketObj.messages || [
+      {
+        id: `msg-${activeConversation.id}-init`,
+        sender: "customer",
+        type: "text",
+        text: ticketObj.lastMessage,
+        timestamp: `${ticketObj.date} 10:00`,
+      }
+    ];
+  }, [activeConversation, tickets]);
+
+  const customer = useMemo(() => {
+    if (!activeConversation) return null;
+    const ticketObj = tickets.find((t) => t.id === activeConversation.id);
+    if (!ticketObj) return null;
+    return {
+      name: activeConversation.name,
+      email: `${normalizeEmailName(activeConversation.name)}@customer.com`,
+      phone: "+90 555 123 45 67",
+      location: "İstanbul, TR",
+      since: activeConversation.time,
+      tags: ["Teknik Destek", activeConversation.priority.toUpperCase()],
+    };
+  }, [activeConversation, tickets]);
+
+  function normalizeEmailName(name) {
+    return name
+      .toLowerCase()
+      .replace(/ı/g, "i")
+      .replace(/ş/g, "s")
+      .replace(/ğ/g, "g")
+      .replace(/ü/g, "u")
+      .replace(/ö/g, "o")
+      .replace(/ç/g, "c")
+      .replace(/\s+/g, "")
+      .replace(/[^\w]/g, "");
+  }
+
+  const handleSendMessage = (text) => {
+    if (!activeConversationId) return;
+    
+    // Support Agent writes as "agent". Platform/Workspace Admins write as "customer" (ticket creator).
+    const sender = role === "support_agent" ? "agent" : "customer";
+
+    dispatch(
+      addMessageToTicket({
+        ticketId: activeConversationId,
+        text,
+        sender,
+      })
+    );
+  };
+
+  const handleResolveTicket = (ticketId) => {
+    const id = ticketId || activeConversationId;
+    if (!id) return;
+    dispatch(
+      updateTicketStatus({
+        id,
+        status: "resolved",
+      })
+    );
+  };
+
+  const notes = [];
+  const aiSummary = activeConversation
+    ? `Müşteri platform üzerinde ${activeConversation.preview} ile ilgili teknik problem bildirdi. Destek temsilcisi ataması bekliyor.`
+    : "";
+  const aiSuggestions = useMemo(() => {
+    if (role === "support_agent") {
+      return [
+        "Merhaba, talebinizi aldık. Detayları inceleyip hemen dönüyorum.",
+        "Destek kaydınız oluşturuldu, ekibimiz üzerinde çalışıyor.",
+        "Sorunu çözdük, sistemi kontrol edebilir misiniz?"
+      ];
+    } else {
+      return [
+        "Sorun hala devam ediyor, kontrol edebilir misiniz?",
+        "Dosya boyutu sınırını 10MB seviyesine çekebilir miyiz?",
+        "Teşekkürler, sorunumuz çözüldü.",
+        "Güncel hata loglarını buraya ekliyorum."
+      ];
+    }
+  }, [role]);
 
   return {
     filter,
     setFilter,
     search,
-    setSearch: (val) => {
-      setSearch(val);
-      // Optional: you can clear selected conversation on search if desired
-    },
+    setSearch,
     activeConversationId,
-    setActiveConversationId,
+    setActiveConversationId: handleSelectConversation,
     conversations,
     activeConversation,
     messages,
@@ -73,7 +196,7 @@ export default function useInbox() {
     notes,
     aiSummary,
     aiSuggestions,
-    isLoading: isConvLoading || isMsgLoading,
-    error: convError,
+    onSendMessage: handleSendMessage,
+    onResolveTicket: handleResolveTicket,
   };
 }
