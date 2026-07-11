@@ -131,6 +131,15 @@
       "lastLogin": "Dün 13:23",
       "queue": "İade & İptal",
       "activeCount": 2
+    },
+    {
+      "name": "Hasan Doğan",
+      "email": "hasan@example.com",
+      "role": "support_agent",
+      "availability": "online",
+      "queue": "Teknik Destek",
+      "activeCount": 0,
+      "id": "IUARZx7"
     }
   ],
   "customers": [
@@ -3856,7 +3865,11 @@
       "active": true,
       "instructions": "Sen Acme'nin müşteri destek asistanısın. Kibar, kısa ve yardımsever yanıtlar ver. Emin olmadığında konuşmayı bir temsilciye aktar.",
       "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
-      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum."
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "companyDescription": "Genel müşteri destek asistanı.",
+      "keywords": [],
+      "themeColor": "#5cf0b7",
+      "themeTextColor": "#ffffff"
     },
     {
       "id": "agt_002",
@@ -4371,6 +4384,11 @@
         "value": "%72",
         "deltaLabel": "9% dünden",
         "deltaType": "up"
+      },
+      "totalTokensUsed": {
+        "value": "152340",
+        "deltaLabel": "347.6K limit kaldı",
+        "deltaType": "neutral"
       }
     },
     "recentActivity": [

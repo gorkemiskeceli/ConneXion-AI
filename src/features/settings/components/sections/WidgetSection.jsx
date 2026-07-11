@@ -10,17 +10,15 @@ import Textarea from "../../../../shared/components/ui/Textarea";
 import Select from "../../../../shared/components/ui/Select";
 import Toggle from "../../../../shared/components/ui/Toggle";
 import { WIDGET_POSITIONS } from "../../constants/settingsConfig";
+import { useToast } from "../../../../shared/components/ui/Toast";
 import { setCustomLogo } from "../../../../homepage/store/uiSlice";
 import { useGetWidgetSettingsQuery, useUpdateWidgetSettingsMutation } from "../../../../services/api";
 
 /**
  * WidgetSection — configure the embedded website chat widget.
- *
- * Note: the spec assigns widget configuration to the Workspace Admin; here it
- * follows the general Settings edit permission (Platform + Workspace Admin).
- * The live preview reflects the current brand color, message and questions.
  */
-export default function WidgetSection({ canEdit }) {
+export default function WidgetSection({ canEdit, onSave }) {
+  const { showToast } = useToast();
   const dispatch = useDispatch();
   const customLogo = useSelector((state) => state.ui.customLogo);
   const fileInputRef = useRef(null);
@@ -60,6 +58,7 @@ export default function WidgetSection({ canEdit }) {
       const reader = new FileReader();
       reader.onloadend = () => {
         dispatch(setCustomLogo(reader.result));
+        showToast("Logo başarıyla yüklendi.", "success");
       };
       reader.readAsDataURL(file);
     }
@@ -70,6 +69,7 @@ export default function WidgetSection({ canEdit }) {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    showToast("Logo kaldırıldı.", "info");
   };
 
   const handleSave = async () => {
@@ -82,7 +82,10 @@ export default function WidgetSection({ canEdit }) {
         showBusinessHours: showHours,
         position
       }).unwrap();
+      showToast("Widget ayarları başarıyla kaydedildi.", "success");
+      if (onSave) onSave();
     } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
       console.error("Failed to save widget settings:", err);
     }
   };

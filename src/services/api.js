@@ -89,6 +89,14 @@ export const api = createApi({
     }),
     getAiLogs: builder.query({ query: () => "/aiLogs", providesTags: ["AiLog"] }),
     getHandoffRules: builder.query({ query: () => "/handoffRules", providesTags: ["HandoffRule"] }),
+    createAiAgent: builder.mutation({
+      query: (agent) => ({
+        url: "/aiAgents",
+        method: "POST",
+        body: agent,
+      }),
+      invalidatesTags: ["AiAgent"],
+    }),
     addHandoffRule: builder.mutation({
       query: (rule) => ({
         url: "/handoffRules",
@@ -127,6 +135,181 @@ export const api = createApi({
     }),
     getBusinessHours: builder.query({ query: () => "/businessHours", providesTags: ["Settings"] }),
     getNotificationSettings: builder.query({ query: () => "/notificationSettings", providesTags: ["Settings"] }),
+
+    // Customer Mutations
+    createCustomer: builder.mutation({
+      query: (customer) => ({
+        url: "/customers",
+        method: "POST",
+        body: customer,
+      }),
+      invalidatesTags: ["Customer"],
+    }),
+    updateCustomer: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/customers/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => ["Customer", { type: "Customer", id }],
+    }),
+    deleteCustomer: builder.mutation({
+      query: (id) => ({
+        url: `/customers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Customer"],
+    }),
+
+    // Knowledge Article Mutations
+    createKnowledgeArticle: builder.mutation({
+      query: (article) => ({
+        url: "/knowledgeArticles",
+        method: "POST",
+        body: article,
+      }),
+      invalidatesTags: ["Article"],
+    }),
+    updateKnowledgeArticle: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/knowledgeArticles/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Article"],
+    }),
+    deleteKnowledgeArticle: builder.mutation({
+      query: (id) => ({
+        url: `/knowledgeArticles/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Article"],
+    }),
+
+    // Workflow Mutations
+    createWorkflow: builder.mutation({
+      query: (workflow) => ({
+        url: "/workflows",
+        method: "POST",
+        body: workflow,
+      }),
+      invalidatesTags: ["Workflow"],
+    }),
+    updateWorkflow: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/workflows/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Workflow"],
+    }),
+    deleteWorkflow: builder.mutation({
+      query: (id) => ({
+        url: `/workflows/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Workflow"],
+    }),
+
+    // User/Member Mutations
+    createUser: builder.mutation({
+      query: (user) => ({
+        url: "/users",
+        method: "POST",
+        body: user,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/users/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    // Queue Mutations
+    createQueue: builder.mutation({
+      query: (queue) => ({
+        url: "/queues",
+        method: "POST",
+        body: queue,
+      }),
+      invalidatesTags: ["Queue"],
+    }),
+    updateQueue: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/queues/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Queue"],
+    }),
+    deleteQueue: builder.mutation({
+      query: (id) => ({
+        url: `/queues/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Queue"],
+    }),
+
+    // Inbox Mutations
+    createMessage: builder.mutation({
+      query: (message) => ({
+        url: "/messages",
+        method: "POST",
+        body: message,
+      }),
+      invalidatesTags: ["Message"],
+    }),
+    updateConversation: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/conversations/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Conversation"],
+    }),
+    updateWorkspaceSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/workspaceSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
+    updateWidgetSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/widgetSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
+    updateBusinessHours: builder.mutation({
+      query: (hours) => ({
+        url: "/businessHours",
+        method: "PUT",
+        body: hours,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
+    updateNotificationSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/notificationSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
   }),
 });
 
@@ -150,11 +333,32 @@ export const {
   useGetAuditLogsQuery,
   useGetWorkspaceSettingsQuery,
   useGetWidgetSettingsQuery,
-  useUpdateWidgetSettingsMutation,
   useGetBusinessHoursQuery,
   useGetNotificationSettingsQuery,
-  useUpdateAiAgentMutation,
+  // Mutation hooks
+  useCreateCustomerMutation,
+  useUpdateCustomerMutation,
+  useDeleteCustomerMutation,
+  useCreateKnowledgeArticleMutation,
+  useUpdateKnowledgeArticleMutation,
+  useDeleteKnowledgeArticleMutation,
+  useCreateWorkflowMutation,
+  useUpdateWorkflowMutation,
+  useDeleteWorkflowMutation,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+  useCreateQueueMutation,
+  useUpdateQueueMutation,
+  useDeleteQueueMutation,
+  useCreateMessageMutation,
+  useUpdateConversationMutation,
+  useUpdateWorkspaceSettingsMutation,
+  useUpdateWidgetSettingsMutation,
+  useUpdateBusinessHoursMutation,
+  useUpdateNotificationSettingsMutation,
   useCreateAiAgentMutation,
+  useUpdateAiAgentMutation,
   useAddKnowledgeSourceMutation,
   useDeleteKnowledgeSourceMutation,
   useAddHandoffRuleMutation,

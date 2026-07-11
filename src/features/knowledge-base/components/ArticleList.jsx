@@ -14,7 +14,7 @@ import { canKnowledgeBase, KB_ACTION } from "../../../constants/permissions";
  * Rows open the article drawer; edit/delete are gated by role.
  * article: { id, title, category, status, updatedAt }
  */
-export default function ArticleList({ role, articles = [], onSelect }) {
+export default function ArticleList({ role, articles = [], onSelect, onEdit, onDelete }) {
   const canEdit = canKnowledgeBase(role, KB_ACTION.EDIT);
   const canDelete = canKnowledgeBase(role, KB_ACTION.DELETE);
   const colSpan = ARTICLE_COLUMNS.length + 1;
@@ -81,9 +81,10 @@ export default function ArticleList({ role, articles = [], onSelect }) {
                       >
                         <Eye className="h-4 w-4" />
                       </button>
-                      {canEdit && (
+                       {canEdit && (
                         <button
                           type="button"
+                          onClick={() => onEdit?.(article)}
                           className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                           aria-label="Düzenle"
                         >
@@ -93,6 +94,7 @@ export default function ArticleList({ role, articles = [], onSelect }) {
                       {canDelete && (
                         <button
                           type="button"
+                          onClick={() => onDelete?.(article.id)}
                           className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600"
                           aria-label="Sil"
                         >

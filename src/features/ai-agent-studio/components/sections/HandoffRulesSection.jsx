@@ -9,23 +9,25 @@ import Toggle from "../../../../shared/components/ui/Toggle";
 import EmptyState from "../../../../shared/components/ui/EmptyState";
 import { HANDOFF_CONDITIONS } from "../../constants/aiStudioConfig";
 import { useUpdateAiAgentMutation, useAddHandoffRuleMutation, useDeleteHandoffRuleMutation } from "../../../../services/api";
+import { useToast } from "../../../../shared/components/ui/Toast";
 
 /**
  * HandoffRulesSection — when and how to transfer to a human agent.
  * rules: { id, condition, target }
  */
 export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [], onReset }) {
+  const { showToast } = useToast();
+  const [confirmData, setConfirmData] = useState(null);
   const [flags, setFlags] = useState({});
   const [confidence, setConfidence] = useState("");
   const [targetTeam, setTargetTeam] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false);
 
   // Custom rule form state
   const [isAdding, setIsAdding] = useState(false);
   const [condition, setCondition] = useState("");
   const [target, setTarget] = useState("");
 
-  const [updateAiAgent, { isLoading, isSuccess, isError }] = useUpdateAiAgentMutation();
+  const [updateAiAgent, { isLoading }] = useUpdateAiAgentMutation();
   const [addHandoffRule] = useAddHandoffRuleMutation();
   const [deleteHandoffRule] = useDeleteHandoffRuleMutation();
 
@@ -37,15 +39,6 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
       setTargetTeam(agent.handoffTargetTeam || "");
     }
   }, [agent]);
-
-  // Show success alert temporarily
-  useEffect(() => {
-    if (isSuccess) {
-      setShowSuccess(true);
-      const timer = setTimeout(() => setShowSuccess(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isSuccess]);
 
   const setFlag = (id, value) => {
     setFlags((prev) => ({ ...prev, [id]: value }));
@@ -60,7 +53,9 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
         handoffConfidence: confidence !== "" ? Number(confidence) : "",
         handoffTargetTeam: targetTeam,
       }).unwrap();
+      showToast("Aktarım ayarları başarıyla kaydedildi.", "success");
     } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
       console.error("Failed to save handoff rules config:", err);
     }
   };
@@ -79,19 +74,26 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
       setCondition("");
       setTarget("");
       setIsAdding(false);
+      showToast("Özel aktarım kuralı başarıyla eklendi.", "success");
     } catch (err) {
+      showToast("Kural eklenirken hata oluştu.", "error");
       console.error("Failed to add custom rule:", err);
     }
   };
 
-  const handleDeleteRule = async (id) => {
-    if (window.confirm("Bu özel aktarım kuralını silmek istediğinize emin misiniz?")) {
-      try {
-        await deleteHandoffRule(id).unwrap();
-      } catch (err) {
-        console.error("Failed to delete custom rule:", err);
-      }
-    }
+  const handleDeleteRule = (id) => {
+    setConfirmData({
+      message: "Bu özel aktarım kuralını silmek istediğinize emin misiniz?",
+      onConfirm: async () => {
+        try {
+          await deleteHandoffRule(id).unwrap();
+          showToast("Aktarım kuralı silindi.", "success");
+        } catch (err) {
+          showToast("Kural silinirken hata oluştu.", "error");
+          console.error("Failed to delete custom rule:", err);
+        }
+      },
+    });
   };
 
   if (!agent) {
@@ -111,30 +113,6 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
       onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
-        {/* Success Alert Banner */}
-        {showSuccess && (
-          <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3.5 text-sm text-emerald-800 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
-            <div className="flex items-center gap-2">
-              <svg className="h-4 w-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="font-medium">Aktarım ayarları başarıyla kaydedildi!</span>
-            </div>
-          </div>
-        )}
-
-        {/* Error Alert Banner */}
-        {isError && (
-          <div className="rounded-xl bg-rose-50 border border-rose-200 p-3.5 text-sm text-rose-800 animate-in fade-in">
-            <div className="flex items-center gap-2">
-              <svg className="h-4 w-4 text-rose-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span className="font-medium">Kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.</span>
-            </div>
-          </div>
-        )}
-
         <div className="divide-y divide-slate-100 rounded-xl border border-slate-100 bg-white">
           {HANDOFF_CONDITIONS.map((opt) => (
             <div key={opt.id} className="p-4">
@@ -288,6 +266,38 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
           )}
         </div>
       </div>
+      {/* Custom Confirmation Modal */}
+      {confirmData && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/20 backdrop-blur-xs p-4 animate-in fade-in duration-100">
+          <div className="w-full max-w-sm rounded-3xl border border-white/40 bg-white/80 backdrop-blur-xl p-6 shadow-2xl animate-in zoom-in-95 duration-150">
+            <h3 className="font-heading text-lg font-extrabold text-slate-900 mb-2">
+              Emin misiniz?
+            </h3>
+            <p className="text-sm text-slate-500 mb-6">
+              {confirmData.message}
+            </p>
+            <div className="flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirmData(null)}
+                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-all"
+              >
+                Vazgeç
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  confirmData.onConfirm();
+                  setConfirmData(null);
+                }}
+                className="rounded-full bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-md shadow-red-600/10 hover:bg-red-700 active:scale-95 transition-all"
+              >
+                Sil
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </StudioSection>
   );
 }

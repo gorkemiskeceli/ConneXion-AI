@@ -9,9 +9,9 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
-  
+
   const { messages, loading, error } = useSelector((state) => state.ai);
-  
+
   const messagesEndRef = useRef(null);
 
   const { data: agents = [] } = useGetAiAgentsQuery();
@@ -157,8 +157,7 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
                     </div>
                   )}
                   <div
-                    className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm shadow-sm ${
-                      isAssistant
+                    className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm shadow-sm ${isAssistant
                         ? "bg-slate-50 border border-slate-100 text-slate-800 rounded-tl-none"
                         : "text-white rounded-tr-none"
                     }`}
@@ -221,7 +220,7 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 

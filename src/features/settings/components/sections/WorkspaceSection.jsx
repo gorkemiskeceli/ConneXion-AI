@@ -6,12 +6,14 @@ import SettingsSection from "../SettingsSection";
 import FormField from "../../../../shared/components/ui/FormField";
 import Input from "../../../../shared/components/ui/Input";
 import Select from "../../../../shared/components/ui/Select";
+import { useToast } from "../../../../shared/components/ui/Toast";
 import { setCustomLogo } from "../../../../homepage/store/uiSlice";
 
 /**
  * WorkspaceSection — general workspace configuration.
  */
-export default function WorkspaceSection({ canEdit }) {
+export default function WorkspaceSection({ canEdit, onSave }) {
+  const { showToast } = useToast();
   const dispatch = useDispatch();
   const customLogo = useSelector((state) => state.ui.customLogo);
   const fileInputRef = useRef(null);
@@ -22,6 +24,7 @@ export default function WorkspaceSection({ canEdit }) {
       const reader = new FileReader();
       reader.onloadend = () => {
         dispatch(setCustomLogo(reader.result));
+        showToast("Logo başarıyla yüklendi.", "success");
       };
       reader.readAsDataURL(file);
     }
@@ -32,6 +35,7 @@ export default function WorkspaceSection({ canEdit }) {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    showToast("Logo kaldırıldı.", "info");
   };
 
   return (
@@ -39,7 +43,7 @@ export default function WorkspaceSection({ canEdit }) {
       title="Workspace"
       description="Workspace kimliğinizi ve temel ayarlarınızı yapılandırın."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={onSave}
     >
       <div className="max-w-2xl space-y-5">
         <FormField label="Logo">

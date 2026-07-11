@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   useGetUsersQuery,
   useGetQueuesQuery,
@@ -12,7 +13,17 @@ import {
  * Supports filtering members list by search.
  */
 export default function useTeamQueues() {
-  const [activeTab, setActiveTab] = useState("members");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeTab = searchParams.get("tab") || "members";
+
+  const setActiveTab = (tab) => {
+    setSearchParams((prev) => {
+      const nextParams = new URLSearchParams(prev);
+      nextParams.set("tab", tab);
+      return nextParams;
+    });
+  };
+
   const [search, setSearch] = useState("");
 
   const { data: rawUsers = [], isLoading: usersLoading, error } = useGetUsersQuery();
