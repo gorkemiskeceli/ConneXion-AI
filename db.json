@@ -1022,34 +1022,17 @@
       }
     },
     {
-      "id": "conv_002",
       "customerId": "cus_003",
       "name": "Umut Aslan",
-      "email": "umut.aslan@example.com",
-      "preview": "Ürünüm hasarlı geldi.",
-      "time": "12 dk",
-      "unread": 1,
       "status": "pending",
-      "priority": "medium",
-      "channel": "web",
-      "assignedAgentId": "usr_008",
       "aiSummary": "Fatura kopyası talep edildi; e-posta ile iletilecek.",
       "aiSuggestions": [
         "Siparişiniz yola çıktı, takip numaranız:",
         "Bir temsilciye aktarıyorum."
       ],
-      "customer": {
-        "name": "Umut Aslan",
-        "email": "umut.aslan@example.com",
-        "phone": "+90 539 651 27 95",
-        "location": "İzmir, Türkiye",
-        "since": "11 Oca 2024",
-        "tags": [
-          "Kurumsal",
-          "Teknik",
-          "Öncelikli"
-        ]
-      }
+      "preview": "Bir temsilciye aktarıyorum.",
+      "lastActivity": "19:10",
+      "id": "conv_002"
     },
     {
       "id": "conv_003",
@@ -3454,6 +3437,27 @@
       "type": "text",
       "text": "İşleminizi oluşturdum, birkaç dakika içinde tamamlanacak.",
       "timestamp": "14:29"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "19:10",
+      "id": "ZOiTlHO"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "Siparişiniz yola çıktı, takip numaranız:",
+      "timestamp": "19:10",
+      "id": "5ycd7ll"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "Bir temsilciye aktarıyorum.",
+      "timestamp": "19:10",
+      "id": "eF2gEVj"
     }
   ],
   "teamPerformance": [
