@@ -95,7 +95,7 @@ export default function TeamMembersTab({
                   <td className="px-5 py-3">{m.activeCount ?? 0}</td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      {canManageTeam ? (
+                      {canManageTeam && (m.role !== "platform_admin" || role === "platform_admin") ? (
                         <>
                           <button
                             type="button"

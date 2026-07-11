@@ -1,7 +1,9 @@
-import { NavLink } from "react-router-dom";
-import { ChevronsUpDown } from "lucide-react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "../../components/Logo";
-import { getNavForRole } from "../../constants/navigation";
+import { getNavForRole, ROLES } from "../../constants/navigation";
+import { logoutUser } from "../../homepage/store/authSlice";
 
 /**
  * Sidebar — premium floating dark-glass rail:
@@ -17,6 +19,24 @@ export default function Sidebar({
   onClose,
 }) {
   const items = getNavForRole(role);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const currentUser = useSelector((state) => state.auth.user);
+  const userName = currentUser?.name || "Ahmet Yılmaz";
+  
+  const roleLabels = {
+    [ROLES.PLATFORM_ADMIN]: "Platform Admin",
+    [ROLES.WORKSPACE_ADMIN]: "Workspace Admin",
+    [ROLES.MANAGER]: "Manager",
+    [ROLES.SUPPORT_AGENT]: "Support Agent",
+  };
+  const userRoleLabel = roleLabels[role] || "User";
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate("/");
+  };
 
   return (
     <>
@@ -74,31 +94,37 @@ export default function Sidebar({
           ))}
         </nav>
 
-        {/* Workspace switcher card */}
-        <div className="p-3 border-t border-white/5">
-          <button
-            type="button"
-            className={`flex items-center gap-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 py-2.5 text-left transition-all text-white ${
-              open ? "w-full px-3" : "justify-center px-0 w-12 h-12 mx-auto"
-            }`}
-          >
-            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-sky-500 font-sans text-sm font-bold text-white">
-              {workspaceName ? workspaceName.charAt(0).toUpperCase() : "W"}
-            </span>
-            {open && (
-              <>
-                <span className="min-w-0 flex-1 leading-tight animate-in fade-in duration-300">
-                  <span className="block truncate text-sm font-semibold text-white">
-                    {workspaceName || "Workspace"}
-                  </span>
-                  <span className="block truncate font-mono text-[9px] uppercase tracking-wide text-slate-450">
-                    {workspacePlan || "Plan"}
-                  </span>
+        {/* Profile and Logout Section */}
+        <div className="p-3 border-t border-white/5 bg-slate-900/30">
+          {open ? (
+            <div className="flex items-center justify-between gap-2.5 rounded-2xl bg-white/5 border border-white/5 p-2 text-white">
+              <div className="min-w-0 flex-1 leading-tight px-1">
+                <span className="block truncate text-sm font-semibold text-white">
+                  {userName}
                 </span>
-                <ChevronsUpDown className="h-4 w-4 shrink-0 text-slate-450" />
-              </>
-            )}
-          </button>
+                <span className="block truncate text-[10px] text-slate-400 mt-0.5">
+                  {userRoleLabel}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-lg p-2 text-slate-450 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                title="Çıkış Yap"
+              >
+                <LogOut className="h-4.5 w-4.5" />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex h-12 w-12 mx-auto items-center justify-center rounded-2xl bg-white/5 border border-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+              title="Çıkış Yap"
+            >
+              <LogOut className="h-5 w-5" />
+            </button>
+          )}
         </div>
       </aside>
     </>

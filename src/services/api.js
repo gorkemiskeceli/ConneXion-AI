@@ -333,7 +333,6 @@ export const {
   useGetAuditLogsQuery,
   useGetWorkspaceSettingsQuery,
   useGetWidgetSettingsQuery,
-  useUpdateWidgetSettingsMutation,
   useGetBusinessHoursQuery,
   useGetNotificationSettingsQuery,
   // Mutation hooks
@@ -360,7 +359,6 @@ export const {
   useUpdateNotificationSettingsMutation,
   useCreateAiAgentMutation,
   useUpdateAiAgentMutation,
-  useCreateAiAgentMutation,
   useAddKnowledgeSourceMutation,
   useDeleteKnowledgeSourceMutation,
   useAddHandoffRuleMutation,

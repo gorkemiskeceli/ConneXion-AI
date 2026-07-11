@@ -1,22 +1,24 @@
 import { Calendar } from "lucide-react";
 import dayjs from "dayjs";
 import "dayjs/locale/tr";
+import { useSelector } from "react-redux";
 
 dayjs.locale("tr");
 
 /**
  * DashboardHeader — page title area.
  * Shows a personalized greeting, a one-line summary subtitle, and today's date.
- * `userName` comes from the session (empty by default → clean greeting).
  */
 export default function DashboardHeader({ userName = "" }) {
+  const currentUser = useSelector((state) => state.auth?.user);
+  const nameToUse = userName || currentUser?.name || "Ahmet Yılmaz";
   const today = dayjs().format("D MMMM YYYY");
 
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <h1 className="font-heading text-2xl font-extrabold text-slate-900">
-          Merhaba{userName ? `, ${userName}` : ""} 👋
+          Merhaba {nameToUse}!
         </h1>
         <p className="mt-1 text-sm text-slate-500">
           Platformun anlık özetine göz at.

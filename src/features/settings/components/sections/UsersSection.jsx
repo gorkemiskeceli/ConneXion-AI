@@ -12,7 +12,7 @@ import { ROLE_LABELS } from "../../../../constants/navigation";
  * UsersSection — workspace user accounts.
  * Wired with search filter, onInvite, onEdit, and onDelete action callbacks.
  */
-export default function UsersSection({ canEdit, users = [], onInvite, onEdit, onDelete }) {
+export default function UsersSection({ canEdit, role, users = [], onInvite, onEdit, onDelete }) {
   const [searchQuery, setSearchQuery] = useState("");
   const colSpan = USER_COLUMNS.length + 1;
 
@@ -99,7 +99,7 @@ export default function UsersSection({ canEdit, users = [], onInvite, onEdit, on
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      {canEdit ? (
+                      {canEdit && (u.role !== "platform_admin" || role === "platform_admin") ? (
                         <>
                           <button
                             type="button"

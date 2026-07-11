@@ -272,7 +272,9 @@ export default function TeamQueuesPage({ role = ROLES.PLATFORM_ADMIN }) {
                   <option value="support_agent">Support Agent</option>
                   <option value="manager">Manager</option>
                   <option value="workspace_admin">Workspace Admin</option>
-                  <option value="platform_admin">Platform Admin</option>
+                  {role === ROLES.PLATFORM_ADMIN && (
+                    <option value="platform_admin">Platform Admin</option>
+                  )}
                 </select>
               </div>
 
