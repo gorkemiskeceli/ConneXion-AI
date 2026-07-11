@@ -2,10 +2,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { setActivePage, setFloatingChatOpen } from '../store/uiSlice.js';
-import { 
-  setLoginModalOpen, 
-  setRegisterModalOpen, 
-  logoutUser 
+import {
+  setLoginModalOpen,
+  setRegisterModalOpen,
+  logoutUser
 } from '../store/authSlice.js';
 import { Sparkles, Menu, X, Play, LogOut, ChevronDown, User as UserIcon } from 'lucide-react';
 
@@ -37,10 +37,10 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-40 w-full h-14 bg-[#1e293b] text-white flex items-center justify-between border-b border-slate-800 shadow-md">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        
+
         {/* Brand Logo & Connection Info */}
         <div className="flex items-center space-x-4">
-          <div 
+          <div
             onClick={() => handleNavClick('home')}
             className="flex cursor-pointer items-center space-x-2.5"
             id="brand-logo-container"
@@ -58,11 +58,10 @@ export default function Header() {
             <button
               key={item.page}
               onClick={() => handleNavClick(item.page)}
-              className={`transition-colors duration-200 h-full px-1 flex items-center border-b-2 text-xs font-semibold ${
-                activePage === item.page
+              className={`transition-colors duration-200 h-full px-1 flex items-center border-b-2 text-xs font-semibold ${activePage === item.page
                   ? 'border-sky-500 text-sky-400'
                   : 'border-transparent text-slate-300 hover:text-white hover:border-slate-600'
-              }`}
+                }`}
               id={`nav-item-${item.page}`}
             >
               {item.label}
@@ -74,11 +73,10 @@ export default function Header() {
         <div className="hidden md:flex items-center space-x-3.5">
           <button
             onClick={() => handleNavClick('playground')}
-            className={`flex items-center space-x-1.5 rounded px-2.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${
-              activePage === 'playground'
+            className={`flex items-center space-x-1.5 rounded px-2.5 py-1.5 text-xs font-bold transition-all cursor-pointer ${activePage === 'playground'
                 ? 'bg-sky-500 text-white shadow-xs'
                 : 'bg-sky-600 text-white hover:bg-sky-500 shadow-xs'
-            }`}
+              }`}
             id="nav-cta-test-drive"
           >
             <Play className="h-3 w-3 fill-current text-white" />
@@ -163,11 +161,10 @@ export default function Header() {
             <button
               key={item.page}
               onClick={() => handleNavClick(item.page)}
-              className={`block w-full text-left rounded px-3 py-2 text-xs font-bold transition-colors ${
-                activePage === item.page
+              className={`block w-full text-left rounded px-3 py-2 text-xs font-bold transition-colors ${activePage === item.page
                   ? 'bg-slate-800 text-sky-400'
                   : 'text-slate-300 hover:bg-slate-800/50 hover:text-white'
-              }`}
+                }`}
               id={`mobile-nav-item-${item.page}`}
             >
               {item.label}
