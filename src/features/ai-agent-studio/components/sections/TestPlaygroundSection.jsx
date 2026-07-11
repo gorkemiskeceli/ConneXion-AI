@@ -62,6 +62,9 @@ STRICT GUARDRAILS:
 ${agent.blockedTerms ? `- Do not reply to or discuss these blocked terms/topics: ${agent.blockedTerms}` : ""}
 ${agent.maxLength ? `- Keep your response under ${agent.maxLength} characters.` : ""}
 
+ODAK ANAHTAR KELİMELER / FOCUS KEYWORDS:
+${agent.keywords && agent.keywords.length > 0 ? `- Focus on these keywords and related topics: ${agent.keywords.join(", ")}` : ""}
+
 INSTRUCTIONS:
 ${agent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin olmadığında konuşmayı bir temsilciye aktar."}
         `.trim()

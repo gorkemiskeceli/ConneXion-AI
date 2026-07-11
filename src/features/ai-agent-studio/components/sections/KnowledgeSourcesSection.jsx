@@ -9,7 +9,7 @@ import { useAddKnowledgeSourceMutation, useDeleteKnowledgeSourceMutation } from 
  * KnowledgeSourcesSection — manages indexed context files.
  * sources: { id, name, type, itemCount, status }
  */
-export default function KnowledgeSourcesSection({ canEdit, sources = [] }) {
+export default function KnowledgeSourcesSection({ canEdit, sources = [], onReset }) {
   const [addKnowledgeSource] = useAddKnowledgeSourceMutation();
   const [deleteKnowledgeSource] = useDeleteKnowledgeSourceMutation();
 
@@ -55,6 +55,7 @@ export default function KnowledgeSourcesSection({ canEdit, sources = [] }) {
       title="Bilgi Kaynakları"
       description="Asistanın yanıt verirken kullanacağı bilgi tabanlarını ve dokümanları bağlayın."
       canEdit={canEdit}
+      onReset={onReset}
     >
       <div className="space-y-4">
         <div className="flex justify-between items-center">

@@ -13,13 +13,16 @@ import { useToast } from "../../../../shared/components/ui/Toast";
 /**
  * GeneralSection — main settings (identity, active state).
  */
-export default function GeneralSection({ canEdit, agent }) {
+export default function GeneralSection({ canEdit, agent, onReset }) {
   const { showToast } = useToast();
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [companyDescription, setCompanyDescription] = useState("");
+  const [keywords, setKeywords] = useState("");
   const [language, setLanguage] = useState("tr");
   const [tone, setTone] = useState("friendly");
   const [active, setActive] = useState(false);
+  const [themeColor, setThemeColor] = useState("#5b63f0");
+  const [themeTextColor, setThemeTextColor] = useState("#ffffff");
 
   const [updateAiAgent, { isLoading }] = useUpdateAiAgentMutation();
 
@@ -27,10 +30,13 @@ export default function GeneralSection({ canEdit, agent }) {
   useEffect(() => {
     if (agent) {
       setName(agent.name || "");
-      setDescription(agent.description || "");
+      setCompanyDescription(agent.companyDescription || agent.description || "");
+      setKeywords(agent.keywords ? agent.keywords.join(", ") : "");
       setLanguage(agent.language || "tr");
       setTone(agent.tone || "friendly");
       setActive(agent.active || false);
+      setThemeColor(agent.themeColor || "#5b63f0");
+      setThemeTextColor(agent.themeTextColor || "#ffffff");
     }
   }, [agent]);
 
@@ -40,11 +46,15 @@ export default function GeneralSection({ canEdit, agent }) {
       await updateAiAgent({
         id: agent.id,
         name,
-        description,
+        description: companyDescription, // for legacy fallback
+        companyDescription,
         language,
         tone,
         active,
         status: active ? "active" : "paused",
+        keywords: keywords.split(",").map(k => k.trim()).filter(Boolean),
+        themeColor,
+        themeTextColor,
       }).unwrap();
       showToast("Genel ayarlar başarıyla kaydedildi.", "success");
     } catch (err) {
@@ -67,6 +77,7 @@ export default function GeneralSection({ canEdit, agent }) {
       description="Asistanın kimliğini, dil ayarlarını ve durumunu yönetin."
       canEdit={canEdit}
       onSave={handleSave}
+      onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -99,8 +110,22 @@ export default function GeneralSection({ canEdit, agent }) {
             placeholder="Asistanın ne işe yaradığını kısaca açıklayın..."
             rows={3}
             disabled={!canEdit || isLoading}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={companyDescription}
+            onChange={(e) => setCompanyDescription(e.target.value)}
+          />
+        </FormField>
+
+        <FormField 
+          label="Odak Anahtar Kelimeler" 
+          hint="Asistanın odaklanmasını istediğiniz konular için anahtar kelimeleri virgülle ayırarak girin." 
+          htmlFor="agent-keywords"
+        >
+          <Input
+            id="agent-keywords"
+            placeholder="Örn. iade, kargo, fiyat, indirim, teknik sorun"
+            disabled={!canEdit || isLoading}
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
           />
         </FormField>
 
@@ -134,6 +159,39 @@ export default function GeneralSection({ canEdit, agent }) {
               ))}
             </Select>
           </FormField>
+        </div>
+
+        <div className="border-t border-slate-100 pt-5">
+          <h4 className="text-sm font-bold text-slate-900 mb-4">Görünüm Ayarları</h4>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <FormField label="Tema Rengi (Primary)" htmlFor="theme-color" hint="Widget buton ve başlık arka plan rengi.">
+              <div className="flex items-center gap-3 pt-1">
+                <input
+                  type="color"
+                  id="theme-color"
+                  disabled={!canEdit || isLoading}
+                  value={themeColor}
+                  onChange={(e) => setThemeColor(e.target.value)}
+                  className="h-10 w-20 cursor-pointer rounded-lg border border-slate-200 bg-white p-1 focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <span className="text-xs font-mono uppercase text-slate-500">{themeColor}</span>
+              </div>
+            </FormField>
+
+            <FormField label="Başlık ve Buton Yazı Rengi" htmlFor="theme-text-color" hint="Tema rengi üzerindeki yazı rengi.">
+              <div className="flex items-center gap-3 pt-1">
+                <input
+                  type="color"
+                  id="theme-text-color"
+                  disabled={!canEdit || isLoading}
+                  value={themeTextColor}
+                  onChange={(e) => setThemeTextColor(e.target.value)}
+                  className="h-10 w-20 cursor-pointer rounded-lg border border-slate-200 bg-white p-1 focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <span className="text-xs font-mono uppercase text-slate-500">{themeTextColor}</span>
+              </div>
+            </FormField>
+          </div>
         </div>
       </div>
     </StudioSection>

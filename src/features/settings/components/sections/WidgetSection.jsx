@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Plus, X, ImagePlus, Trash2 } from "lucide-react";
 
@@ -12,6 +12,7 @@ import Toggle from "../../../../shared/components/ui/Toggle";
 import { WIDGET_POSITIONS } from "../../constants/settingsConfig";
 import { useToast } from "../../../../shared/components/ui/Toast";
 import { setCustomLogo } from "../../../../homepage/store/uiSlice";
+import { useGetWidgetSettingsQuery, useUpdateWidgetSettingsMutation } from "../../../../services/api";
 
 /**
  * WidgetSection — configure the embedded website chat widget.
@@ -22,10 +23,28 @@ export default function WidgetSection({ canEdit, onSave }) {
   const customLogo = useSelector((state) => state.ui.customLogo);
   const fileInputRef = useRef(null);
 
+  const { data: settings } = useGetWidgetSettingsQuery();
+  const [updateWidgetSettings] = useUpdateWidgetSettingsMutation();
+
   const [brandColor, setBrandColor] = useState("#5B63F0");
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [questions, setQuestions] = useState([""]);
   const [showHours, setShowHours] = useState(false);
+  const [position, setPosition] = useState("bottom-right");
+
+  // Sync with fetched data
+  useEffect(() => {
+    if (settings) {
+      setBrandColor(settings.brandColor || "#5B63F0");
+      setWelcomeMessage(settings.welcomeMessage || "");
+      setQuestions(settings.suggestedQuestions && settings.suggestedQuestions.length > 0 ? settings.suggestedQuestions : [""]);
+      setShowHours(settings.showBusinessHours || false);
+      setPosition(settings.position || "bottom-right");
+      if (settings.logo) {
+        dispatch(setCustomLogo(settings.logo));
+      }
+    }
+  }, [settings, dispatch]);
 
   const setQuestion = (i, value) =>
     setQuestions((prev) => prev.map((q, idx) => (idx === i ? value : q)));
@@ -53,12 +72,30 @@ export default function WidgetSection({ canEdit, onSave }) {
     showToast("Logo kaldırıldı.", "info");
   };
 
+  const handleSave = async () => {
+    try {
+      await updateWidgetSettings({
+        logo: customLogo,
+        brandColor,
+        welcomeMessage,
+        suggestedQuestions: questions.filter(q => q.trim()),
+        showBusinessHours: showHours,
+        position
+      }).unwrap();
+      showToast("Widget ayarları başarıyla kaydedildi.", "success");
+      if (onSave) onSave();
+    } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
+      console.error("Failed to save widget settings:", err);
+    }
+  };
+
   return (
     <SettingsSection
       title="Widget Yapılandırması"
       description="Web sitenize gömülü sohbet widget'ını özelleştirin."
       canEdit={canEdit}
-      onSave={onSave}
+      onSave={handleSave}
     >
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
         {/* Form */}
@@ -165,7 +202,12 @@ export default function WidgetSection({ canEdit, onSave }) {
           </FormField>
 
           <FormField label="Widget Konumu" htmlFor="position">
-            <Select id="position" defaultValue="bottom-right" disabled={!canEdit}>
+            <Select 
+              id="position" 
+              value={position} 
+              onChange={(e) => setPosition(e.target.value)} 
+              disabled={!canEdit}
+            >
               {WIDGET_POSITIONS.map((p) => (
                 <option key={p.value} value={p.value}>
                   {p.label}

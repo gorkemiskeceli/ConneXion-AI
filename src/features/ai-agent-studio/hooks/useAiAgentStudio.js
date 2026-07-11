@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   useGetAiAgentsQuery,
+  useCreateAiAgentMutation,
   useGetKnowledgeSourcesQuery,
   useGetHandoffRulesQuery,
   useGetAiLogsQuery,
@@ -9,41 +10,137 @@ import {
 
 /**
  * useAiAgentStudio — UI state + data seam for the studio.
- *
- * Fetches agents, sources, handoff rules, and AI logs from RTK Query.
- * Defaults the selected agent to the first available agent.
+ * Enforces a single global agent architecture.
  */
 export default function useAiAgentStudio() {
   const [activeTab, setActiveTab] = useState("general");
-  const [selectedAgentId, setSelectedAgentId] = useState(null);
+  const [draftAgent, setDraftAgent] = useState(null);
+  const [resetKey, setResetKey] = useState(0);
 
   const { data: agents = [], isLoading: agentsLoading, error } = useGetAiAgentsQuery();
+  const [createAiAgent] = useCreateAiAgentMutation();
+  
   const { data: knowledgeSources = [] } = useGetKnowledgeSourcesQuery();
   const { data: handoffRules = [] } = useGetHandoffRulesQuery();
   const { data: logs = [] } = useGetAiLogsQuery();
   const { data: queues = [] } = useGetQueuesQuery();
 
-  // Automatically select the first agent once data finishes loading
-  useEffect(() => {
-    if (agents.length > 0 && !selectedAgentId) {
-      setSelectedAgentId(agents[0].id);
-    }
-  }, [agents, selectedAgentId]);
+  const [localKnowledgeSources, setLocalKnowledgeSources] = useState([]);
+  const [localHandoffRules, setLocalHandoffRules] = useState([]);
+  const [localLogs, setLocalLogs] = useState([]);
 
-  const selectedAgent = agents.find((a) => a.id === selectedAgentId) ?? null;
+  // Sync draft agent once agents load or update (e.g. after saving/mutation)
+  useEffect(() => {
+    if (agents.length > 0) {
+      setDraftAgent(agents[0]);
+    }
+  }, [agents]);
+
+  // Sync other local collections
+  useEffect(() => {
+    if (knowledgeSources.length > 0) setLocalKnowledgeSources(knowledgeSources);
+  }, [knowledgeSources]);
+
+  useEffect(() => {
+    if (handoffRules.length > 0) setLocalHandoffRules(handoffRules);
+  }, [handoffRules]);
+
+  useEffect(() => {
+    if (logs.length > 0) setLocalLogs(logs);
+  }, [logs]);
+
+  // If no agent configuration exists, create a default config implicitly
+  useEffect(() => {
+    if (!agentsLoading && agents.length === 0) {
+      const createDefaultAgent = async () => {
+        try {
+          await createAiAgent({
+            id: `agt_${Date.now()}`,
+            name: "ConneXion Assistant",
+            status: "active",
+            description: "Varsayılan müşteri destek asistanı.",
+            language: "tr",
+            tone: "friendly",
+            active: true,
+            instructions: "Kibar, kısa ve yardımsever yanıtlar ver.",
+            greeting: "Merhaba! Size nasıl yardımcı olabilirim?",
+            fallback: "Bu konuda sizi bir temsilciye aktarıyorum.",
+            guardrailFlags: {
+              profanityFilter: true
+            },
+            blockedTerms: "",
+            maxLength: "",
+            keywords: ["yardım", "fiyat", "destek"],
+            themeColor: "",
+            themeTextColor: ""
+          }).unwrap();
+        } catch (err) {
+          console.error("Failed to create default AI Agent:", err);
+        }
+      };
+      createDefaultAgent();
+    }
+  }, [agents, agentsLoading, createAiAgent]);
+
+  const selectedAgent = draftAgent || agents[0] || null;
+
+  const handleGlobalReset = () => {
+    // 1. Reset agent config to absolute factory defaults (fully cleared)
+    setDraftAgent({
+      id: selectedAgent?.id || "agt_default",
+      name: "",
+      status: "paused",
+      description: "",
+      companyDescription: "",
+      keywords: [],
+      language: "tr",
+      tone: "friendly",
+      active: false,
+      instructions: "",
+      customInstructions: "",
+      greeting: "",
+      fallback: "",
+      guardrailFlags: {
+        profanityFilter: false,
+        restrictToKnowledge: false,
+        piiMasking: false,
+        blockOffTopic: false
+      },
+      blockedTerms: "",
+      maxLength: "",
+      handoffFlags: {
+        lowConfidence: false,
+        customerRequest: false,
+        negativeSentiment: false
+      },
+      handoffConfidence: "",
+      handoffTargetTeam: "",
+      themeColor: "",
+      themeTextColor: ""
+    });
+
+    // 2. Clear collections
+    setLocalKnowledgeSources([]);
+    setLocalHandoffRules([]);
+    setLocalLogs([]);
+
+    // 3. Trigger remount for local components (like playground)
+    setResetKey((prev) => prev + 1);
+  };
 
   return {
     activeTab,
     setActiveTab,
     agents,
     selectedAgent,
-    selectedAgentId,
-    setSelectedAgentId,
-    knowledgeSources,
-    handoffRules,
-    logs,
+    selectedAgentId: selectedAgent?.id || null,
+    knowledgeSources: localKnowledgeSources,
+    handoffRules: localHandoffRules,
+    logs: localLogs,
     queues,
+    resetKey,
     isLoading: agentsLoading,
     error,
+    handleGlobalReset,
   };
 }

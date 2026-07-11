@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Plus, Bot, X } from "lucide-react";
+import { useSelector } from "react-redux";
 
 import useAiAgentStudio from "../hooks/useAiAgentStudio";
+import EmbedCodeSection from "../../../components/widget/EmbedCodeSection";
 import StudioTabs from "../components/StudioTabs";
 import GeneralSection from "../components/sections/GeneralSection";
 import InstructionsSection from "../components/sections/InstructionsSection";
@@ -18,10 +20,13 @@ import { useCreateAiAgentMutation } from "../../../services/api";
 
 /**
  * AiAgentStudioPage — configuration interface for the AI assistant.
- * Wired with fully functioning Create Agent modal and Section Save triggers.
+ * Wired with fully functioning Create Agent modal, Embed code snippet, and Section Save triggers.
  */
 export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
   const { showToast } = useToast();
+  const currentUser = useSelector((state) => state.auth?.user);
+  const tenantId = currentUser?.id || "usr_001";
+
   const {
     activeTab,
     setActiveTab,
@@ -33,6 +38,8 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
     handoffRules,
     logs,
     queues,
+    resetKey,
+    handleGlobalReset,
   } = useAiAgentStudio();
 
   const [createAgent] = useCreateAiAgentMutation();
@@ -74,36 +81,68 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
   const renderSection = () => {
     switch (activeTab) {
       case "general":
-        return <GeneralSection canEdit={canEdit} agent={selectedAgent} onSave={handleSaveSettings} />;
+        return (
+          <GeneralSection
+            key={resetKey}
+            canEdit={canEdit}
+            agent={selectedAgent}
+            onReset={handleGlobalReset}
+            onSave={handleSaveSettings}
+          />
+        );
       case "instructions":
-        return <InstructionsSection canEdit={canEdit} agent={selectedAgent} onSave={handleSaveSettings} />;
+        return (
+          <InstructionsSection
+            key={resetKey}
+            canEdit={canEdit}
+            agent={selectedAgent}
+            onReset={handleGlobalReset}
+            onSave={handleSaveSettings}
+          />
+        );
       case "knowledge":
         return (
-          <KnowledgeSourcesSection canEdit={canEdit} sources={knowledgeSources} onSave={handleSaveSettings} />
+          <KnowledgeSourcesSection
+            key={resetKey}
+            canEdit={canEdit}
+            sources={knowledgeSources}
+            onReset={handleGlobalReset}
+            onSave={handleSaveSettings}
+          />
         );
       case "guardrails":
-        return <GuardrailsSection canEdit={canEdit} agent={selectedAgent} onSave={handleSaveSettings} />;
+        return (
+          <GuardrailsSection
+            key={resetKey}
+            canEdit={canEdit}
+            agent={selectedAgent}
+            onReset={handleGlobalReset}
+            onSave={handleSaveSettings}
+          />
+        );
       case "handoff":
         return (
           <HandoffRulesSection
+            key={resetKey}
             canEdit={canEdit}
             rules={handoffRules}
             agent={selectedAgent}
             queues={queues}
+            onReset={handleGlobalReset}
             onSave={handleSaveSettings}
           />
         );
       case "playground":
-        return <TestPlaygroundSection enabled={canPlayground} agent={selectedAgent} />;
+        return <TestPlaygroundSection key={resetKey} enabled={canPlayground} agent={selectedAgent} />;
       case "logs":
-        return <AiLogsSection logs={logs} />;
+        return <AiLogsSection key={resetKey} logs={logs} />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="mx-auto max-w-[1600px]">
+    <div className="mx-auto max-w-[1600px] space-y-6">
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -150,6 +189,9 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
         <StudioTabs active={activeTab} onChange={setActiveTab} />
         <div className="min-w-0 flex-1">{renderSection()}</div>
       </div>
+
+      {/* Embed Code Widget Section */}
+      <EmbedCodeSection tenantId={tenantId} />
 
       {/* View-only hint for non-editors */}
       {!canEdit && (

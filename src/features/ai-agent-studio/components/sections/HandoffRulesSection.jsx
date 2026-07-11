@@ -15,7 +15,7 @@ import { useToast } from "../../../../shared/components/ui/Toast";
  * HandoffRulesSection — when and how to transfer to a human agent.
  * rules: { id, condition, target }
  */
-export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [] }) {
+export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [], onReset }) {
   const { showToast } = useToast();
   const [confirmData, setConfirmData] = useState(null);
   const [flags, setFlags] = useState({});
@@ -110,6 +110,7 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
       description="Konuşmanın ne zaman bir temsilciye devredileceğini tanımlayın."
       canEdit={canEdit}
       onSave={handleSave}
+      onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
         <div className="divide-y divide-slate-100 rounded-xl border border-slate-100 bg-white">
