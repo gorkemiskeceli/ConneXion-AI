@@ -136,5 +136,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     plugins: [react(), hfChatApiPlugin(env)],
+    server: {
+      watch: {
+        ignored: ['**/db.json', '**/public/db.json']
+      }
+    }
   }
 })
