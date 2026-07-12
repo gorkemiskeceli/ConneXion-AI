@@ -62,12 +62,14 @@ function DashboardWrapper() {
     [ROLES.SUPPORT_AGENT]: "Support Agent",
   };
 
+  const mappedRole = role === "admin" ? ROLES.PLATFORM_ADMIN : ROLES.WORKSPACE_ADMIN;
+
   return (
     <RoleContext.Provider value={{ role, setRole }}>
       <ToastProvider>
         <div className="relative">
           <DashboardLayout
-            role={role}
+            role={mappedRole}
             userName={currentUser?.name || "Ahmet Yılmaz"}
             userRoleLabel={roleLabels[role] || "Kullanıcı"}
             workspaceName="ConneXion-AI Corp"
@@ -83,7 +85,8 @@ function DashboardWrapper() {
 // Route adapter to inject the dynamically active role into page props
 function RoleRoute({ Component, ...props }) {
   const { role } = useActiveRole();
-  return <Component role={role} {...props} />;
+  const mappedRole = role === "admin" ? ROLES.PLATFORM_ADMIN : ROLES.WORKSPACE_ADMIN;
+  return <Component role={mappedRole} {...props} />;
 }
 
 const router = createBrowserRouter([
