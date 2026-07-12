@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import StudioSection from "../StudioSection";
 import FormField from "../../../../shared/components/ui/FormField";
@@ -7,61 +7,14 @@ import Textarea from "../../../../shared/components/ui/Textarea";
 import Select from "../../../../shared/components/ui/Select";
 import Toggle from "../../../../shared/components/ui/Toggle";
 import { LANGUAGE_OPTIONS, TONE_OPTIONS } from "../../constants/aiStudioConfig";
-import { useUpdateAiAgentMutation } from "../../../../services/api";
 import { useToast } from "../../../../shared/components/ui/Toast";
 
 /**
  * GeneralSection — main settings (identity, active state).
  */
-export default function GeneralSection({ canEdit, agent, onReset }) {
+export default function GeneralSection({ canEdit, agent, onChange, onSave, onReset }) {
   const { showToast } = useToast();
-  const [name, setName] = useState("");
-  const [companyDescription, setCompanyDescription] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [language, setLanguage] = useState("tr");
-  const [tone, setTone] = useState("friendly");
-  const [active, setActive] = useState(false);
-  const [themeColor, setThemeColor] = useState("#5b63f0");
-  const [themeTextColor, setThemeTextColor] = useState("#ffffff");
-
-  const [updateAiAgent, { isLoading }] = useUpdateAiAgentMutation();
-
-  // Sync state with selected agent
-  useEffect(() => {
-    if (agent) {
-      setName(agent.name || "");
-      setCompanyDescription(agent.companyDescription || agent.description || "");
-      setKeywords(agent.keywords ? agent.keywords.join(", ") : "");
-      setLanguage(agent.language || "tr");
-      setTone(agent.tone || "friendly");
-      setActive(agent.active || false);
-      setThemeColor(agent.themeColor || "#5b63f0");
-      setThemeTextColor(agent.themeTextColor || "#ffffff");
-    }
-  }, [agent]);
-
-  const handleSave = async () => {
-    if (!agent) return;
-    try {
-      await updateAiAgent({
-        id: agent.id,
-        name,
-        description: companyDescription, // for legacy fallback
-        companyDescription,
-        language,
-        tone,
-        active,
-        status: active ? "active" : "paused",
-        keywords: keywords.split(",").map(k => k.trim()).filter(Boolean),
-        themeColor,
-        themeTextColor,
-      }).unwrap();
-      showToast("Genel ayarlar başarıyla kaydedildi.", "success");
-    } catch (err) {
-      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
-      console.error("Failed to update AI Agent:", err);
-    }
-  };
+  const [isSaving, setIsSaving] = useState(false);
 
   if (!agent) {
     return (
@@ -70,6 +23,43 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
       </div>
     );
   }
+
+  const name = agent.name || "";
+  const companyDescription = agent.companyDescription || agent.description || "";
+  const keywords = Array.isArray(agent.keywords) ? agent.keywords.join(", ") : (agent.keywords || "");
+  const language = agent.language || "tr";
+  const tone = agent.tone || "friendly";
+  const active = agent.active || false;
+  const themeColor = agent.themeColor || "#5b63f0";
+  const themeTextColor = agent.themeTextColor || "#ffffff";
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      const keywordsArray = typeof keywords === "string"
+        ? keywords.split(",").map(k => k.trim()).filter(Boolean)
+        : keywords;
+
+      await onSave({
+        name,
+        description: companyDescription, // for legacy fallback
+        companyDescription,
+        language,
+        tone,
+        active,
+        status: active ? "active" : "paused",
+        keywords: keywordsArray,
+        themeColor,
+        themeTextColor,
+      });
+      showToast("Genel ayarlar başarıyla kaydedildi.", "success");
+    } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
+      console.error("Failed to update AI Agent:", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <StudioSection
@@ -85,9 +75,9 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
             <Input
               id="agent-name"
               placeholder="Örn. Destek Asistanı"
-              disabled={!canEdit || isLoading}
+              disabled={!canEdit || isSaving}
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => onChange({ name: e.target.value })}
             />
           </FormField>
 
@@ -97,8 +87,8 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
                 id="agent-status"
                 label={active ? "Asistan Etkin" : "Asistan Devre Dışı"}
                 checked={active}
-                onChange={setActive}
-                disabled={!canEdit || isLoading}
+                onChange={(v) => onChange({ active: v })}
+                disabled={!canEdit || isSaving}
               />
             </div>
           </FormField>
@@ -109,9 +99,9 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
             id="agent-desc"
             placeholder="Asistanın ne işe yaradığını kısaca açıklayın..."
             rows={3}
-            disabled={!canEdit || isLoading}
+            disabled={!canEdit || isSaving}
             value={companyDescription}
-            onChange={(e) => setCompanyDescription(e.target.value)}
+            onChange={(e) => onChange({ companyDescription: e.target.value })}
           />
         </FormField>
 
@@ -123,9 +113,9 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
           <Input
             id="agent-keywords"
             placeholder="Örn. iade, kargo, fiyat, indirim, teknik sorun"
-            disabled={!canEdit || isLoading}
+            disabled={!canEdit || isSaving}
             value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
+            onChange={(e) => onChange({ keywords: e.target.value })}
           />
         </FormField>
 
@@ -133,9 +123,9 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
           <FormField label="Dil" htmlFor="agent-lang">
             <Select
               id="agent-lang"
-              disabled={!canEdit || isLoading}
+              disabled={!canEdit || isSaving}
               value={language}
-              onChange={(e) => setLanguage(e.target.value)}
+              onChange={(e) => onChange({ language: e.target.value })}
             >
               {LANGUAGE_OPTIONS.map((lang) => (
                 <option key={lang.value} value={lang.value}>
@@ -148,9 +138,9 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
           <FormField label="Ton" htmlFor="agent-tone">
             <Select
               id="agent-tone"
-              disabled={!canEdit || isLoading}
+              disabled={!canEdit || isSaving}
               value={tone}
-              onChange={(e) => setTone(e.target.value)}
+              onChange={(e) => onChange({ tone: e.target.value })}
             >
               {TONE_OPTIONS.map((t) => (
                 <option key={t.value} value={t.value}>
@@ -169,9 +159,9 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
                 <input
                   type="color"
                   id="theme-color"
-                  disabled={!canEdit || isLoading}
+                  disabled={!canEdit || isSaving}
                   value={themeColor}
-                  onChange={(e) => setThemeColor(e.target.value)}
+                  onChange={(e) => onChange({ themeColor: e.target.value })}
                   className="h-10 w-20 cursor-pointer rounded-lg border border-slate-200 bg-white p-1 focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <span className="text-xs font-mono uppercase text-slate-500">{themeColor}</span>
@@ -183,9 +173,9 @@ export default function GeneralSection({ canEdit, agent, onReset }) {
                 <input
                   type="color"
                   id="theme-text-color"
-                  disabled={!canEdit || isLoading}
+                  disabled={!canEdit || isSaving}
                   value={themeTextColor}
-                  onChange={(e) => setThemeTextColor(e.target.value)}
+                  onChange={(e) => onChange({ themeTextColor: e.target.value })}
                   className="h-10 w-20 cursor-pointer rounded-lg border border-slate-200 bg-white p-1 focus:outline-none focus:ring-1 focus:ring-primary"
                 />
                 <span className="text-xs font-mono uppercase text-slate-500">{themeTextColor}</span>

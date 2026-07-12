@@ -34,14 +34,12 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
     queues,
     resetKey,
     handleGlobalReset,
+    updateDraftAgent,
+    handleSaveAgent,
   } = useAiAgentStudio();
 
   const canEdit = canAiStudio(role, AI_STUDIO_ACTION.EDIT);
   const canPlayground = canAiStudio(role, AI_STUDIO_ACTION.PLAYGROUND);
-
-  const handleSaveSettings = () => {
-    showToast("Ayarlar başarıyla kaydedildi.", "success");
-  };
 
   const renderSection = () => {
     switch (activeTab) {
@@ -52,7 +50,8 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
             canEdit={canEdit}
             agent={selectedAgent}
             onReset={handleGlobalReset}
-            onSave={handleSaveSettings}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
           />
         );
       case "instructions":
@@ -62,7 +61,8 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
             canEdit={canEdit}
             agent={selectedAgent}
             onReset={handleGlobalReset}
-            onSave={handleSaveSettings}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
           />
         );
       case "knowledge":
@@ -72,7 +72,7 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
             canEdit={canEdit}
             sources={knowledgeSources}
             onReset={handleGlobalReset}
-            onSave={handleSaveSettings}
+            onSave={handleSaveAgent}
           />
         );
       case "guardrails":
@@ -82,7 +82,8 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
             canEdit={canEdit}
             agent={selectedAgent}
             onReset={handleGlobalReset}
-            onSave={handleSaveSettings}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
           />
         );
       case "handoff":
@@ -94,7 +95,8 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
             agent={selectedAgent}
             queues={queues}
             onReset={handleGlobalReset}
-            onSave={handleSaveSettings}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
           />
         );
       case "playground":

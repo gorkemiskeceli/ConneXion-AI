@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   useGetAiAgentsQuery,
   useCreateAiAgentMutation,
+  useUpdateAiAgentMutation,
   useGetKnowledgeSourcesQuery,
   useGetHandoffRulesQuery,
   useGetAiLogsQuery,
@@ -19,6 +20,7 @@ export default function useAiAgentStudio() {
 
   const { data: agents = [], isLoading: agentsLoading, error } = useGetAiAgentsQuery();
   const [createAiAgent] = useCreateAiAgentMutation();
+  const [updateAiAgent, { isLoading: isUpdating }] = useUpdateAiAgentMutation();
   
   const { data: knowledgeSources = [] } = useGetKnowledgeSourcesQuery();
   const { data: handoffRules = [] } = useGetHandoffRulesQuery();
@@ -84,6 +86,31 @@ export default function useAiAgentStudio() {
 
   const selectedAgent = draftAgent || agents[0] || null;
 
+  const updateDraftAgent = (updatedFields) => {
+    setDraftAgent((prev) => {
+      const base = prev || agents[0] || {};
+      return {
+        ...base,
+        ...updatedFields,
+      };
+    });
+  };
+
+  const handleSaveAgent = async (updatedFields = {}) => {
+    const currentAgent = draftAgent || agents[0];
+    if (!currentAgent) return;
+    try {
+      const payload = {
+        ...currentAgent,
+        ...updatedFields,
+      };
+      await updateAiAgent(payload).unwrap();
+    } catch (err) {
+      console.error("Failed to save AI agent settings:", err);
+      throw err;
+    }
+  };
+
   const handleGlobalReset = () => {
     // 1. Reset agent config to absolute factory defaults (fully cleared)
     setDraftAgent({
@@ -139,8 +166,10 @@ export default function useAiAgentStudio() {
     logs: localLogs,
     queues,
     resetKey,
-    isLoading: agentsLoading,
+    isLoading: agentsLoading || isUpdating,
     error,
     handleGlobalReset,
+    updateDraftAgent,
+    handleSaveAgent,
   };
 }

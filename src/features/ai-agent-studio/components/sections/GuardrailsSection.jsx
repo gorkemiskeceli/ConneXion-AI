@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import StudioSection from "../StudioSection";
 import FormField from "../../../../shared/components/ui/FormField";
@@ -6,48 +6,14 @@ import Textarea from "../../../../shared/components/ui/Textarea";
 import Input from "../../../../shared/components/ui/Input";
 import Toggle from "../../../../shared/components/ui/Toggle";
 import { GUARDRAIL_OPTIONS } from "../../constants/aiStudioConfig";
-import { useUpdateAiAgentMutation } from "../../../../services/api";
 import { useToast } from "../../../../shared/components/ui/Toast";
 
 /**
  * GuardrailsSection — safety limits for the agent.
  */
-export default function GuardrailsSection({ canEdit, agent, onReset }) {
+export default function GuardrailsSection({ canEdit, agent, onChange, onSave, onReset }) {
   const { showToast } = useToast();
-  const [flags, setFlags] = useState({});
-  const [blockedTerms, setBlockedTerms] = useState("");
-  const [maxLength, setMaxLength] = useState("");
-
-  const [updateAiAgent, { isLoading }] = useUpdateAiAgentMutation();
-
-  // Sync state with incoming agent prop
-  useEffect(() => {
-    if (agent) {
-      setFlags(agent.guardrailFlags || {});
-      setBlockedTerms(agent.blockedTerms || "");
-      setMaxLength(agent.maxLength || "");
-    }
-  }, [agent]);
-
-  const setFlag = (id, value) => {
-    setFlags((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const handleSave = async () => {
-    if (!agent) return;
-    try {
-      await updateAiAgent({
-        id: agent.id,
-        guardrailFlags: flags,
-        blockedTerms,
-        maxLength: maxLength !== "" ? Number(maxLength) : "",
-      }).unwrap();
-      showToast("Güvenlik sınırları (Guardrails) başarıyla kaydedildi.", "success");
-    } catch (err) {
-      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
-      console.error("Failed to save guardrails config:", err);
-    }
-  };
+  const [isSaving, setIsSaving] = useState(false);
 
   if (!agent) {
     return (
@@ -56,6 +22,36 @@ export default function GuardrailsSection({ canEdit, agent, onReset }) {
       </div>
     );
   }
+
+  const flags = agent.guardrailFlags || {};
+  const blockedTerms = agent.blockedTerms || "";
+  const maxLength = agent.maxLength || "";
+
+  const setFlag = (id, value) => {
+    onChange({
+      guardrailFlags: {
+        ...flags,
+        [id]: value,
+      },
+    });
+  };
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      await onSave({
+        guardrailFlags: flags,
+        blockedTerms,
+        maxLength: maxLength !== "" ? Number(maxLength) : "",
+      });
+      showToast("Güvenlik sınırları (Guardrails) başarıyla kaydedildi.", "success");
+    } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
+      console.error("Failed to save guardrails config:", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <StudioSection
@@ -72,7 +68,7 @@ export default function GuardrailsSection({ canEdit, agent, onReset }) {
               <Toggle
                 checked={Boolean(flags[opt.id])}
                 onChange={(v) => setFlag(opt.id, v)}
-                disabled={!canEdit || isLoading}
+                disabled={!canEdit || isSaving}
                 label={opt.label}
                 description={opt.description}
               />
@@ -89,9 +85,9 @@ export default function GuardrailsSection({ canEdit, agent, onReset }) {
             id="blocked-terms"
             rows={3}
             placeholder="Örn. rakip firmalar, fiyat pazarlığı, ..."
-            disabled={!canEdit || isLoading}
+            disabled={!canEdit || isSaving}
             value={blockedTerms}
-            onChange={(e) => setBlockedTerms(e.target.value)}
+            onChange={(e) => onChange({ blockedTerms: e.target.value })}
           />
         </FormField>
 
@@ -105,9 +101,9 @@ export default function GuardrailsSection({ canEdit, agent, onReset }) {
             min={0}
             placeholder="Örn. 500"
             className="max-w-[200px]"
-            disabled={!canEdit || isLoading}
+            disabled={!canEdit || isSaving}
             value={maxLength}
-            onChange={(e) => setMaxLength(e.target.value)}
+            onChange={(e) => onChange({ maxLength: e.target.value })}
           />
         </FormField>
       </div>

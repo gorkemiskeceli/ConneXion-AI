@@ -1,47 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import StudioSection from "../StudioSection";
 import FormField from "../../../../shared/components/ui/FormField";
 import Textarea from "../../../../shared/components/ui/Textarea";
-import { useUpdateAiAgentMutation } from "../../../../services/api";
 import { useToast } from "../../../../shared/components/ui/Toast";
 
 /**
  * InstructionsSection — behavioral rules & canned messages.
  */
-export default function InstructionsSection({ canEdit, agent, onReset }) {
+export default function InstructionsSection({ canEdit, agent, onChange, onSave, onReset }) {
   const { showToast } = useToast();
-  const [customInstructions, setCustomInstructions] = useState("");
-  const [greeting, setGreeting] = useState("");
-  const [fallback, setFallback] = useState("");
-
-  const [updateAiAgent, { isLoading }] = useUpdateAiAgentMutation();
-
-  // Sync state with selected agent
-  useEffect(() => {
-    if (agent) {
-      setCustomInstructions(agent.customInstructions || agent.instructions || "");
-      setGreeting(agent.greeting || "");
-      setFallback(agent.fallback || "");
-    }
-  }, [agent]);
-
-  const handleSave = async () => {
-    if (!agent) return;
-    try {
-      await updateAiAgent({
-        id: agent.id,
-        instructions: customInstructions, // for legacy fallback
-        customInstructions,
-        greeting,
-        fallback,
-      }).unwrap();
-      showToast("Talimatlar başarıyla kaydedildi.", "success");
-    } catch (err) {
-      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
-      console.error("Failed to update instructions:", err);
-    }
-  };
+  const [isSaving, setIsSaving] = useState(false);
 
   if (!agent) {
     return (
@@ -50,6 +19,28 @@ export default function InstructionsSection({ canEdit, agent, onReset }) {
       </div>
     );
   }
+
+  const customInstructions = agent.customInstructions || agent.instructions || "";
+  const greeting = agent.greeting || "";
+  const fallback = agent.fallback || "";
+
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      await onSave({
+        instructions: customInstructions, // for legacy fallback
+        customInstructions,
+        greeting,
+        fallback,
+      });
+      showToast("Talimatlar başarıyla kaydedildi.", "success");
+    } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
+      console.error("Failed to update instructions:", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <StudioSection
@@ -70,9 +61,9 @@ export default function InstructionsSection({ canEdit, agent, onReset }) {
             id="sys-instructions"
             placeholder="Sen bir müşteri destek temsilcisisin. Kibar ol..."
             rows={6}
-            disabled={!canEdit || isLoading}
+            disabled={!canEdit || isSaving}
             value={customInstructions}
-            onChange={(e) => setCustomInstructions(e.target.value)}
+            onChange={(e) => onChange({ customInstructions: e.target.value })}
           />
         </FormField>
 
@@ -85,9 +76,9 @@ export default function InstructionsSection({ canEdit, agent, onReset }) {
             id="greeting-msg"
             placeholder="Merhaba! Size bugün nasıl yardımcı olabilirim?"
             rows={3}
-            disabled={!canEdit || isLoading}
+            disabled={!canEdit || isSaving}
             value={greeting}
-            onChange={(e) => setGreeting(e.target.value)}
+            onChange={(e) => onChange({ greeting: e.target.value })}
           />
         </FormField>
 
@@ -100,9 +91,9 @@ export default function InstructionsSection({ canEdit, agent, onReset }) {
             id="fallback-msg"
             placeholder="Üzgünüm, bu konuda yeterli bilgiye sahip değilim. Sizi hemen canlı bir temsilciye aktarıyorum."
             rows={3}
-            disabled={!canEdit || isLoading}
+            disabled={!canEdit || isSaving}
             value={fallback}
-            onChange={(e) => setFallback(e.target.value)}
+            onChange={(e) => onChange({ fallback: e.target.value })}
           />
         </FormField>
       </div>
