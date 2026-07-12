@@ -1,7 +1,42 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { service } from "./service";
 
-// Base URL comes from .env (VITE_API_URL or VITE_JSON_SERVER_URL), falls back to local JSON Server port 3000.
-const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_JSON_SERVER_URL || "http://localhost:3000";
+const customBaseQuery = async (args) => {
+  let url = typeof args === "string" ? args : args.url;
+  let method = typeof args === "string" ? "GET" : args.method || "GET";
+  let body = typeof args === "string" ? undefined : args.body;
+  let params = typeof args === "string" ? undefined : args.params;
+
+  if (params) {
+    const searchParams = new URLSearchParams(params);
+    url += (url.includes("?") ? "&" : "?") + searchParams.toString();
+  }
+
+  try {
+    let data;
+    const cleanMethod = method.toUpperCase();
+    if (cleanMethod === "GET") {
+      data = await service.get(url);
+    } else if (cleanMethod === "POST") {
+      data = await service.post(url, body);
+    } else if (cleanMethod === "PUT" || cleanMethod === "PATCH") {
+      data = await service.put(url, body);
+    } else if (cleanMethod === "DELETE") {
+      data = await service.delete(url);
+    } else {
+      throw new Error(`Unsupported method: ${method}`);
+    }
+    return { data };
+  } catch (error) {
+    console.error("[Custom Base Query Error]:", error);
+    return {
+      error: {
+        status: error.status || 500,
+        data: error.message || "An error occurred",
+      },
+    };
+  }
+};
 
 /**
  * api — the single RTK Query service for all server state.
@@ -11,7 +46,7 @@ const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_JSON_SERVER
  */
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: customBaseQuery,
   tagTypes: [
     "Dashboard",
     "Reports",

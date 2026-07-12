@@ -34,22 +34,17 @@ export default function useInbox(role) {
 
   // Read support tickets from Redux
   const tickets = useSelector((state) => state.support.tickets);
+  const currentUser = useSelector((state) => state.auth.user);
 
   // Filter tickets by active user role to prevent cross-workspace visibility
   const roleFilteredTickets = useMemo(() => {
-    if (role === "platform_admin" || role === "support_agent") {
+    if (!currentUser) return [];
+    if (currentUser.role === "admin") {
       return tickets;
     }
-    if (role === "workspace_admin") {
-      // Workspace Admin only sees "Acme Corp" tickets
-      return tickets.filter((t) => t.customer.includes("Acme Corp"));
-    }
-    if (role === "manager") {
-      // Manager only sees "TrendSoft" tickets
-      return tickets.filter((t) => t.customer.includes("TrendSoft"));
-    }
-    return [];
-  }, [tickets, role]);
+    // Non-admin (role !== "admin") users only see tickets matching their tenantId
+    return tickets.filter((t) => t.tenantId === currentUser.tenantId);
+  }, [tickets, currentUser]);
 
   // Map tickets to conversation format
   // { id, name, preview, time, unread, status, priority, channel }

@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider, Outlet, Navigate } from "react-rou
 import { Provider, useSelector } from "react-redux";
 import { store } from "./homepage/store/index.js";
 import { ToastProvider } from "./shared/components/ui/Toast";
+import { AuthProvider } from "./context/AuthContext";
 
 // Layout and Core Pages
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -35,8 +36,14 @@ function DashboardWrapper() {
     if (currentUser && currentUser.role) {
       return currentUser.role;
     }
-    return localStorage.getItem("saasprecise_active_role") || ROLES.PLATFORM_ADMIN;
+    return localStorage.getItem("saasprecise_active_role") || "user";
   });
+
+  useEffect(() => {
+    if (currentUser && currentUser.role) {
+      setRole(currentUser.role);
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     localStorage.setItem("saasprecise_active_role", role);
@@ -47,6 +54,8 @@ function DashboardWrapper() {
   }
 
   const roleLabels = {
+    admin: "Platform Yöneticisi",
+    user: "Kullanıcı",
     [ROLES.PLATFORM_ADMIN]: "Platform Admin",
     [ROLES.WORKSPACE_ADMIN]: "Workspace Admin",
     [ROLES.MANAGER]: "Manager",
@@ -60,7 +69,7 @@ function DashboardWrapper() {
           <DashboardLayout
             role={role}
             userName={currentUser?.name || "Ahmet Yılmaz"}
-            userRoleLabel={roleLabels[role]}
+            userRoleLabel={roleLabels[role] || "Kullanıcı"}
             workspaceName="ConneXion-AI Corp"
             workspacePlan="Enterprise"
           />
@@ -104,7 +113,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </Provider>
   );
 }

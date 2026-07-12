@@ -1,12 +1,20 @@
 import { SETTINGS_NAV } from "../constants/settingsConfig";
+import { useAuth } from "../../../context/AuthContext";
 
 /**
  * SettingsNav — vertical section nav inside the settings card.
  */
 export default function SettingsNav({ active, onChange }) {
+  const { currentUser } = useAuth();
+  const isAdmin = currentUser?.role === "admin";
+  
+  const visibleNav = isAdmin 
+    ? SETTINGS_NAV 
+    : SETTINGS_NAV.filter(item => item.id === "profile");
+
   return (
     <nav className="flex gap-1 overflow-x-auto p-3 md:w-60 md:flex-col md:overflow-visible md:border-r md:border-slate-100">
-      {SETTINGS_NAV.map(({ id, label, icon: Icon }) => {
+      {visibleNav.map(({ id, label, icon: Icon }) => {
         const isActive = id === active;
         return (
           <button

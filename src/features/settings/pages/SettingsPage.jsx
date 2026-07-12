@@ -11,6 +11,8 @@ import WidgetSection from "../components/sections/WidgetSection";
 import NotificationsSection from "../components/sections/NotificationsSection";
 import IntegrationsSection from "../components/sections/IntegrationsSection";
 import AuditLogsSection from "../components/sections/AuditLogsSection";
+import ProfileSection from "../components/sections/ProfileSection";
+import { useAuth } from "../../../context/AuthContext";
 import { ROLES } from "../../../constants/navigation";
 import { canSettings, SETTINGS_ACTION } from "../../../constants/permissions";
 import { useToast } from "../../../shared/components/ui/Toast";
@@ -29,9 +31,14 @@ export default function SettingsPage({
   initialSection = "workspace",
 }) {
   const { showToast } = useToast();
-  const { activeSection, setActiveSection, users, auditLogs } = useSettings({
-    initialSection,
+  const { currentUser } = useAuth();
+  const isAdmin = currentUser?.role === "admin";
+
+  const { activeSection: rawActiveSection, setActiveSection, users, auditLogs } = useSettings({
+    initialSection: isAdmin ? initialSection : "profile",
   });
+
+  const activeSection = isAdmin ? rawActiveSection : "profile";
 
   const canEdit = canSettings(role, SETTINGS_ACTION.EDIT);
 
@@ -118,6 +125,8 @@ export default function SettingsPage({
 
   const renderSection = () => {
     switch (activeSection) {
+      case "profile":
+        return <ProfileSection currentUser={currentUser} />;
       case "workspace":
         return <WorkspaceSection canEdit={canEdit} onSave={handleSave} />;
       case "users":

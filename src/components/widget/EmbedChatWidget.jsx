@@ -4,6 +4,35 @@ import { MessageSquare, Send, X, Bot, Sparkles, AlertCircle, Trash2 } from "luci
 import { sendMessageToAI, clearChat, clearError } from "../../homepage/store/aiSlice";
 import { getSystemPrompt } from "../../config/agentConfig";
 import { useGetAiAgentsQuery, useGetWidgetSettingsQuery } from "../../services/api";
+import { service } from "../../services/service";
+
+function renderMessageText(text) {
+  if (!text) return "";
+  
+  let formatted = text;
+
+  // 1. Clean list headers like "* **Hizmetler:**" or "* **Adres:**" into styled headers
+  formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*:/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1:</strong>');
+  formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1</strong>');
+  
+  // 2. Format standard markdown headings
+  formatted = formatted.replace(/###\s+(.*)/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1</strong>');
+  formatted = formatted.replace(/##\s+(.*)/g, '<strong class="block text-slate-900 font-extrabold mt-3 text-base">$1</strong>');
+  
+  // 3. Format standard bold markers **bold** to <strong>bold</strong>
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // 4. Convert inline lists to clean, line-broken list items: e.g. " - Saç kesimi" -> "<br/>• Saç kesimi"
+  formatted = formatted.replace(/\s*-\s+/g, '<br/>• ');
+  
+  // 5. Clean up any leading asterisks used as lists: e.g. "* " -> "• "
+  formatted = formatted.replace(/^\s*\*\s+/gm, '• ');
+
+  // 6. Convert newlines to HTML line breaks
+  formatted = formatted.replace(/\n/g, '<br />');
+  
+  return formatted;
+}
 
 export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +40,10 @@ export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
   const dispatch = useDispatch();
 
   const { messages, loading, error } = useSelector((state) => state.ai);
+  const currentUser = useSelector((state) => state.auth?.user);
+
+  const [widgetConvId, setWidgetConvId] = useState(null);
+  const [widgetCustId, setWidgetCustId] = useState(null);
 
   const messagesEndRef = useRef(null);
 
@@ -56,7 +89,7 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
     }
   }, [messages, isOpen]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
 
@@ -69,7 +102,86 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
       .filter(Boolean)
       .some(term => userMessage.toLowerCase().includes(term));
 
-    dispatch(sendMessageToAI({ systemPrompt: dynamicSystemPrompt, userMessage, isBlocked }));
+    let activeConvId = widgetConvId;
+    let activeCustId = widgetCustId;
+
+    try {
+      // If no conversation session is tracked, initialize it
+      if (!activeConvId) {
+        activeCustId = `cus_${Math.random().toString(36).substr(2, 9)}`;
+        activeConvId = `conv_${Math.random().toString(36).substr(2, 9)}`;
+        const customerName = `Web Ziyaretçisi #${Math.floor(1000 + Math.random() * 9000)}`;
+
+        setWidgetConvId(activeConvId);
+        setWidgetCustId(activeCustId);
+
+        // 1. Create customer in database
+        await service.post("/customers", {
+          id: activeCustId,
+          name: customerName,
+          email: `${activeCustId}@visitor.com`,
+          phone: "-",
+          company: "Web Ziyaretçisi",
+          status: "active",
+          tags: ["Web Widget"],
+          tenantId: currentUser?.tenantId || "tnt_standard"
+        });
+
+        // 2. Create conversation in database
+        await service.post("/conversations", {
+          id: activeConvId,
+          customerId: activeCustId,
+          name: customerName,
+          email: `${activeCustId}@visitor.com`,
+          preview: userMessage,
+          time: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          unread: 1,
+          status: "open",
+          priority: "medium",
+          channel: "web",
+          assignedAgentId: currentUser?.id || "usr_004",
+          aiSummary: "Yapay zeka asistanı görüşmesi başladı.",
+          aiSuggestions: [],
+          tenantId: currentUser?.tenantId || "tnt_standard"
+        });
+      }
+
+      // 3. Post User Message to DB
+      await service.post("/messages", {
+        conversationId: activeConvId,
+        sender: "customer",
+        text: userMessage,
+        timestamp: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+        tenantId: currentUser?.tenantId || "tnt_standard"
+      });
+
+      // 4. Dispatch user message to UI state and AI API
+      const resultAction = await dispatch(
+        sendMessageToAI({ systemPrompt: dynamicSystemPrompt, userMessage, isBlocked })
+      );
+      
+      const assistantReply = resultAction.payload;
+
+      if (assistantReply) {
+        // 5. Post Assistant Reply to DB
+        await service.post("/messages", {
+          conversationId: activeConvId,
+          sender: "agent",
+          text: assistantReply,
+          timestamp: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          tenantId: currentUser?.tenantId || "tnt_standard"
+        });
+
+        // 6. Update Conversation Preview
+        await service.put(`/conversations/${activeConvId}`, {
+          preview: assistantReply,
+          lastActivity: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          unread: 1
+        });
+      }
+    } catch (err) {
+      console.error("Widget conversation persistence failed:", err);
+    }
   };
 
   const handleClearChat = () => {
@@ -163,11 +275,14 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
                     }`}
                     style={!isAssistant ? { backgroundColor: themeColor, color: themeTextColor } : {}}
                   >
-                    <p className="leading-relaxed whitespace-pre-wrap">
-                      {msg.id === "ai-init"
-                        ? (activeAgent && activeAgent.greeting ? activeAgent.greeting : msg.text)
-                        : msg.text}
-                    </p>
+                    <p 
+                      className="leading-relaxed whitespace-pre-wrap"
+                      dangerouslySetInnerHTML={{ __html: renderMessageText(
+                        msg.id === "ai-init"
+                          ? (activeAgent && activeAgent.greeting ? activeAgent.greeting : msg.text)
+                          : msg.text
+                      ) }}
+                    />
                     <span
                       className={`block mt-1 text-[9px] text-right font-medium ${
                         isAssistant ? "text-slate-400" : "opacity-80"

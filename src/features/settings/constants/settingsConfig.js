@@ -7,12 +7,14 @@ import {
   Bell,
   Puzzle,
   ScrollText,
+  User,
 } from "lucide-react";
 
 import { ROLES } from "../../../constants/navigation";
 
 // Left-hand settings sections.
 export const SETTINGS_NAV = [
+  { id: "profile", label: "Profil Ayarları", icon: User },
   { id: "workspace", label: "Workspace", icon: Building2 },
   { id: "users", label: "Kullanıcılar", icon: Users },
   { id: "roles", label: "Roller", icon: Shield },

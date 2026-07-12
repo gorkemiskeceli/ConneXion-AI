@@ -5,6 +5,7 @@ import useContacts from "../hooks/useContacts";
 import ContactsToolbar from "../components/ContactsToolbar";
 import ContactsTable from "../components/ContactsTable";
 import ContactProfileDrawer from "../components/ContactProfileDrawer";
+import { useAuth } from "../../../context/AuthContext";
 import { ROLES } from "../../../constants/navigation";
 import { canContacts, CONTACTS_ACTION } from "../../../constants/permissions";
 import { useToast } from "../../../shared/components/ui/Toast";
@@ -20,6 +21,7 @@ import {
  */
 export default function ContactsPage({ role = ROLES.PLATFORM_ADMIN }) {
   const { showToast } = useToast();
+  const { currentUser } = useAuth();
   const {
     search,
     setSearch,
@@ -116,6 +118,7 @@ export default function ContactsPage({ role = ROLES.PLATFORM_ADMIN }) {
           ...data,
           conversations: 0,
           lastActivity: new Date().toLocaleDateString("tr-TR"),
+          tenantId: currentUser?.tenantId,
         }).unwrap();
         showToast("Kişi başarıyla eklendi.", "success");
       }

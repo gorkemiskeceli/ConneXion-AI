@@ -5,6 +5,7 @@ import { addTicket } from "../../../homepage/store/supportSlice";
 export default function useSupport(role) {
   const dispatch = useDispatch();
   const tickets = useSelector((state) => state.support.tickets);
+  const currentUser = useSelector((state) => state.auth.user);
 
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -66,6 +67,7 @@ export default function useSupport(role) {
         status: "open",
         ...newTicket,
         customer: customerName,
+        tenantId: currentUser?.tenantId,
       })
     );
     setIsModalOpen(false);
