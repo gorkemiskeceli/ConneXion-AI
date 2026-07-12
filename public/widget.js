@@ -49,65 +49,64 @@
     const style = document.createElement("style");
     style.innerHTML = `
       .connex-widget-container {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
         box-sizing: border-box;
         --connex-brand-color: ${brandColor};
         --connex-brand-text-color: ${brandTextColor};
-        --connex-position-left: ${isLeft ? "20px" : "auto"};
-        --connex-position-right: ${isLeft ? "auto" : "20px"};
+        --connex-position-left: ${isLeft ? "24px" : "auto"};
+        --connex-position-right: ${isLeft ? "auto" : "24px"};
       }
       .connex-widget-container * {
         box-sizing: border-box;
       }
       
-      /* Toggle Button - Brutalist style */
+      /* Toggle Button - Modern Premium style */
       .connex-toggle-btn {
         position: fixed;
-        bottom: 20px;
+        bottom: 24px;
         left: var(--connex-position-left);
         right: var(--connex-position-right);
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
-        background-color: #000;
-        color: #fff;
-        border: 3px solid #000;
-        box-shadow: 4px 4px 0px var(--connex-brand-color);
+        background-color: var(--connex-brand-color);
+        color: var(--connex-brand-text-color);
+        border: none;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         z-index: 999999;
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease;
         outline: none;
       }
       .connex-toggle-btn:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0px var(--connex-brand-color);
+        transform: scale(1.08);
+        box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.2), 0 10px 15px -6px rgba(0, 0, 0, 0.15);
       }
       .connex-toggle-btn:active {
-        transform: translate(2px, 2px);
-        box-shadow: 0px 0px 0px var(--connex-brand-color);
+        transform: scale(0.95);
       }
       
-      /* Chat Box - Brutalist style */
+      /* Chat Box - Sleek modern card */
       .connex-chat-box {
         position: fixed;
-        bottom: 95px;
+        bottom: 96px;
         left: var(--connex-position-left);
         right: var(--connex-position-right);
         width: 380px;
-        height: 520px;
-        max-height: calc(100vh - 130px);
-        background-color: #fff;
-        border: 3px solid #000;
-        box-shadow: 8px 8px 0px #000;
-        border-radius: 16px;
+        height: 540px;
+        max-height: calc(100vh - 140px);
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
+        border-radius: 20px;
         display: flex;
         flex-direction: column;
         z-index: 999999;
         overflow: hidden;
-        transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
         transform: translateY(30px) scale(0.95);
         opacity: 0;
         pointer-events: none;
@@ -122,90 +121,91 @@
       .connex-header {
         background-color: var(--connex-brand-color);
         color: var(--connex-brand-text-color);
-        padding: 16px;
-        border-bottom: 3px solid #000;
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         display: flex;
         align-items: center;
         justify-content: space-between;
       }
       .connex-header-title {
-        font-weight: 800;
+        font-weight: 700;
         font-size: 15px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
         margin: 0;
         flex: 1;
         color: var(--connex-brand-text-color);
       }
       .connex-online-dot {
-        width: 10px;
-        height: 10px;
+        width: 8px;
+        height: 8px;
         background-color: #10b981;
         border-radius: 50%;
         display: inline-block;
-        border: 2px solid #000;
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
       }
       .connex-close-btn {
-        background: #000;
-        border: 2px solid #000;
-        color: #fff;
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: var(--connex-brand-text-color);
         font-size: 16px;
-        font-weight: bold;
         cursor: pointer;
         width: 28px;
         height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 6px;
-        transition: transform 0.1s ease;
+        border-radius: 50%;
+        transition: background 0.2s ease, transform 0.2s ease;
       }
       .connex-close-btn:hover {
-        transform: scale(1.1);
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.05);
       }
       
       /* Message List */
       .connex-msg-list {
         flex: 1;
-        padding: 16px;
+        padding: 20px;
         overflow-y: auto;
-        background-color: #f7f7f9;
+        background-color: #f8fafc;
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 16px;
       }
       .connex-msg-bubble {
         max-w: 80%;
         padding: 12px 16px;
-        font-size: 13px;
+        font-size: 13.5px;
         line-height: 1.5;
         position: relative;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       }
       .connex-msg-bubble.user {
         align-self: flex-end;
-        background-color: #fff;
-        color: #000;
-        border: 2px solid #000;
-        box-shadow: 3px 3px 0px #000;
-        border-radius: 14px 14px 0 14px;
+        background-color: var(--connex-brand-color);
+        color: var(--connex-brand-text-color);
+        border-radius: 18px 18px 0 18px;
       }
       .connex-msg-bubble.assistant {
         align-self: flex-start;
-        background-color: #000;
-        color: #fff;
-        border: 2px solid #000;
-        box-shadow: 3px 3px 0px var(--connex-brand-color);
-        border-radius: 14px 14px 14px 0;
+        background-color: #ffffff;
+        color: #1e293b;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 18px 18px 18px 0;
       }
       .connex-msg-timestamp {
         font-size: 9px;
         margin-top: 6px;
-        opacity: 0.6;
+        opacity: 0.5;
         text-align: right;
-        font-family: monospace;
+      }
+      .connex-msg-bubble.user .connex-msg-timestamp {
+        color: var(--connex-brand-text-color);
+      }
+      .connex-msg-bubble.assistant .connex-msg-timestamp {
+        color: #64748b;
       }
       
       /* Suggested Questions */
@@ -213,91 +213,91 @@
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
-        margin-top: 6px;
+        margin-top: 8px;
         align-self: flex-start;
       }
       .connex-suggested-chip {
-        background-color: #fff;
-        color: #000;
-        border: 2px solid #000;
-        box-shadow: 2px 2px 0px #000;
-        padding: 8px 12px;
+        background-color: #ffffff;
+        color: var(--connex-brand-color);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+        padding: 8px 14px;
         font-size: 11px;
-        font-weight: 700;
-        border-radius: 8px;
+        font-weight: 600;
+        border-radius: 9999px;
         cursor: pointer;
-        transition: transform 0.1s ease, box-shadow 0.1s ease;
+        transition: all 0.2s ease;
       }
       .connex-suggested-chip:hover {
-        transform: translate(-1px, -1px);
-        box-shadow: 3px 3px 0px #000;
-      }
-      .connex-suggested-chip:active {
-        transform: translate(1px, 1px);
-        box-shadow: 0px 0px 0px #000;
+        background-color: var(--connex-brand-color);
+        color: var(--connex-brand-text-color);
+        border-color: var(--connex-brand-color);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.05);
       }
       
       /* Input Area */
       .connex-input-form {
         display: flex;
-        padding: 14px;
-        border-top: 3px solid #000;
-        background-color: #fff;
+        padding: 16px;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        background-color: #ffffff;
         gap: 10px;
+        align-items: center;
       }
       .connex-input-field {
         flex: 1;
-        border: 2px solid #000;
-        border-radius: 8px;
-        padding: 12px 14px;
-        font-size: 13px;
+        border: 1px solid #cbd5e1;
+        border-radius: 9999px;
+        padding: 10px 18px;
+        font-size: 13.5px;
         outline: none;
-        color: #000 !important;
-        background-color: #fff !important;
-        transition: border-color 0.15s ease;
+        color: #1e293b !important;
+        background-color: #f8fafc !important;
+        transition: all 0.2s ease;
       }
       .connex-input-field:focus {
         border-color: var(--connex-brand-color);
+        background-color: #ffffff !important;
+        box-shadow: 0 0 0 3px rgba(91, 99, 240, 0.15);
       }
       .connex-send-btn {
-        background-color: #000;
-        color: #fff;
-        border: 2px solid #000;
-        box-shadow: 2px 2px 0px var(--connex-brand-color);
-        font-weight: bold;
-        padding: 0 18px;
-        font-size: 13px;
-        border-radius: 8px;
+        background-color: var(--connex-brand-color);
+        color: var(--connex-brand-text-color);
+        border: none;
+        padding: 10px;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: transform 0.1s ease, box-shadow 0.15s ease;
+        transition: all 0.2s ease;
       }
       .connex-send-btn:hover {
-        transform: translate(-1px, -1px);
-        box-shadow: 3px 3px 0px var(--connex-brand-color);
+        transform: scale(1.08);
+        filter: brightness(1.05);
       }
       .connex-send-btn:active {
-        transform: translate(1px, 1px);
-        box-shadow: 0px 0px 0px var(--connex-brand-color);
+        transform: scale(0.95);
       }
       
       /* Loader */
       .connex-loader {
         display: flex;
         gap: 6px;
-        padding: 10px 14px;
+        padding: 12px 16px;
         align-self: flex-start;
-        background-color: #000;
-        border: 2px solid #000;
-        border-radius: 14px 14px 14px 0;
-        box-shadow: 3px 3px 0px var(--connex-brand-color);
+        background-color: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 18px 18px 18px 0;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       }
       .connex-loader-dot {
-        width: 8px;
-        height: 8px;
-        background-color: #fff;
+        width: 6px;
+        height: 6px;
+        background-color: #64748b;
         border-radius: 50%;
         animation: connex-bounce 1.4s infinite ease-in-out both;
       }
@@ -421,13 +421,41 @@
       handleSendMessage(text);
     });
 
+    function formatMessageText(text) {
+      if (!text) return "";
+      
+      let formatted = text;
+
+      // 1. Clean list headers like "* **Hizmetler:**" or "* **Adres:**" into styled headers
+      formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*:/g, '<strong style="display: block; font-weight: 700; margin-top: 10px; color: inherit;">$1:</strong>');
+      formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*/g, '<strong style="display: block; font-weight: 700; margin-top: 10px; color: inherit;">$1</strong>');
+      
+      // 2. Format standard markdown headings
+      formatted = formatted.replace(/###\s+(.*)/g, '<strong style="display: block; font-weight: 700; margin-top: 10px; color: inherit;">$1</strong>');
+      formatted = formatted.replace(/##\s+(.*)/g, '<strong style="display: block; font-weight: 800; margin-top: 12px; font-size: 14px; color: inherit;">$1</strong>');
+      
+      // 3. Format standard bold markers **bold** to <strong>bold</strong>
+      formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      
+      // 4. Convert inline lists to clean, line-broken list items: e.g. " - Saç kesimi" -> "<br/>• Saç kesimi"
+      formatted = formatted.replace(/\s*-\s+/g, '<br/>• ');
+      
+      // 5. Clean up any leading asterisks used as lists: e.g. "* " -> "• "
+      formatted = formatted.replace(/^\s*\*\s+/gm, '• ');
+
+      // 6. Convert newlines to HTML line breaks
+      formatted = formatted.replace(/\n/g, '<br />');
+      
+      return formatted;
+    }
+
     function appendMessage(sender, text) {
       const bubble = document.createElement("div");
       bubble.className = `connex-msg-bubble ${sender}`;
       
       const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       bubble.innerHTML = `
-        <div>${text}</div>
+        <div>${formatMessageText(text)}</div>
         <div class="connex-msg-timestamp">${time}</div>
       `;
       
