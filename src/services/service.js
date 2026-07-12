@@ -170,7 +170,7 @@ export const service = {
 
     if (!IS_VERCEL) {
       const res = await fetch(`http://localhost:3000${url}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       });
