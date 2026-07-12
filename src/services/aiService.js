@@ -15,7 +15,7 @@ export async function callHuggingFaceAI(systemPrompt = getSystemPrompt(), userMe
     let finalSystemPrompt = systemPrompt;
 
     if (scrapedDomText && !finalSystemPrompt.includes("[HOST WEBSITE LIVE SCREEN CONTENT]")) {
-      finalSystemPrompt += `\n\n[HOST WEBSITE LIVE SCREEN CONTENT]\n${scrapedDomText}\n\nTALİMAT: ASLA bu sayfa içeriğini doğrudan kopyalayıp yapıştırma. Ziyaretçinin sorduğu soruya göre son derece kısa, cana yakın, düzenli paragraflar halinde cevap ver. Her konuyu (Çalışma Saatleri, Adres, Hizmetler vb.) aralarında boş bir satır olacak şekilde ayrı paragraflarda ve başlıklar altında yaz. Ham yıldız (* veya **) veya '#' işaretleri kullanmak yerine temiz başlıklar ve listeler oluştur.`;
+      finalSystemPrompt += `\n\n[HOST WEBSITE LIVE SCREEN CONTENT]\n${scrapedDomText}\n\nTALİMAT: ASLA bu sayfa içeriğini doğrudan kopyalayıp yapıştırma. Ziyaretçinin sorduğu soruya göre son derece kısa, cana yakın, düzenli paragraflar halinde cevap ver. Her konuyu (Çalışma Saatleri, Adres, Hizmetler vb.) aralarında boş bir satır olacak şekilde ayrı paragraflarda ve başlıklar altında yaz. Ham yıldız (* veya **), '#' işaretleri veya tablo oluşturmak için kullanılan dikey çizgi (|) ve tire (-) işaretlerini asla kullanma. Bilgileri düzgün satırlar halinde sun.`;
     }
 
     if (IS_VERCEL) {

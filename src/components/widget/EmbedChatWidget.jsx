@@ -11,24 +11,45 @@ function renderMessageText(text) {
   
   let formatted = text;
 
-  // 1. Clean list headers like "* **Hizmetler:**" or "* **Adres:**" into styled headers
+  // 1. Parse markdown tables into clean blocks
+  if (formatted.includes('|')) {
+    const lines = formatted.split('\n');
+    const parsedLines = lines.map(line => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+        // Skip separator line or main header labels
+        if (trimmed.includes('---') || (trimmed.toLowerCase().includes('bölüm') && trimmed.toLowerCase().includes('içerik'))) {
+          return '';
+        }
+        const cells = trimmed.split('|').map(c => c.trim()).filter(Boolean);
+        if (cells.length === 2) {
+          return `<strong class="block text-slate-800 font-bold mt-2.5">${cells[0]}</strong>${cells[1]}`;
+        }
+        return cells.join(' • ');
+      }
+      return line;
+    }).filter(l => l !== '');
+    formatted = parsedLines.join('\n');
+  }
+
+  // 2. Clean list headers like "* **Hizmetler:**" or "* **Adres:**" into styled headers
   formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*:/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1:</strong>');
   formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1</strong>');
   
-  // 2. Format standard markdown headings
+  // 3. Format standard markdown headings
   formatted = formatted.replace(/###\s+(.*)/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1</strong>');
   formatted = formatted.replace(/##\s+(.*)/g, '<strong class="block text-slate-900 font-extrabold mt-3 text-base">$1</strong>');
   
-  // 3. Format standard bold markers **bold** to <strong>bold</strong>
+  // 4. Format standard bold markers **bold** to <strong>bold</strong>
   formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
   
-  // 4. Convert inline lists to clean, line-broken list items: e.g. " - Saç kesimi" -> "<br/>• Saç kesimi"
+  // 5. Convert inline lists to clean, line-broken list items: e.g. " - Saç kesimi" -> "<br/>• Saç kesimi"
   formatted = formatted.replace(/\s*-\s+/g, '<br/>• ');
   
-  // 5. Clean up any leading asterisks used as lists: e.g. "* " -> "• "
+  // 6. Clean up any leading asterisks used as lists: e.g. "* " -> "• "
   formatted = formatted.replace(/^\s*\*\s+/gm, '• ');
 
-  // 6. Convert newlines to HTML line breaks
+  // 7. Convert newlines to HTML line breaks
   formatted = formatted.replace(/\n/g, '<br />');
   
   return formatted;
