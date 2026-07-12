@@ -9,6 +9,10 @@
     apiUrl: "http://localhost:3000"
   };
 
+  let activeConvId = sessionStorage.getItem("connex_conv_id") || null;
+  let activeCustId = sessionStorage.getItem("connex_cust_id") || null;
+  let renderedMessageCount = 0;
+
   // Detect the origin from which the script is loaded (handles when port 5173 is occupied and Vite runs on 5174 etc.)
   const scriptTag = document.currentScript;
   const scriptOrigin = scriptTag ? new URL(scriptTag.src).origin : "http://localhost:5173";
@@ -393,8 +397,39 @@
     toggleBtn.addEventListener("click", toggleChat);
     closeBtn.addEventListener("click", toggleChat);
 
-    // Add Welcome Message
-    appendMessage("assistant", activeAgent && activeAgent.greeting ? activeAgent.greeting : widgetSettings.welcomeMessage);
+    // Add History or Welcome Message
+    if (activeConvId) {
+      fetch(`${config.apiUrl}/messages?conversationId=${activeConvId}`)
+        .then(r => r.json())
+        .then(messages => {
+          messages.forEach(m => {
+            appendMessage(m.sender === "customer" ? "user" : "assistant", m.text);
+          });
+        })
+        .catch(err => {
+          console.warn("Failed to load chat history:", err);
+          appendMessage("assistant", activeAgent && activeAgent.greeting ? activeAgent.greeting : widgetSettings.welcomeMessage);
+        });
+    } else {
+      appendMessage("assistant", activeAgent && activeAgent.greeting ? activeAgent.greeting : widgetSettings.welcomeMessage);
+    }
+
+    // Periodically poll for new agent messages from database
+    setInterval(() => {
+      if (activeConvId) {
+        fetch(`${config.apiUrl}/messages?conversationId=${activeConvId}`)
+          .then(r => r.json())
+          .then(messages => {
+            if (messages.length > renderedMessageCount) {
+              const newMsgs = messages.slice(renderedMessageCount);
+              newMsgs.forEach(m => {
+                appendMessage(m.sender === "customer" ? "user" : "assistant", m.text);
+              });
+            }
+          })
+          .catch(err => console.warn("Failed to sync messages:", err));
+      }
+    }, 3000);
     
     // Render Suggested Questions
     if (widgetSettings.suggestedQuestions && widgetSettings.suggestedQuestions.length > 0) {
@@ -482,6 +517,7 @@
       
       msgList.appendChild(bubble);
       scrollToBottom();
+      renderedMessageCount++;
     }
 
     function scrollToBottom() {
@@ -520,6 +556,71 @@
         removeTypingLoader();
         appendMessage("assistant", "Bu konu hakkında yanıt veremiyorum.");
         return;
+      }
+
+      // DB Persistence
+      try {
+        if (!activeConvId) {
+          activeCustId = `cus_${Math.random().toString(36).substr(2, 9)}`;
+          activeConvId = `conv_${Math.random().toString(36).substr(2, 9)}`;
+          sessionStorage.setItem("connex_conv_id", activeConvId);
+          sessionStorage.setItem("connex_cust_id", activeCustId);
+
+          const customerName = `Web Ziyaretçisi #${Math.floor(1000 + Math.random() * 9000)}`;
+
+          // 1. Create customer
+          await fetch(`${config.apiUrl}/customers`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: activeCustId,
+              name: customerName,
+              email: `${activeCustId}@visitor.com`,
+              phone: "-",
+              company: "Web Ziyaretçisi",
+              status: "active",
+              tags: ["Web Widget"],
+              tenantId: config.tenantId
+            })
+          });
+
+          // 2. Create conversation
+          await fetch(`${config.apiUrl}/conversations`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: activeConvId,
+              customerId: activeCustId,
+              name: customerName,
+              email: `${activeCustId}@visitor.com`,
+              preview: userMessage,
+              time: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+              unread: 1,
+              status: "open",
+              priority: "medium",
+              channel: "web",
+              assignedAgentId: "usr_004",
+              aiSummary: "Yapay zeka asistanı görüşmesi başladı.",
+              aiSuggestions: [],
+              tenantId: config.tenantId
+            })
+          });
+        }
+
+        // 3. Post User Message
+        await fetch(`${config.apiUrl}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            conversationId: activeConvId,
+            sender: "customer",
+            text: userMessage,
+            timestamp: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+            tenantId: config.tenantId
+          })
+        });
+      } catch (dbErr) {
+        console.warn("Failed to persist message to local DB:", dbErr);
       }
 
       // Build system prompt for this agent
@@ -585,7 +686,36 @@
 
         if (response.ok) {
           const data = await response.json();
-          appendMessage("assistant", data.text || "Bir sorun oluştu.");
+          const assistantReply = data.text || "Bir sorun oluştu.";
+          appendMessage("assistant", assistantReply);
+
+          // Persist Assistant Reply to DB
+          try {
+            await fetch(`${config.apiUrl}/messages`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                conversationId: activeConvId,
+                sender: "agent",
+                text: assistantReply,
+                timestamp: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+                tenantId: config.tenantId
+              })
+            });
+
+            // Update Conversation Preview
+            await fetch(`${config.apiUrl}/conversations/${activeConvId}`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                preview: assistantReply,
+                lastActivity: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+                unread: 1
+              })
+            });
+          } catch (dbErr2) {
+            console.warn("Failed to persist assistant reply:", dbErr2);
+          }
         } else {
           appendMessage("assistant", "Bir bağlantı hatası oluştu.");
         }

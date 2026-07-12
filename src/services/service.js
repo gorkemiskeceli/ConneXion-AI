@@ -106,11 +106,11 @@ export const service = {
       const { collection, id } = parseUrl(url);
       if (collection === 'customers' || collection === 'contacts' || collection === 'conversations' || collection === 'messages') {
         if (id) {
-          if (result && result.tenantId !== currentUser.tenantId) {
+          if (result && result.tenantId !== currentUser.tenantId && result.tenantId !== currentUser.id) {
             return null; // Deny access to other tenant's item
           }
         } else if (Array.isArray(result)) {
-          result = result.filter(item => item.tenantId === currentUser.tenantId);
+          result = result.filter(item => item.tenantId === currentUser.tenantId || item.tenantId === currentUser.id);
         }
       }
     }
@@ -121,9 +121,9 @@ export const service = {
   post: async (url, body) => {
     const currentUser = getActiveUser();
     const { collection } = parseUrl(url);
-    if (currentUser && currentUser.tenantId) {
+    if (currentUser && (currentUser.tenantId || currentUser.id)) {
       if (collection === 'customers' || collection === 'contacts' || collection === 'conversations' || collection === 'messages') {
-        body.tenantId = currentUser.tenantId;
+        body.tenantId = currentUser.tenantId || currentUser.id;
       }
     }
 
@@ -162,9 +162,9 @@ export const service = {
   put: async (url, body) => {
     const currentUser = getActiveUser();
     const { collection } = parseUrl(url);
-    if (currentUser && currentUser.tenantId) {
+    if (currentUser && (currentUser.tenantId || currentUser.id)) {
       if (collection === 'customers' || collection === 'contacts' || collection === 'conversations' || collection === 'messages') {
-        body.tenantId = currentUser.tenantId;
+        body.tenantId = currentUser.tenantId || currentUser.id;
       }
     }
 
