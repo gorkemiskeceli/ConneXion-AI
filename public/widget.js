@@ -405,31 +405,36 @@
           messages.forEach(m => {
             appendMessage(m.sender === "customer" ? "user" : "assistant", m.text);
           });
+          startPolling();
         })
         .catch(err => {
           console.warn("Failed to load chat history:", err);
           appendMessage("assistant", activeAgent && activeAgent.greeting ? activeAgent.greeting : widgetSettings.welcomeMessage);
+          startPolling();
         });
     } else {
       appendMessage("assistant", activeAgent && activeAgent.greeting ? activeAgent.greeting : widgetSettings.welcomeMessage);
+      startPolling();
     }
 
-    // Periodically poll for new agent messages from database
-    setInterval(() => {
-      if (activeConvId) {
-        fetch(`${config.apiUrl}/messages?conversationId=${activeConvId}`)
-          .then(r => r.json())
-          .then(messages => {
-            if (messages.length > renderedMessageCount) {
-              const newMsgs = messages.slice(renderedMessageCount);
-              newMsgs.forEach(m => {
-                appendMessage(m.sender === "customer" ? "user" : "assistant", m.text);
-              });
-            }
-          })
-          .catch(err => console.warn("Failed to sync messages:", err));
-      }
-    }, 3000);
+    function startPolling() {
+      // Periodically poll for new agent messages from database
+      setInterval(() => {
+        if (activeConvId) {
+          fetch(`${config.apiUrl}/messages?conversationId=${activeConvId}`)
+            .then(r => r.json())
+            .then(messages => {
+              if (messages.length > renderedMessageCount) {
+                const newMsgs = messages.slice(renderedMessageCount);
+                newMsgs.forEach(m => {
+                  appendMessage(m.sender === "customer" ? "user" : "assistant", m.text);
+                });
+              }
+            })
+            .catch(err => console.warn("Failed to sync messages:", err));
+        }
+      }, 3000);
+    }
     
     // Render Suggested Questions
     if (widgetSettings.suggestedQuestions && widgetSettings.suggestedQuestions.length > 0) {
