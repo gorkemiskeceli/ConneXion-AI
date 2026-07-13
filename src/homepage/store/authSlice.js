@@ -133,14 +133,14 @@ export const authSlice = createSlice({
       } else {
         const id = `usr_${Math.random().toString(36).substr(2, 9)}`;
         const tenantId = `tnt_${Math.random().toString(36).substr(2, 9)}`;
-        const newUser = { id, name, email, password, role: 'user', tenantId };
+        const newUser = { id, name, email, password, role: 'workspace_admin', tenantId };
         state.registeredUsers.push(newUser);
-        state.user = { id, name, email, role: 'user', tenantId };
+        state.user = { id, name, email, role: 'workspace_admin', tenantId };
         state.registerModalOpen = false;
         state.authError = null;
         setSafeLocalItem('saasprecise_registered_users', JSON.stringify(state.registeredUsers));
         setSafeLocalItem('saasprecise_user', JSON.stringify(state.user));
-        setSafeLocalItem('saasprecise_active_role', 'user');
+        setSafeLocalItem('saasprecise_active_role', 'workspace_admin');
       }
     },
     updateUserProfile: (state, action) => {

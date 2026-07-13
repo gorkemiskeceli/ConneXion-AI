@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
 import {
   useGetAiAgentsQuery,
   useCreateAiAgentMutation,
@@ -11,21 +12,34 @@ import {
 
 /**
  * useAiAgentStudio — UI state + data seam for the studio.
- * Enforces a single global agent architecture.
+ * Enforces a single global agent architecture, isolated by tenant.
  */
 export default function useAiAgentStudio() {
+  const currentUser = useSelector((state) => state.auth.user);
+
   const [activeTab, setActiveTab] = useState("general");
   const [draftAgent, setDraftAgent] = useState(null);
   const [resetKey, setResetKey] = useState(0);
 
-  const { data: agents = [], isLoading: agentsLoading, error } = useGetAiAgentsQuery();
+  const { data: allAgents = [], isLoading: agentsLoading, error } = useGetAiAgentsQuery();
   const [createAiAgent] = useCreateAiAgentMutation();
   const [updateAiAgent, { isLoading: isUpdating }] = useUpdateAiAgentMutation();
   
-  const { data: knowledgeSources = [] } = useGetKnowledgeSourcesQuery();
-  const { data: handoffRules = [] } = useGetHandoffRulesQuery();
-  const { data: logs = [] } = useGetAiLogsQuery();
+  const { data: allKnowledgeSources = [] } = useGetKnowledgeSourcesQuery();
+  const { data: allHandoffRules = [] } = useGetHandoffRulesQuery();
+  const { data: allLogs = [] } = useGetAiLogsQuery();
   const { data: queues = [] } = useGetQueuesQuery();
+
+  const filterByTenant = (items) => {
+    if (!currentUser || currentUser.role === "platform_admin") return items;
+    return items.filter((item) => item.tenantId === currentUser.tenantId);
+  };
+
+  const agents = useMemo(() => filterByTenant(allAgents), [allAgents, currentUser]);
+  const knowledgeSources = useMemo(() => filterByTenant(allKnowledgeSources), [allKnowledgeSources, currentUser]);
+  const handoffRules = useMemo(() => filterByTenant(allHandoffRules), [allHandoffRules, currentUser]);
+  const logs = useMemo(() => filterByTenant(allLogs), [allLogs, currentUser]);
+
 
   const [localKnowledgeSources, setLocalKnowledgeSources] = useState([]);
   const [localHandoffRules, setLocalHandoffRules] = useState([]);
@@ -58,6 +72,7 @@ export default function useAiAgentStudio() {
         try {
           await createAiAgent({
             id: `agt_${Date.now()}`,
+            tenantId: currentUser?.tenantId || "tnt_default",
             name: "ConneXion Assistant",
             status: "active",
             description: "Varsayılan müşteri destek asistanı.",
@@ -82,7 +97,7 @@ export default function useAiAgentStudio() {
       };
       createDefaultAgent();
     }
-  }, [agents, agentsLoading, createAiAgent]);
+  }, [agents, agentsLoading, createAiAgent, currentUser]);
 
   const selectedAgent = draftAgent || agents[0] || null;
 
