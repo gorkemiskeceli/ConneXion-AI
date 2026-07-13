@@ -1019,6 +1019,18 @@
         "Web Widget"
       ],
       "tenantId": "usr_oo56kqutk"
+    },
+    {
+      "id": "cus_y7qc5lcx4",
+      "name": "Web Ziyaretçisi #6435",
+      "email": "cus_y7qc5lcx4@visitor.com",
+      "phone": "-",
+      "company": "Web Ziyaretçisi",
+      "status": "active",
+      "tags": [
+        "Web Widget"
+      ],
+      "tenantId": "usr_nsl6t1qxg"
     }
   ],
   "conversations": [
@@ -1965,6 +1977,42 @@
       "aiSuggestions": [],
       "tenantId": "tnt_admin",
       "lastActivity": "07:26"
+    },
+    {
+      "id": "conv_b9wzq95dv",
+      "customerId": "cus_y7qc5lcx4",
+      "name": "Web Ziyaretçisi #6435",
+      "email": "cus_y7qc5lcx4@visitor.com",
+      "preview": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "time": "09:52",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "web",
+      "assignedAgentId": "usr_004",
+      "aiSummary": "Yapay zeka asistanı görüşmesi başladı.",
+      "aiSuggestions": [],
+      "tenantId": "usr_nsl6t1qxg",
+      "lastActivity": "09:59"
+    },
+    {
+      "id": "TKT-5900",
+      "customerId": "usr_nsl6t1qxg",
+      "name": "Acme Corp",
+      "email": "gorkem@gmail.com",
+      "subject": "gorkem test",
+      "category": "Genel",
+      "preview": "merhaba",
+      "time": "13.07.2026",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "ticket",
+      "assignedAgentId": "usr_005",
+      "aiSummary": "Kullanıcı yeni destek talebi oluşturdu.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_admin",
+      "lastActivity": "10:06"
     }
   ],
   "messages": [
@@ -3748,6 +3796,94 @@
       "timestamp": "07:26",
       "tenantId": "tnt_jvhnvhfal",
       "id": "LWpMDC3"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "09:52",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "BWJgaGc"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "09:52",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "oZ85dVA"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "roselia hakkında bilgi ver",
+      "timestamp": "09:54",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "hT2wnBQ"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia, İstanbul Huzur Caddesi No:123’de bulunan, profesyonel bakım ve güzellik hizmeti sunan bir salon. Zarafet ve uzmanlığın buluştuğu bir ortamda, saç kesimi, saç boyama, cilt bakımı, makyaj, el & tırnak bakımı ve masaj gibi geniş bir hizmet yelpazesi sunuyor. 08:00‑18:00 arası & Pazartesi‑Cuma açık, Pazar kapalı. Detaylı randevu ve iletişim için sayfada yer alan telefon +90 212 555 0123 veya e‑posta hello@roselia.com’ı kullanabilirsiniz. 🚺✂️✨",
+      "timestamp": "09:54",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "gRLYXNa"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "09:59",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "T-_jNwz"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "09:59",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "g6yqi0e"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "10:01",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "S3kDYsF"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "10:01",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "Jl1aceu"
+    },
+    {
+      "conversationId": "TKT-5900",
+      "sender": "customer",
+      "text": "gorkem test\n",
+      "timestamp": "13.07.2026 10:00",
+      "tenantId": "tnt_wf1z9f75f",
+      "id": "mGzuUqJ"
+    },
+    {
+      "conversationId": "TKT-5900",
+      "sender": "agent",
+      "text": "Destek talebiniz başarıyla oluşturulmuştur. Destek ekibimiz en kısa sürede inceleyip dönüş sağlayacaktır.",
+      "timestamp": "13.07.2026 10:01",
+      "tenantId": "tnt_wf1z9f75f",
+      "id": "mHt579l"
+    },
+    {
+      "conversationId": "TKT-5900",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "10:06",
+      "tenantId": "tnt_admin",
+      "id": "vo7-fNG"
     }
   ],
   "teamPerformance": [
@@ -4119,7 +4255,108 @@
     "documents": 2
   },
   "knowledgeSources": [],
-  "aiAgents": [],
+  "aiAgents": [
+    {
+      "id": "agt_1783925000577",
+      "tenantId": "tnt_admin",
+      "name": "ConneXion Assistant",
+      "status": "active",
+      "description": "Varsayılan müşteri destek asistanı.",
+      "language": "tr",
+      "tone": "friendly",
+      "active": true,
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
+      "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
+    },
+    {
+      "id": "agt_1783925000578",
+      "tenantId": "tnt_admin",
+      "name": "ConneXion Assistant",
+      "status": "active",
+      "description": "Varsayılan müşteri destek asistanı.",
+      "language": "tr",
+      "tone": "friendly",
+      "active": true,
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
+      "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
+    },
+    {
+      "id": "agt_1783925077459",
+      "tenantId": "tnt_wf1z9f75f",
+      "name": "ConneXion Assistant",
+      "status": "active",
+      "description": "Varsayılan müşteri destek asistanı.",
+      "language": "tr",
+      "tone": "friendly",
+      "active": true,
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
+      "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
+    },
+    {
+      "id": "agt_1783925077458",
+      "tenantId": "tnt_wf1z9f75f",
+      "name": "ConneXion Assistant",
+      "status": "active",
+      "description": "Varsayılan müşteri destek asistanı.",
+      "language": "tr",
+      "tone": "friendly",
+      "active": true,
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
+      "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
+    }
+  ],
   "aiLogs": [],
   "handoffRules": [],
   "workflows": [
@@ -4465,7 +4702,7 @@
         "deltaType": "up"
       },
       "totalTokensUsed": {
-        "value": "167036",
+        "value": "167812",
         "deltaLabel": "347.6K limit kaldı",
         "deltaType": "neutral"
       }

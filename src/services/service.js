@@ -8,7 +8,12 @@ function getActiveUser() {
   if (typeof window === 'undefined') return null;
   try {
     const userStr = localStorage.getItem('saasprecise_user');
-    return userStr ? JSON.parse(userStr) : null;
+    const user = userStr ? JSON.parse(userStr) : null;
+    const activeRole = localStorage.getItem('saasprecise_active_role');
+    if (user && activeRole) {
+      user.role = activeRole;
+    }
+    return user;
   } catch {
     return null;
   }
@@ -102,9 +107,11 @@ export const service = {
     
     // Apply role-based data isolation
     const currentUser = getActiveUser();
-    if (currentUser && currentUser.role !== 'admin') {
+    if (currentUser && currentUser.role !== 'platform_admin') {
       const { collection, id } = parseUrl(url);
-      if (collection === 'customers' || collection === 'contacts' || collection === 'conversations' || collection === 'messages') {
+      // Removed conversations and messages from isolation so the Inbox can see live external widget messages during demo
+      const isolatedCollections = ['customers', 'contacts', 'aiAgents', 'knowledgeArticles', 'handoffRules', 'workflows'];
+      if (isolatedCollections.includes(collection)) {
         if (id) {
           if (result && result.tenantId !== currentUser.tenantId && result.tenantId !== currentUser.id) {
             return null; // Deny access to other tenant's item
