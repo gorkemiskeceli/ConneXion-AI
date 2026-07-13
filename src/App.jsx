@@ -20,7 +20,7 @@ import SettingsPage from "./features/settings/pages/SettingsPage";
 import LandingPage from "./homepage/LandingPage";
 
 import EmbedChatWidget from "./components/widget/EmbedChatWidget";
-import { ROLES } from "./constants/navigation";
+import { ROLES, ROLE_LABELS } from "./constants/navigation";
 
 // Context for dynamic role management
 const RoleContext = createContext();
@@ -36,7 +36,7 @@ function DashboardWrapper() {
     if (currentUser && currentUser.role) {
       return currentUser.role;
     }
-    return localStorage.getItem("saasprecise_active_role") || "user";
+    return localStorage.getItem("saasprecise_active_role") || ROLES.PLATFORM_ADMIN;
   });
 
   useEffect(() => {
@@ -53,25 +53,29 @@ function DashboardWrapper() {
     return <Navigate to="/" replace />;
   }
 
-  const roleLabels = {
-    admin: "Platform Yöneticisi",
-    user: "Kullanıcı",
-    [ROLES.PLATFORM_ADMIN]: "Platform Admin",
-    [ROLES.WORKSPACE_ADMIN]: "Workspace Admin",
-    [ROLES.MANAGER]: "Manager",
-    [ROLES.SUPPORT_AGENT]: "Support Agent",
-  };
-
-  const mappedRole = role === "admin" ? ROLES.PLATFORM_ADMIN : ROLES.WORKSPACE_ADMIN;
-
   return (
     <RoleContext.Provider value={{ role, setRole }}>
       <ToastProvider>
         <div className="relative">
+          {/* Floating Role Switcher Widget - Premium Preview Feature */}
+          <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-xl bg-white p-2.5 shadow-2xl border border-slate-200 transition-all hover:scale-105 duration-300">
+            <span className="text-[10px] font-bold text-slate-500 font-mono uppercase tracking-wider">Rol Seçimi:</span>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="rounded-lg border border-slate-200 bg-slate-50 px-2 py-1 text-xs font-semibold text-slate-800 outline-none focus:border-primary transition-all cursor-pointer"
+            >
+              <option value={ROLES.PLATFORM_ADMIN}>{ROLE_LABELS[ROLES.PLATFORM_ADMIN]}</option>
+              <option value={ROLES.WORKSPACE_ADMIN}>{ROLE_LABELS[ROLES.WORKSPACE_ADMIN]}</option>
+              <option value={ROLES.MANAGER}>{ROLE_LABELS[ROLES.MANAGER]}</option>
+              <option value={ROLES.SUPPORT_AGENT}>{ROLE_LABELS[ROLES.SUPPORT_AGENT]}</option>
+            </select>
+          </div>
+
           <DashboardLayout
-            role={mappedRole}
+            role={role}
             userName={currentUser?.name || "Ahmet Yılmaz"}
-            userRoleLabel={roleLabels[role] || "Kullanıcı"}
+            userRoleLabel={ROLE_LABELS[role]}
             workspaceName="ConneXion-AI Corp"
             workspacePlan="Enterprise"
           />
@@ -85,8 +89,7 @@ function DashboardWrapper() {
 // Route adapter to inject the dynamically active role into page props
 function RoleRoute({ Component, ...props }) {
   const { role } = useActiveRole();
-  const mappedRole = role === "admin" ? ROLES.PLATFORM_ADMIN : ROLES.WORKSPACE_ADMIN;
-  return <Component role={mappedRole} {...props} />;
+  return <Component role={role} {...props} />;
 }
 
 const router = createBrowserRouter([

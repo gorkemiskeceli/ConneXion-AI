@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import Logo from "../../components/Logo";
-import { getNavForRole, ROLES } from "../../constants/navigation";
+import { getNavForRole, ROLES, ROLE_LABELS } from "../../constants/navigation";
 import { logoutUser } from "../../homepage/store/authSlice";
 
 /**
@@ -25,13 +25,7 @@ export default function Sidebar({
   const currentUser = useSelector((state) => state.auth.user);
   const userName = currentUser?.name || "Ahmet Yılmaz";
   
-  const roleLabels = {
-    [ROLES.PLATFORM_ADMIN]: "Platform Admin",
-    [ROLES.WORKSPACE_ADMIN]: "Workspace Admin",
-    [ROLES.MANAGER]: "Manager",
-    [ROLES.SUPPORT_AGENT]: "Support Agent",
-  };
-  const userRoleLabel = roleLabels[role] || "User";
+  const userRoleLabel = ROLE_LABELS[role] || role;
 
   const handleLogout = () => {
     dispatch(logoutUser());
