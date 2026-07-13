@@ -1,434 +1,189 @@
-# AI Chatbot – Customer Service Platform
+# ConneXion-AI - Akıllı Müşteri Hizmetleri ve Yönetim Platformu
 
-A modern multi-tenant AI-powered customer support platform that enables businesses to provide intelligent customer service directly through their websites using an embedded AI chat widget.
+ConneXion-AI, işletmelerin müşteri iletişimini merkezileştirmesi, yapay zeka destekli yanıtlar sunması ve destek taleplerini (ticket) profesyonel bir şekilde uçtan uca yönetmesi için tasarlanmış modern, ölçeklenebilir ve yapay zeka entegreli bir müşteri hizmetleri yönetim paneli ve B2B SaaS platformudur. 
 
----
-
-# Overview
-
-AI Chatbot is a frontend-only SaaS application that allows businesses to deploy an AI customer support assistant on their websites.
-
-Customers interact with the AI through a live website chat widget where they can send text or voice messages. The AI answers questions using the configured Knowledge Base and, when necessary, transfers conversations to human support agents.
-
-Businesses manage their AI assistant, conversations, customers, knowledge sources, workflows, teams, and analytics through a centralized administration dashboard.
-
-This project is built as a realistic frontend MVP using React and JSON Server without any backend implementation.
+Bu dökümantasyon projenin mimarisi, teknik altyapısı, özellikleri ve çalışma prensipleri hakkında kapsamlı bir rehber niteliği taşımaktadır.
 
 ---
 
-# Product Goals
+## 🎯 Vizyon ve Temel Odak
 
-The platform aims to help businesses:
-
-- Deliver fast AI-powered customer support
-- Reduce repetitive customer inquiries
-- Improve response times
-- Organize customer conversations
-- Configure chatbot behavior without coding
-- Assist support teams with AI-powered workflows
-- Monitor customer service performance
-- Scale customer support operations
+Müşteri destek süreçleri genellikle birden fazla kanala dağılmış, takip edilmesi zor ve tekrarlayan işlerle doludur. ConneXion-AI'nin temel amacı:
+- **Merkezileştirme:** Çoklu kanal (Omnichannel) desteği ile tüm mesajları tek bir "Inbox" ekranına toplamak.
+- **Otomasyon & Yapay Zeka:** Sık sorulan sorulara AI tabanlı "Akıllı Öneriler" ile anında yanıt oluşturmak.
+- **İzlenebilirlik:** Ticket (Destek Talebi) yaşam döngüsünü başından sonuna kadar şeffaf bir şekilde yönetmek.
+- **İzolasyon (Çoklu Kiracı):** Kurumsal verilerin Tenant bazlı güvenli bir şekilde ayrıştırılmasını sağlamak.
 
 ---
 
-# Application Structure
+## 🚀 Kilit Noktalar ve Detaylı Özellikler
 
-The project consists of three main applications within a single React project.
+### 1. Akıllı Gelen Kutusu (Inbox) ve Ticket Yönetimi
+- **Gerçek Zamanlı İletişim Arayüzü:** Modern sohbet (chat) arayüzü sayesinde müşterilerle hızlıca etkileşim.
+- **AI Yanıt Önerileri:** Gelen mesajın bağlamını analiz ederek müşteri temsilcisine tek tıkla gönderilebilecek yanıt taslakları sunar.
+- **Dahili Notlar (Internal Notes):** Temsilcilerin kendi aralarında sadece takımın görebileceği notlar bırakmasını sağlar (Sarı uyarı balonları).
+- **Atama ve Devretme:** Destek taleplerini ilgili departmanlara veya temsilcilere (Re-assign) atama yeteneği.
+- **Ticket Statüleri:** Açık, Beklemede, Çözüldü gibi durum (status) yönetimi ve durumların renk kodlarıyla (Badge) görselleştirilmesi.
 
-## 1. Marketing Website
+### 2. Dashboard ve Raporlama (Analytics)
+- **Canlı Metrikler:** Toplam konuşma, ortalama yanıt süresi, çözülen ticket sayısı gibi verileri Recharts kütüphanesi ile anlık grafiklere döker.
+- **Performans Takibi:** Temsilcilerin performansını ve müşteri memnuniyet (CSAT) skorlarını analiz eder.
+- **Dışa Aktarım (Export):** Raporların ve listelerin `html2pdf.js` kullanılarak anında PDF formatında indirilmesi.
 
-The public-facing website introduces the product and explains its capabilities.
+### 3. Dinamik Rol Yönetimi (RBAC - Role Based Access Control)
+- **Platform Admin:** Uygulamanın tüm özelliklerine tam erişim sağlar. Tenant sınırlarını kaldırabilir.
+- **Workspace Admin & Manager:** Yalnızca kendi şirket (Tenant) verilerine erişebilir, çalışan davet edebilir.
+- **Support Agent (Destek Temsilcisi):** Yalnızca kendine atanan veya havuzdaki boş ticket'ları görür.
+- **User (Müşteri):** Sadece kendi açtığı talepleri (ticket) görüntüleyip yanıtlayabilir; dashboard veya inbox panellerine erişimi yoktur.
 
-Pages include:
-
-- Home
-- Features
-- Solutions
-- Pricing
-- FAQ
-- About
-- Contact
-- Authentication
-
-Purpose:
-
-- Present the platform
-- Explain features
-- Showcase benefits
-- Generate leads
-- Encourage sign-ups
+### 4. Müşteri (CRM) ve Ekip Yönetimi
+- **Müşteri Profilleri:** Müşteri işlem geçmişi, açık talepleri, iletişim ve etiket (tag) bilgileri.
+- **Ekip Davet Sistemi:** Yeni çalışma arkadaşlarını sisteme yetkilerini belirleyerek davet etme akışları.
 
 ---
 
-## 2. AI Chatbot Demo
+## 🛠 Teknik Altyapı ve Kullanılan Teknolojiler
 
-The AI Chatbot Demo allows visitors to experience the product exactly as customers would.
+ConneXion-AI, en güncel frontend araçları ile inşa edilmiş, Single Page Application (SPA) mimarisini benimseyen bir React uygulamasıdır.
 
-The demo is included inside the same React application and is not a separate website.
+### Core (Çekirdek Çatı)
+- **[React 18](https://reactjs.org/):** Bileşen tabanlı ve performanslı arayüzler inşa etmek için temel kütüphane.
+- **[Vite](https://vitejs.dev/):** Webpack'e kıyasla inanılmaz derecede hızlı Hot Module Replacement (HMR) ve derleme sunan yapılandırma aracı.
+- **[React Router v6](https://reactrouter.com/):** İçe içe rotalar (nested routes) ve Layout tabanlı sayfa geçişlerini yönetmek için.
 
-The page simulates a real business website with an embedded AI chat widget.
+### State Management (Durum Yönetimi)
+- **[Redux Toolkit (RTK)](https://redux-toolkit.js.org/):** Global durum yönetimini (Örn: Aktif oturum, filtreler) en az boilerplate kod ile yönetmek için.
+- **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview):** API çağrılarını yönetmek için kullanıldı. Mükemmel bir caching (önbellekleme) sistemi sunarak gereksiz ağ isteklerini engeller. (Örn: Inbox verilerinin anında yenilenmesi).
 
-### Demo Experience
+### Styling, UI & Animasyon (Tasarım Sistemi)
+- **[Tailwind CSS](https://tailwindcss.com/):** Tamamen Utility-First yaklaşımı ile custom CSS yazmadan %100 responsive, modern tasarımlar yapıldı.
+- **[Framer Motion (Motion)](https://motion.dev/):** Menü açılışları, sayfa geçişleri ve akıcı modal (popup) animasyonları için kullanıldı.
+- **[Lucide React](https://lucide.dev/):** Tutarlı, vektörel ve SVG tabanlı modern ikon kütüphanesi.
+- **[Recharts](https://recharts.org/):** Kontrol paneli üzerindeki SVG tabanlı istatistik grafikleri için.
 
-A floating circular chatbot launcher appears in the bottom-right corner of the page.
-
-When clicked:
-
-- Opens the chatbot window
-- Keeps the website visible
-- Allows minimizing
-- Preserves conversation history
-
-Visitors can:
-
-- Start conversations
-- Send text messages
-- Send voice messages
-- Receive simulated AI responses
-- Experience human handoff scenarios
-
-The demo uses JSON Server data and simulated AI behavior.
+### Mock Backend
+- **[JSON Server](https://github.com/typicode/json-server):** Backend geliştirilmeden uygulamanın uçtan uca çalışabilmesi için `db.json` üzerinden tam teşekküllü bir REST API simülasyonu sağlar. Gelen tüm POST, GET, PUT, PATCH, DELETE isteklerini diske yazar.
 
 ---
 
-## 3. Admin Dashboard
+## 🏛 Mimarisi ve Dosya Yapısı
 
-The administration dashboard enables businesses to manage every aspect of their AI customer support operation.
+Proje yapısı ölçeklenebilirliği sağlamak için "Feature-based" (Özellik Odaklı) mimari deseniyle organize edilmiştir. 
 
-Main modules include:
-
-- Dashboard
-- Inbox
-- Contacts
-- AI Agent Studio
-- Knowledge Base
-- Workflows
-- Team & Queues
-- Reports
-- Settings
-
----
-
-# Customer Communication
-
-Customers communicate exclusively through the embedded website chat widget.
-
-Supported communication methods:
-
-- Text messages
-- Voice messages
-
-Voice messages appear within the same conversation timeline as text messages.
-
-No external messaging platforms are included in this MVP.
-
----
-
-# Website Chat Widget
-
-The website chat widget is the primary customer communication interface.
-
-Businesses can embed the widget directly into their websites.
-
-Features include:
-
-- Welcome message
-- Suggested questions
-- Text messaging
-- Voice messaging
-- AI-generated responses
-- Human handoff simulation
-- Conversation history
-
-Businesses can customize:
-
-- Logo
-- Brand colors
-- Welcome message
-- Suggested questions
-- Widget position
-- Business hours
+```text
+ConneXion-AI/
+├── public/                 # Favicon, statik resimler, widget kodları
+│   └── widget.js           # Dış platformlar için chatbot entegrasyon betiği
+├── src/
+│   ├── constants/          # Uygulama genelinde değişmeyen sabitler (RBAC kuralları, Statü Enum'ları)
+│   ├── features/           # PROJENİN KALBİ - Modüler Özellikler
+│   │   ├── auth/           # Login/Register ekranları, yetkilendirme
+│   │   ├── contacts/       # CRM Müşteriler listesi ve detayları
+│   │   ├── dashboard/      # Ana özet grafikleri (Chart componenti)
+│   │   ├── inbox/          # Gelen kutusu, chat arayüzü, conversation thread
+│   │   ├── reports/        # PDF çıktı alınabilen rapor tabloları
+│   │   ├── support/        # Müşterilerin kendi arayüzünde gördüğü destek sistemi
+│   │   └── team/           # Ekip listesi, rol değişiklikleri
+│   ├── homepage/           # Landing page ve auth store entegrasyonu
+│   ├── layouts/            # Dashboard, Auth vb. için kalıp sarmalayıcılar (Outlet)
+│   ├── services/           # RTK Query API tanımlamaları (api.js, service.js)
+│   ├── shared/             # Yeniden kullanılabilir butonlar, modallar, boş durum (Empty State) bileşenleri
+│   ├── App.jsx             # Yönlendirme (Routing) ve Provider sarmalayıcıları
+│   ├── index.css           # Global Tailwind direktifleri (@tailwind base; vs.)
+│   └── main.jsx            # React'in DOM'a render edildiği nokta
+├── db.json                 # JSON Server veritabanı (Müşteriler, Konuşmalar, Mesajlar)
+├── tailwind.config.js      # Marka renkleri, fontlar ve özel temalar
+├── vite.config.js          # Vite geliştirme ve derleme ayarları
+└── package.json            # Proje kimliği ve npm bağımlılıkları
+```
 
 ---
 
-# User Roles
+## 🔄 Veri Akışı ve RTK Query Entegrasyonu
 
-The platform supports four different user roles with role-based access control.
+Uygulamada manuel `fetch` veya `axios` istekleri kullanılmamaktadır. Tüm CRUD işlemleri `src/services/api.js` dosyasında **RTK Query** uç noktaları (endpoints) olarak tanımlanmıştır. 
 
-## Platform Admin
-
-Responsible for managing the entire platform.
-
-Capabilities include:
-
-- View all workspaces
-- Monitor platform health
-- Access tenant-level reports
-- Manage global settings
+Örnek bir akış:
+1. Bir müşteri Inbox'ta bir mesaja "Gönder" der.
+2. `useCreateMessageMutation` tetiklenir.
+3. Mesaj `db.json`'a JSON Server aracılığıyla POST edilir.
+4. İşlem başarılı olduğunda RTK Query Cache'i "invalidate" eder.
+5. İlgili `getConversationById` hook'u otomatik olarak yeniden çalışır ve arayüz anında güncellenir.
+Bu sayede State'in manuel güncellenmesine gerek kalmaz, Single Source of Truth prensibi korunur.
 
 ---
 
-## Workspace Admin
+## 📦 Kurulum ve Geliştirme Ortamı (Getting Started)
 
-Responsible for managing a single business workspace.
+Proje kaynak kodlarını yerel makinenizde tam teşekküllü olarak çalıştırmak için Node.js'in bilgisayarınızda yüklü olması gerekmektedir.
 
-Capabilities include:
+### 1. Bağımlılıkların Yüklenmesi
+Projeyi klonladıktan sonra kök dizinde terminali açıp gerekli kütüphaneleri indirin:
+```bash
+npm install
+```
 
-- Configure AI agents
-- Manage users
-- Manage Knowledge Base
-- Configure workflows
-- View reports
-- Manage settings
-- Manage customer support operations
+### 2. Geliştirme Sunucusunu (Mock API) Başlatmak
+Backend görevi gören JSON sunucusunu ayağa kaldırmak zorunludur. Aksi takdirde frontend veri alamaz. Yeni bir terminalde çalıştırın:
+```bash
+npm run server
+```
+*(Sunucu http://localhost:3000 adresinde ayağa kalkar ve `db.json` dosyasını dinler.)*
 
----
-
-## Manager
-
-Responsible for supervising customer support teams.
-
-Capabilities include:
-
-- Monitor team conversations
-- View team performance
-- Test AI configurations
-- Manage assigned teams
-- Access operational reports
+### 3. Frontend Geliştirme Ortamını Başlatmak
+Mevcut terminali kapatmadan **yeni bir terminal sekmesi açarak** React uygulamasını çalıştırın:
+```bash
+npm run dev
+```
+*(Uygulama http://localhost:5173 adresinden erişilebilir olacaktır.)*
 
 ---
 
-## Support Agent
+## 📜 NPM Komutları ve Scriptler
 
-Responsible for handling assigned customer conversations.
+`package.json` içerisinde tanımlı olan faydalı komutların listesi:
 
-Capabilities include:
-
-- View assigned conversations
-- Reply to customers
-- View assigned customer profiles
-- Add notes and tags
-- View personal performance metrics
+- **`npm run dev`**: Vite dev server'ı başlatır. HMR (Hot Module Replacement) devrededir.
+- **`npm run server`**: `json-server` kullanarak sahte bir RESTful API oluşturur. 
+- **`npm run build`**: Projeyi optimize eder, minify edilmiş `.js` ve `.css` çıktılarını `dist/` klasörüne yazar (Production Build).
+- **`npm run preview`**: Build işleminden sonra projenin production ortamında nasıl çalışacağını yerel olarak test etmenizi sağlar.
+- **`npm run lint`**: Kodlama standartlarını ESLint aracılığıyla denetler, koddaki tutarsızlıkları ve hatalı kullanımları gösterir.
 
 ---
 
-# AI Capabilities (Mock)
+## 👥 Örnek Profiller ve Test Verileri
 
-The project demonstrates AI-assisted customer support using realistic UI interactions and JSON Server data.
+Sistemi farklı kullanıcı rolleriyle deneyimlemek için giriş yapabileceğiniz hazır (mock) kullanıcı hesapları `db.json` ve uygulamanın auth mekanizmasına gömülmüştür.
 
-Capabilities include:
+| İsim | Rol | E-Posta | Açıklama |
+| --- | --- | --- | --- |
+| Platform Yöneticisi | `platform_admin` | `admin@connexion.ai` | Tüm verilere, tenant'lara ve sistem ayarlarına küresel erişimi olan en yetkili hesaptır. |
+| SaaS Precise Yöneticisi | `admin` | `yonetici@saasprecise.com` | Yalnızca `saasprecise` tenant'ına aittir, o firmanın tüm biletlerini görür. |
+| SaaS Precise Temsilci | `support_agent` | `temsilci@saasprecise.com` | Gelen kutusunda müşterilerle sohbet eden operasyon personelidir. |
+| TrendSoft Kullanıcı | `user` | `gorkemiskeceli@gmail.com` | Sadece kendi açtığı şikayet/destek taleplerini müşteri ekranından görebilen son kullanıcıdır. |
 
-- FAQ responses
-- Knowledge Base search
-- Suggested replies
-- Customer summaries
-- Conversation summaries
-- Human handoff suggestions
-- Voice message transcription (mock)
-- AI conversation logs
-
-No real AI model is integrated.
+*(Test ortamında şifre alanına herhangi bir giriş yapabilirsiniz, sistem e-posta bazlı kontrol sağlamaktadır.)*
 
 ---
 
-# Data Source
+## 🌍 Dış Widget Entegrasyonu (ConneXion-AI Widget)
 
-The application uses JSON Server as the only data source.
-
-Mock data includes:
-
-- Dashboard metrics
-- Customers
-- Conversations
-- Messages
-- AI agents
-- Knowledge Base
-- Reports
-- Teams
-- Widget configuration
-- Workflows
-- User roles
-- Permissions
-- Settings
-
-No backend services are implemented.
+Uygulama, müşterilerin kendi web sitelerine (Örn: bir React test uygulamasına) ekleyebilecekleri bir **Chat Widget** mekanizması da sunar. 
+Widget kodu `public/widget.js` içindedir. Müşteriler, sitelerinin ana bileşeninde (Örn: `App.jsx`) `useConneXionAI()` özel hook'u üzerinden script'i içeri aktararak bu widget'ı kendi platformlarında çalıştırabilir ve mesajlarını doğrudan bu panele düşürebilirler.
 
 ---
 
-# User Experience
+## 🚀 Proje Durumu ve Gelecek Geliştirmeler
 
-## Marketing Website
+Bu aşamada (Faz 1) proje, detaylı bir prototip ve tam donanımlı UI gösterimi (Mock API tabanlı MVP) olarak tamamlanmıştır.
 
-The marketing website follows a modern SaaS landing page structure.
-
-Characteristics:
-
-- Clean layouts
-- Large hero sections
-- Conversion-focused design
-- Responsive pages
-- Clear call-to-actions
+**Gelecek Faz (Faz 2) Kapsamı:**
+- Node.js / Express ile gerçek bir Backend API mimarisinin kurulması.
+- PostgreSQL veya MongoDB ile kalıcı veritabanına geçiş.
+- JWT tabanlı gerçek bir Auth mekanizmasının kurulması.
+- Socket.io üzerinden WebSocket ile asenkron / gerçek zamanlı (Real-time) mesajlaşma sisteminin entegre edilmesi.
+- OpenAI API doğrudan bağlanarak AI Asistan'ın statik textler yerine gerçek NLP (Doğal Dil İşleme) yanıtları üretmesi.
 
 ---
 
-## AI Chatbot Demo
-
-Visitors interact with the chatbot exactly as customers would on a business website.
-
-The chatbot appears as a floating launcher positioned in the bottom-right corner.
-
-Clicking the launcher expands the chatbot while keeping the page visible.
-
-Visitors can:
-
-- Send text messages
-- Send voice messages
-- Receive AI responses
-- Experience handoff simulations
-- Minimize and reopen the chatbot
-
----
-
-## Admin Dashboard
-
-The administration dashboard is desktop-first and optimized for productivity.
-
-Characteristics:
-
-- Fixed navigation sidebar
-- Top navigation bar
-- KPI-driven dashboard
-- Card-based layouts
-- Data visualization
-- Three-column inbox
-- Professional enterprise interface
-
----
-
-# Design Language
-
-The platform follows a modern enterprise SaaS design system.
-
-Design principles:
-
-- Clean layouts
-- Large spacing
-- White surfaces
-- Dark navigation sidebar
-- Rounded cards
-- Subtle shadows
-- Consistent typography
-- Minimal visual clutter
-- Professional analytics dashboard
-
-The interface emphasizes clarity, usability, and data visibility over decorative elements.
-
----
-
-# Responsive Design
-
-Marketing Website
-
-Fully responsive.
-
-AI Chatbot Demo
-
-Fully responsive with a responsive embedded chatbot widget.
-
-Admin Dashboard
-
-Desktop-first while remaining usable on large tablets.
-
----
-
-# Technology Stack
-
-Frontend
-
-- React
-- Vite
-- React Router
-- Redux Toolkit
-- Tailwind CSS
-
-Mock Backend
-
-- JSON Server
-
-Charts
-
-- Recharts
-
-Icons
-
-- Lucide React
-
-Notifications
-
-- React Hot Toast
-
-Utilities
-
-- Day.js
-
----
-
-# Project Scope
-
-Included
-
-- Marketing website
-- Embedded AI chatbot demo
-- Admin dashboard
-- Dashboard analytics
-- Inbox
-- Contacts
-- AI Agent Studio
-- Knowledge Base
-- Workflows
-- Team & Queues
-- Reports
-- Settings
-- Role-based permissions
-- JSON Server integration
-- Responsive marketing pages
-
----
-
-# Out of Scope
-
-The MVP intentionally excludes:
-
-- Backend development
-- Authentication services
-- Database implementation
-- OpenAI integration
-- Real AI models
-- Real-time messaging
-- CRM integrations
-- External messaging platforms
-- Payment processing
-- Subscription billing
-- Production deployment
-
----
-
-# Future Expansion
-
-The project architecture allows future integration of:
-
-- OpenAI-compatible LLMs
-- Authentication
-- PostgreSQL
-- Real-time messaging
-- CRM systems
-- Voice AI
-- Advanced analytics
-- Additional workflow automation
-- Third-party integrations
-
----
-
-# License
-
-This project is intended for educational and portfolio purposes as a production-quality frontend SaaS application.
+*Bu dökümantasyon, ConneXion-AI projesinin tüm standartlarını ve kurallarını kapsamak üzere titizlikle oluşturulmuştur.*
