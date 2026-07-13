@@ -109,8 +109,8 @@ export const service = {
     const currentUser = getActiveUser();
     if (currentUser && currentUser.role !== 'platform_admin') {
       const { collection, id } = parseUrl(url);
-      // Removed conversations and messages from isolation so the Inbox can see live external widget messages during demo
-      const isolatedCollections = ['customers', 'contacts', 'aiAgents', 'knowledgeArticles', 'handoffRules', 'workflows'];
+      // Only isolate customers, contacts, and aiAgents for presentation purposes
+      const isolatedCollections = ['customers', 'contacts', 'aiAgents'];
       if (isolatedCollections.includes(collection)) {
         if (id) {
           if (result && result.tenantId !== currentUser.tenantId && result.tenantId !== currentUser.id) {

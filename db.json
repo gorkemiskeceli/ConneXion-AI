@@ -1031,6 +1031,30 @@
         "Web Widget"
       ],
       "tenantId": "usr_nsl6t1qxg"
+    },
+    {
+      "id": "cus_k265eerjx",
+      "name": "Web Ziyaretçisi #5037",
+      "email": "cus_k265eerjx@visitor.com",
+      "phone": "-",
+      "company": "Web Ziyaretçisi",
+      "status": "active",
+      "tags": [
+        "Web Widget"
+      ],
+      "tenantId": "usr_001"
+    },
+    {
+      "id": "cus_rdhjj4ulz",
+      "name": "Web Ziyaretçisi #7091",
+      "email": "cus_rdhjj4ulz@visitor.com",
+      "phone": "-",
+      "company": "Web Ziyaretçisi",
+      "status": "active",
+      "tags": [
+        "Web Widget"
+      ],
+      "tenantId": "usr_001"
     }
   ],
   "conversations": [
@@ -2013,6 +2037,40 @@
       "aiSuggestions": [],
       "tenantId": "tnt_admin",
       "lastActivity": "10:06"
+    },
+    {
+      "id": "conv_l6i4divn4",
+      "customerId": "cus_k265eerjx",
+      "name": "Web Ziyaretçisi #5037",
+      "email": "cus_k265eerjx@visitor.com",
+      "preview": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "time": "10:28",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "web",
+      "assignedAgentId": "usr_004",
+      "aiSummary": "Yapay zeka asistanı görüşmesi başladı.",
+      "aiSuggestions": [],
+      "tenantId": "usr_001",
+      "lastActivity": "10:32"
+    },
+    {
+      "id": "conv_yeblw7myy",
+      "customerId": "cus_rdhjj4ulz",
+      "name": "Web Ziyaretçisi #7091",
+      "email": "cus_rdhjj4ulz@visitor.com",
+      "preview": "merhaba",
+      "time": "10:36",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "web",
+      "assignedAgentId": "usr_004",
+      "aiSummary": "Yapay zeka asistanı görüşmesi başladı.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_admin",
+      "lastActivity": "10:41"
     }
   ],
   "messages": [
@@ -3884,6 +3942,134 @@
       "timestamp": "10:06",
       "tenantId": "tnt_admin",
       "id": "vo7-fNG"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "10:28",
+      "tenantId": "usr_001",
+      "id": "qxX_Ta0"
+    },
+    {
+      "conversationId": "conv_l6i4divn4",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "10:28",
+      "tenantId": "usr_001",
+      "id": "KoQKS43"
+    },
+    {
+      "conversationId": "conv_l6i4divn4",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "10:31",
+      "tenantId": "usr_001",
+      "id": "j1yGhs-"
+    },
+    {
+      "conversationId": "conv_l6i4divn4",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "10:32",
+      "tenantId": "usr_001",
+      "id": "pYpgzix"
+    },
+    {
+      "conversationId": "conv_l6i4divn4",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "10:32",
+      "tenantId": "usr_001",
+      "id": "05Rnjs2"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "10:36",
+      "tenantId": "usr_001",
+      "id": "jF-Z5Bw"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "10:36",
+      "tenantId": "usr_001",
+      "id": "4GaoL8W"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "customer",
+      "text": "bilgi ver",
+      "timestamp": "10:38",
+      "tenantId": "usr_001",
+      "id": "W7Yj-SL"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "Merhaba! Roselia salonumuzla ilgili temel bilgileri burada bulabilirsiniz:\n\n| **Kategoriler** | **Detaylar** |\n|-----------------|--------------|\n| **Kampanya** | Hayalindeki görüntüye ulaşma hizmetimiz |\n| **Hizmetler** | • Saç Kesimi & Şekillendirme<br>• Saç Boyama<br>• Cilt Bakımı<br>• Makyaj (doğal, gelinlik, özel davet)<br>• El & Tırnak Bakımı (manikür, pedikür, tasarımlar)<br>• Masaj (teknolojik terapötik seviyesi) |\n| **Adres** | Huzur Caddesi No:123, İstanbul, Türkiye |\n| **Telefon** | +90 212 555 0123 |\n| **E‑posta** | hello@roselia.com |\n| **Çalışma Saatleri** | Pazartesi–Çarşamba: 08:00 – 18:00<br>Perşembe–Cumartesi: 08:00 – 18:00<br>Pazar: Kapalı |\n| **Randevu** | Randevu almak için “Randevu Al” sayfasına girip saat, tarih ve hizmet seçerek online planlama yapabilirsiniz. |\n\nBu bilgilerle ilgili herhangi bir sorunuz varsa ya da randevu ayarlamak isterseniz, size yardımcı olmaktan memnuniyet duyarız! İstediğiniz başka bir detay var mı?",
+      "timestamp": "10:38",
+      "tenantId": "usr_001",
+      "id": "2rScEC8"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "adam ol",
+      "timestamp": "10:39",
+      "tenantId": "tnt_admin",
+      "id": "TJCbuh7"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "Size en yakın salonumuzda randevu oluşturabilirim.",
+      "timestamp": "10:39",
+      "tenantId": "tnt_admin",
+      "id": "Ytsiy6K"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "10:40",
+      "tenantId": "tnt_admin",
+      "id": "8DGyL6X"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "roseliaya hoşgeldiniz",
+      "timestamp": "10:40",
+      "tenantId": "tnt_admin",
+      "id": "WUqg2yx"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "customer",
+      "text": "hoşbulduk aşko",
+      "timestamp": "10:40",
+      "tenantId": "usr_001",
+      "id": "XbH4PvG"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "Hoş bulduk, teşekkür ederiz! 😊 Size nasıl yardımcı olabilirim?",
+      "timestamp": "10:40",
+      "tenantId": "usr_001",
+      "id": "B3rWlJ_"
+    },
+    {
+      "conversationId": "conv_yeblw7myy",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "10:41",
+      "tenantId": "tnt_admin",
+      "id": "kfqxh8W"
     }
   ],
   "teamPerformance": [
@@ -4254,7 +4440,36 @@
     "policies": 4,
     "documents": 2
   },
-  "knowledgeSources": [],
+  "knowledgeSources": [
+    {
+      "id": "ks_001",
+      "name": "Ürün SSS",
+      "type": "FAQ",
+      "itemCount": 21,
+      "status": "active"
+    },
+    {
+      "id": "ks_002",
+      "name": "Politika Belgeleri",
+      "type": "Doküman",
+      "itemCount": 12,
+      "status": "active"
+    },
+    {
+      "id": "ks_003",
+      "name": "Ürün Kataloğu",
+      "type": "Ürün",
+      "itemCount": 36,
+      "status": "active"
+    },
+    {
+      "id": "ks_004",
+      "name": "Hizmet Açıklamaları",
+      "type": "Hizmet",
+      "itemCount": 5,
+      "status": "inactive"
+    }
+  ],
   "aiAgents": [
     {
       "id": "agt_1783925000577",
@@ -4357,8 +4572,165 @@
       "themeTextColor": ""
     }
   ],
-  "aiLogs": [],
-  "handoffRules": [],
+  "aiLogs": [
+    {
+      "id": "ail_001",
+      "time": "20 May 2024 10:04",
+      "event": "Duygu analizi",
+      "confidence": 47,
+      "action": "Aktarıldı"
+    },
+    {
+      "id": "ail_002",
+      "time": "18 May 2024 19:03",
+      "event": "Bilgi tabanı araması",
+      "confidence": 82,
+      "action": "Yanıtlandı"
+    },
+    {
+      "id": "ail_003",
+      "time": "23 May 2024 11:04",
+      "event": "Handoff önerisi",
+      "confidence": 64,
+      "action": "Aktarıldı"
+    },
+    {
+      "id": "ail_004",
+      "time": "19 May 2024 20:34",
+      "event": "Yanıt üretildi",
+      "confidence": 58,
+      "action": "Yanıtlandı"
+    },
+    {
+      "id": "ail_005",
+      "time": "22 May 2024 17:01",
+      "event": "Yanıt üretildi",
+      "confidence": 73,
+      "action": "Yanıtlandı"
+    },
+    {
+      "id": "ail_006",
+      "time": "22 May 2024 08:33",
+      "event": "Handoff önerisi",
+      "confidence": 45,
+      "action": "Aktarıldı"
+    },
+    {
+      "id": "ail_007",
+      "time": "17 May 2024 09:58",
+      "event": "Duygu analizi",
+      "confidence": 80,
+      "action": "Eskalasyon"
+    },
+    {
+      "id": "ail_008",
+      "time": "24 May 2024 15:10",
+      "event": "Duygu analizi",
+      "confidence": 51,
+      "action": "Eskalasyon"
+    },
+    {
+      "id": "ail_009",
+      "time": "24 May 2024 10:02",
+      "event": "Duygu analizi",
+      "confidence": 46,
+      "action": "Yanıtlandı"
+    },
+    {
+      "id": "ail_010",
+      "time": "19 May 2024 08:20",
+      "event": "Yanıt üretildi",
+      "confidence": 55,
+      "action": "Yanıtlandı"
+    },
+    {
+      "id": "ail_011",
+      "time": "17 May 2024 13:46",
+      "event": "Handoff önerisi",
+      "confidence": 70,
+      "action": "Yanıtlandı"
+    },
+    {
+      "id": "ail_012",
+      "time": "22 May 2024 19:21",
+      "event": "Yanıt üretildi",
+      "confidence": 47,
+      "action": "Bilgi bulundu"
+    },
+    {
+      "id": "ail_013",
+      "time": "22 May 2024 12:37",
+      "event": "Duygu analizi",
+      "confidence": 53,
+      "action": "Eskalasyon"
+    },
+    {
+      "id": "ail_014",
+      "time": "21 May 2024 20:28",
+      "event": "Yanıt üretildi",
+      "confidence": 93,
+      "action": "Aktarıldı"
+    },
+    {
+      "id": "ail_015",
+      "time": "22 May 2024 15:05",
+      "event": "Bilgi tabanı araması",
+      "confidence": 89,
+      "action": "Bilgi bulundu"
+    },
+    {
+      "id": "ail_016",
+      "time": "20 May 2024 17:33",
+      "event": "Otomatik yanıt",
+      "confidence": 85,
+      "action": "Bilgi bulundu"
+    },
+    {
+      "id": "ail_017",
+      "time": "18 May 2024 11:19",
+      "event": "Otomatik yanıt",
+      "confidence": 98,
+      "action": "Aktarıldı"
+    },
+    {
+      "id": "ail_018",
+      "time": "23 May 2024 12:55",
+      "event": "Handoff önerisi",
+      "confidence": 70,
+      "action": "Aktarıldı"
+    },
+    {
+      "id": "ail_019",
+      "time": "20 May 2024 14:35",
+      "event": "Duygu analizi",
+      "confidence": 61,
+      "action": "Eskalasyon"
+    },
+    {
+      "id": "ail_020",
+      "time": "17 May 2024 12:54",
+      "event": "Otomatik yanıt",
+      "confidence": 47,
+      "action": "Eskalasyon"
+    }
+  ],
+  "handoffRules": [
+    {
+      "id": "hr_001",
+      "condition": "Güven skoru %60 altında",
+      "target": "Teknik Destek"
+    },
+    {
+      "id": "hr_002",
+      "condition": "Müşteri temsilci istedi",
+      "target": "Genel Destek"
+    },
+    {
+      "id": "hr_003",
+      "condition": "Olumsuz duygu algılandı",
+      "target": "VIP Müşteriler"
+    }
+  ],
   "workflows": [
     {
       "id": "wf_001",
@@ -5323,5 +5695,6 @@
     "mention": true,
     "slaBreach": true,
     "dailySummary": false
-  }
+  },
+  "workflowStats": []
 }

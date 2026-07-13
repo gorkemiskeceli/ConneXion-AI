@@ -36,9 +36,9 @@ export default function useAiAgentStudio() {
   };
 
   const agents = useMemo(() => filterByTenant(allAgents), [allAgents, currentUser]);
-  const knowledgeSources = useMemo(() => filterByTenant(allKnowledgeSources), [allKnowledgeSources, currentUser]);
-  const handoffRules = useMemo(() => filterByTenant(allHandoffRules), [allHandoffRules, currentUser]);
-  const logs = useMemo(() => filterByTenant(allLogs), [allLogs, currentUser]);
+  const knowledgeSources = allKnowledgeSources;
+  const handoffRules = allHandoffRules;
+  const logs = allLogs;
 
 
   const [localKnowledgeSources, setLocalKnowledgeSources] = useState([]);
