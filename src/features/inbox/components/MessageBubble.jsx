@@ -18,7 +18,7 @@ export default function MessageBubble({ message, self }) {
     : "bg-white border border-slate-200 text-slate-700";
 
   return (
-    <div className={`flex ${isSelf ? "justify-end" : "justify-start"}`}>
+    <div className={`flex w-full ${isSelf ? "justify-end" : "justify-start"}`}>
       <div className="max-w-[78%]">
         {isAi && (
           <span className="mb-1 flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide text-primary-600">
@@ -53,7 +53,7 @@ export default function MessageBubble({ message, self }) {
               </span>
             </div>
           ) : (
-            <p className="whitespace-pre-wrap">{message.text}</p>
+            <p className="whitespace-pre-wrap break-words">{message.text}</p>
           )}
         </div>
 

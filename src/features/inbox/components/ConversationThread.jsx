@@ -96,7 +96,7 @@ export default function ConversationThread({
       </div>
 
       {/* Messages */}
-      <div className="flex-1 space-y-4 overflow-y-auto bg-surface/50 px-5 py-5">
+      <div className="flex-1 space-y-4 overflow-y-auto overflow-x-hidden bg-surface/50 px-5 py-5 w-full">
         {messages.length === 0 ? (
           <EmptyState
             title="Mesaj yok"
@@ -105,7 +105,7 @@ export default function ConversationThread({
           />
         ) : (
           messages.map((m) => {
-            const selfSender = role === "support_agent" ? "agent" : "customer";
+            const selfSender = ["admin", "support_agent", "platform_admin", "workspace_admin", "manager"].includes(role) ? "agent" : "customer";
             return (
               <MessageBubble 
                 key={m.id} 

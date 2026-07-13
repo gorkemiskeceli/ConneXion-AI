@@ -50,7 +50,7 @@ export default function DashboardLayout({
           userRoleLabel={userRoleLabel}
         />
 
-        <main className="min-h-[calc(100vh-4rem)] px-4 py-6 lg:px-8">
+        <main className="min-h-[calc(100vh-4rem)] px-4 pt-6 pb-24 lg:px-8">
           <Outlet />
         </main>
 

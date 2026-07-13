@@ -47,8 +47,8 @@ const getInitialRegisteredUsers = () => {
     { id: 'usr_001', name: 'Ahmet Yılmaz', email: 'ahmet@sirketiniz.com', password: 'password123', role: 'admin', tenantId: 'tnt_admin' },
     { id: 'usr_002', name: 'Platform Admini', email: 'admin@saasprecise.com', password: 'admin123', role: 'admin', tenantId: 'tnt_admin' },
     { id: 'usr_003', name: 'İşletme Admini', email: 'isletme@saasprecise.com', password: 'isletme123', role: 'admin', tenantId: 'tnt_admin' },
-    { id: 'usr_004', name: 'Müşteri Temsilcisi Yöneticisi', email: 'yonetici@saasprecise.com', password: 'yonetici123', role: 'user', tenantId: 'tnt_standard' },
-    { id: 'usr_005', name: 'Müşteri Temsilcisi', email: 'temsilci@saasprecise.com', password: 'temsilci123', role: 'user', tenantId: 'tnt_standard' }
+    { id: 'usr_004', name: 'Müşteri Temsilcisi Yöneticisi', email: 'yonetici@saasprecise.com', password: 'yonetici123', role: 'admin', tenantId: 'tnt_admin' },
+    { id: 'usr_005', name: 'Müşteri Temsilcisi', email: 'temsilci@saasprecise.com', password: 'temsilci123', role: 'admin', tenantId: 'tnt_admin' }
   ];
 
   let modified = false;

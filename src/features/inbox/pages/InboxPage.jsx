@@ -34,40 +34,8 @@ export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
     onResolveTicket,
   } = useInbox(role);
 
-  const [createMessage] = useCreateMessageMutation();
-  const [updateConversation] = useUpdateConversationMutation();
-
-  const handleSendMessage = async (text) => {
-    if (!activeConversationId || !activeConversation) return;
-
-    if (activeConversation.channel === "ticket") {
-      onSendMessage?.(text);
-      return;
-    }
-
-    const newMessage = {
-      conversationId: activeConversationId,
-      sender: "agent",
-      text,
-      timestamp: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
-    };
-
-    try {
-      await createMessage(newMessage).unwrap();
-
-      await updateConversation({
-        id: activeConversationId,
-        customerId: activeConversation.customerId,
-        name: activeConversation.name,
-        status: activeConversation.status,
-        aiSummary: activeConversation.aiSummary,
-        aiSuggestions: activeConversation.aiSuggestions,
-        preview: text,
-        lastActivity: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
-      }).unwrap();
-    } catch (err) {
-      console.error("Mesaj gönderme hatası:", err);
-    }
+  const handleSendMessage = (text) => {
+    onSendMessage?.(text);
   };
 
   return (

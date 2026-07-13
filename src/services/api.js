@@ -305,6 +305,14 @@ export const api = createApi({
       }),
       invalidatesTags: ["Message"],
     }),
+    createConversation: builder.mutation({
+      query: (conversation) => ({
+        url: "/conversations",
+        method: "POST",
+        body: conversation,
+      }),
+      invalidatesTags: ["Conversation"],
+    }),
     updateConversation: builder.mutation({
       query: ({ id, ...body }) => ({
         url: `/conversations/${id}`,
@@ -387,6 +395,7 @@ export const {
   useUpdateQueueMutation,
   useDeleteQueueMutation,
   useCreateMessageMutation,
+  useCreateConversationMutation,
   useUpdateConversationMutation,
   useUpdateWorkspaceSettingsMutation,
   useUpdateWidgetSettingsMutation,
