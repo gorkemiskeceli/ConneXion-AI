@@ -27,7 +27,7 @@ export const ROLES = {
 // Modules follow the project spec (no Channels / Voice).
 export const NAV_ITEMS = [
   {
-    label: "Dashboard",
+    label: "Kontrol Paneli",
     to: PATHS.dashboard,
     icon: LayoutDashboard,
     roles: [
@@ -38,7 +38,7 @@ export const NAV_ITEMS = [
     ],
   },
   {
-    label: "Inbox",
+    label: "Gelen Kutusu",
     to: PATHS.inbox,
     icon: Inbox,
     roles: [
@@ -49,7 +49,7 @@ export const NAV_ITEMS = [
     ],
   },
   {
-    label: "Contacts",
+    label: "Kişiler",
     to: PATHS.contacts,
     icon: Users,
     roles: [
@@ -60,13 +60,13 @@ export const NAV_ITEMS = [
     ],
   },
   {
-    label: "AI Agent Studio",
+    label: "Yapay Zeka Stüdyosu",
     to: PATHS.aiAgentStudio,
     icon: Bot,
     roles: [ROLES.PLATFORM_ADMIN, ROLES.WORKSPACE_ADMIN, ROLES.MANAGER],
   },
   {
-    label: "Knowledge Base",
+    label: "Bilgi Bankası",
     to: PATHS.knowledgeBase,
     icon: BookOpen,
     roles: [
@@ -77,19 +77,19 @@ export const NAV_ITEMS = [
     ],
   },
   {
-    label: "Workflows",
+    label: "İş Akışları",
     to: PATHS.workflows,
     icon: Workflow,
     roles: [ROLES.PLATFORM_ADMIN, ROLES.WORKSPACE_ADMIN, ROLES.MANAGER],
   },
   {
-    label: "Team & Queues",
+    label: "Ekipler & Kuyruklar",
     to: PATHS.team,
     icon: UsersRound,
     roles: [ROLES.PLATFORM_ADMIN, ROLES.WORKSPACE_ADMIN, ROLES.MANAGER],
   },
   {
-    label: "Reports",
+    label: "Raporlar",
     to: PATHS.reports,
     icon: BarChart3,
     roles: [
@@ -106,7 +106,7 @@ export const NAV_ITEMS = [
     roles: [ROLES.PLATFORM_ADMIN, ROLES.WORKSPACE_ADMIN, ROLES.MANAGER],
   },
   {
-    label: "Settings",
+    label: "Ayarlar",
     to: PATHS.settings,
     icon: Settings,
     roles: [ROLES.PLATFORM_ADMIN, ROLES.WORKSPACE_ADMIN],

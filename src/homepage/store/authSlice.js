@@ -41,7 +41,7 @@ const getInitialRegisteredUsers = () => {
       users = [];
     }
   }
-  
+
   // Seed default users for testing convenience
   const demoUsers = [
     { id: 'usr_001', name: 'Ahmet Yılmaz', email: 'ahmet@sirketiniz.com', password: 'password123', role: 'admin', tenantId: 'tnt_admin' },
@@ -107,10 +107,10 @@ export const authSlice = createSlice({
       );
 
       if (found) {
-        state.user = { 
+        state.user = {
           id: found.id || `usr_${Math.random().toString(36).substr(2, 9)}`,
-          name: found.name, 
-          email: found.email, 
+          name: found.name,
+          email: found.email,
           role: found.role || 'user',
           tenantId: found.tenantId || 'tnt_standard'
         };
@@ -149,7 +149,7 @@ export const authSlice = createSlice({
         if (name) state.user.name = name;
         if (email) state.user.email = email;
         setSafeLocalItem('saasprecise_user', JSON.stringify(state.user));
-        
+
         const idx = state.registeredUsers.findIndex(
           (u) => u.id === state.user.id || u.email.toLowerCase() === state.user.email.toLowerCase()
         );
@@ -166,7 +166,7 @@ export const authSlice = createSlice({
       if (typeof window !== 'undefined') {
         try {
           localStorage.removeItem('saasprecise_user');
-        } catch {}
+        } catch { }
       }
     },
     clearAuthError: (state) => {
