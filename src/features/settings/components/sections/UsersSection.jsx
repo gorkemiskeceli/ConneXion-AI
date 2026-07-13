@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Search, UserPlus, Pencil, Trash2, Users } from "lucide-react";
 
 import SettingsSection from "../SettingsSection";
@@ -9,19 +10,28 @@ import { ROLE_LABELS } from "../../../../constants/navigation";
 
 /**
  * UsersSection — workspace user accounts.
- * user: { id, name, email, role, status, lastLogin }
+ * Wired with search filter, onInvite, onEdit, and onDelete action callbacks.
  */
-export default function UsersSection({ canEdit, users = [] }) {
+export default function UsersSection({ canEdit, role, users = [], onInvite, onEdit, onDelete }) {
+  const [searchQuery, setSearchQuery] = useState("");
   const colSpan = USER_COLUMNS.length + 1;
+
+  const filteredUsers = users.filter((u) => {
+    return (
+      u.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  });
 
   return (
     <SettingsSection
       title="Kullanıcılar"
       description="Workspace kullanıcılarını ve erişimlerini yönetin."
       headerRight={
-        canEdit ? (
+        canEdit && onInvite ? (
           <button
             type="button"
+            onClick={onInvite}
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
           >
             <UserPlus className="h-4 w-4" />
@@ -34,6 +44,8 @@ export default function UsersSection({ canEdit, users = [] }) {
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
         <input
           type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Kullanıcı ara..."
           className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-700 placeholder:text-slate-400 focus:border-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-100"
         />
@@ -52,7 +64,7 @@ export default function UsersSection({ canEdit, users = [] }) {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-50">
-            {users.length === 0 ? (
+            {filteredUsers.length === 0 ? (
               <tr>
                 <td colSpan={colSpan}>
                   <EmptyState
@@ -63,7 +75,7 @@ export default function UsersSection({ canEdit, users = [] }) {
                 </td>
               </tr>
             ) : (
-              users.map((u) => (
+              filteredUsers.map((u) => (
                 <tr key={u.id} className="text-slate-700">
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -87,10 +99,11 @@ export default function UsersSection({ canEdit, users = [] }) {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      {canEdit ? (
+                      {canEdit && (u.role !== "platform_admin" || role === "platform_admin") ? (
                         <>
                           <button
                             type="button"
+                            onClick={() => onEdit?.(u)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                             aria-label="Düzenle"
                           >
@@ -98,6 +111,7 @@ export default function UsersSection({ canEdit, users = [] }) {
                           </button>
                           <button
                             type="button"
+                            onClick={() => onDelete?.(u.id)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600"
                             aria-label="Kaldır"
                           >

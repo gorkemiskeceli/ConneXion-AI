@@ -1,9 +1,11 @@
-import { Plus, Play, Save } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Plus, Play, Save, Trash2 } from "lucide-react";
 
 import WorkflowNode from "./WorkflowNode";
 import Input from "../../../shared/components/ui/Input";
 import Toggle from "../../../shared/components/ui/Toggle";
 import { SKELETON_NODES } from "../constants/workflowsConfig";
+import { useToast } from "../../../shared/components/ui/Toast";
 
 /**
  * AddStep — connector line + gated "add step" button between nodes.
@@ -40,8 +42,32 @@ export default function WorkflowBuilder({
   workflow,
   canEdit = false,
   canTest = false,
+  onSave,
+  onDelete,
 }) {
+  const { showToast } = useToast();
   const nodes = workflow?.nodes?.length ? workflow.nodes : SKELETON_NODES;
+
+  const [name, setName] = useState("");
+  const [active, setActive] = useState(false);
+
+  useEffect(() => {
+    setName(workflow?.name ?? "");
+    setActive(workflow?.status === "active");
+  }, [workflow]);
+
+  const handleSaveClick = () => {
+    if (!name.trim()) {
+      showToast("Workflow adı boş olamaz.", "error");
+      return;
+    }
+    onSave?.({
+      ...workflow,
+      name,
+      status: active ? "active" : "paused",
+      nodes: workflow?.nodes?.length ? workflow.nodes : SKELETON_NODES,
+    });
+  };
 
   return (
     <div className="flex min-h-[600px] flex-1 flex-col overflow-hidden rounded-2xl bg-white shadow-card">
@@ -49,7 +75,8 @@ export default function WorkflowBuilder({
       <div className="flex flex-col gap-3 border-b border-slate-100 px-5 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="w-full sm:max-w-xs">
           <Input
-            defaultValue={workflow?.name ?? ""}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             placeholder="Workflow adı"
             disabled={!canEdit}
           />
@@ -58,7 +85,11 @@ export default function WorkflowBuilder({
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-slate-500">Aktif</span>
-            <Toggle checked={false} disabled={!canEdit} />
+            <Toggle
+              checked={active}
+              onChange={(val) => setActive(val)}
+              disabled={!canEdit}
+            />
           </div>
 
           {canTest && (
@@ -71,9 +102,21 @@ export default function WorkflowBuilder({
             </button>
           )}
 
+          {canEdit && workflow && (
+            <button
+              type="button"
+              onClick={() => onDelete?.(workflow.id)}
+              className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+            >
+              <Trash2 className="h-4 w-4" />
+              Sil
+            </button>
+          )}
+
           {canEdit && (
             <button
               type="button"
+              onClick={handleSaveClick}
               className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
             >
               <Save className="h-4 w-4" />

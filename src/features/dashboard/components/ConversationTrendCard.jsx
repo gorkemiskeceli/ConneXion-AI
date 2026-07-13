@@ -14,7 +14,7 @@ import SectionCard from "../../../shared/components/ui/SectionCard";
 import EmptyState from "../../../shared/components/ui/EmptyState";
 import PeriodFilter from "../../../shared/components/ui/PeriodFilter";
 
-const PRIMARY = "#5B63F0";
+const PRIMARY = "#2F6FEE";
 const SUCCESS = "#22C55E";
 
 function LegendDot({ color, label }) {

@@ -8,6 +8,7 @@ import {
   UsersRound,
   BarChart3,
   Settings,
+  HelpCircle,
 } from "lucide-react";
 
 import { PATHS } from "./paths";
@@ -99,6 +100,12 @@ export const NAV_ITEMS = [
     ],
   },
   {
+    label: "Destek",
+    to: PATHS.support,
+    icon: HelpCircle,
+    roles: [ROLES.PLATFORM_ADMIN, ROLES.WORKSPACE_ADMIN, ROLES.MANAGER],
+  },
+  {
     label: "Settings",
     to: PATHS.settings,
     icon: Settings,
@@ -107,8 +114,12 @@ export const NAV_ITEMS = [
 ];
 
 // Helper to filter nav by the active role.
-export const getNavForRole = (role) =>
-  NAV_ITEMS.filter((item) => item.roles.includes(role));
+export const getNavForRole = (role) => {
+  if (role === "admin" || role === "user") {
+    return NAV_ITEMS;
+  }
+  return NAV_ITEMS.filter((item) => item.roles.includes(role));
+};
 
 export const ROLE_LABELS = {
   [ROLES.PLATFORM_ADMIN]: "Platform Yöneticisi",

@@ -11,6 +11,7 @@ export const PATHS = {
   workflows: "/dashboard/workflows",
   team: "/dashboard/team",
   reports: "/dashboard/reports",
+  support: "/dashboard/support",
   settings: "/dashboard/settings",
   auditLogs: "/dashboard/settings/audit-logs",
 };

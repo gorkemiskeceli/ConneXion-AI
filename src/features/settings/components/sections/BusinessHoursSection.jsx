@@ -9,7 +9,7 @@ import { WEEK_DAYS } from "../../constants/settingsConfig";
 /**
  * BusinessHoursSection — weekly availability schedule.
  */
-export default function BusinessHoursSection({ canEdit }) {
+export default function BusinessHoursSection({ canEdit, onSave }) {
   const [open, setOpen] = useState({});
   const setDay = (id, value) => setOpen((prev) => ({ ...prev, [id]: value }));
 
@@ -18,7 +18,7 @@ export default function BusinessHoursSection({ canEdit }) {
       title="Çalışma Saatleri"
       description="Ekibinizin destek verdiği saatleri belirleyin."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={onSave}
     >
       <div className="max-w-2xl space-y-5">
         <FormField label="Zaman Dilimi" htmlFor="bh-tz">

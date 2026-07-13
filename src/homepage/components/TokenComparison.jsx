@@ -266,7 +266,7 @@ export default function TokenComparison() {
           <div className="lg:col-span-7 relative flex justify-center items-center">
             
             {/* Visual Board Container */}
-            <div className="w-full max-w-[620px] aspect-[720/540] relative bg-slate-950/20 border border-slate-800/50 rounded-2xl shadow-2xl backdrop-blur-sm overflow-hidden p-2">
+            <div className="w-full max-w-[620px] aspect-[720/560] relative bg-slate-950/20 border border-slate-800/50 rounded-2xl shadow-2xl backdrop-blur-sm overflow-hidden p-6">
               
               {/* Grid overlay */}
               <div 
@@ -291,18 +291,18 @@ export default function TokenComparison() {
               </div>
 
               {/* 3. Arama Tamamlandı */}
-              <div className="absolute top-[12%] right-[6%] z-20 bg-slate-950/80 border border-slate-800 text-[9px] sm:text-[10px] font-mono text-slate-300 rounded-full px-2.5 py-1 backdrop-blur-xs flex items-center gap-1.5 shadow-lg select-none hover:border-cyan-500/30 transition-all duration-300">
+              <div className="absolute top-[8%] right-[6%] z-20 bg-slate-950/80 border border-slate-800 text-[9px] sm:text-[10px] font-mono text-slate-300 rounded-full px-2.5 py-1 backdrop-blur-xs flex items-center gap-1.5 shadow-lg select-none hover:border-cyan-500/30 transition-all duration-300">
                 <span className="flex h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
                 <span>ARAMA // TAMAMLANDI</span>
               </div>
 
               {/* 4. Gecikme < 250ms */}
-              <div className="absolute bottom-[14%] right-[5%] z-20 bg-slate-950/80 border border-slate-800 text-[9px] sm:text-[10px] font-mono text-slate-300 rounded-full px-2.5 py-1 backdrop-blur-xs flex items-center gap-1.5 shadow-lg select-none hover:border-emerald-500/30 transition-all duration-300">
+              <div className="absolute bottom-[10%] right-[5%] z-20 bg-slate-950/80 border border-slate-800 text-[9px] sm:text-[10px] font-mono text-slate-300 rounded-full px-2.5 py-1 backdrop-blur-xs flex items-center gap-1.5 shadow-lg select-none hover:border-emerald-500/30 transition-all duration-300">
                 <span>GECİKME // &lt;250ms</span>
               </div>
 
               {/* 5. Verimlilik %70 Daha Düşük */}
-              <div className="absolute top-[32%] left-[45%] z-20 bg-emerald-950/80 border border-emerald-500/30 text-[9px] sm:text-[10px] font-mono text-emerald-300 rounded-full px-2.5 py-1 backdrop-blur-xs flex items-center gap-1.5 shadow-lg select-none shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+              <div className="absolute top-[20%] left-[6%] z-20 bg-emerald-950/80 border border-emerald-500/30 text-[9px] sm:text-[10px] font-mono text-emerald-300 rounded-full px-2.5 py-1 backdrop-blur-xs flex items-center gap-1.5 shadow-lg select-none shadow-[0_0_15px_rgba(16,185,129,0.15)]">
                 <span>VERİMLİLİK // %70 DAHA YÜKSEK</span>
               </div>
 
@@ -425,304 +425,195 @@ export default function TokenComparison() {
 
                   {/* Path 5 */}
                   <path d="M 530 230 L 610 265" fill="none" stroke="#334155" strokeWidth="1" />
-                  <path d="M 530 230 L 610 265" fill="none" stroke="#0891b2" strokeWidth="1.5" strokeDasharray="8,20" className="animate-circuit-flow" />
-
-                  {/* Perpendicular branch tracks */}
-                  <path d="M 250 250 L 290 330" fill="none" stroke="#0f172a" strokeWidth="1.2" />
-                  <path d="M 350 420 L 410 280" fill="none" stroke="#0f172a" strokeWidth="1.2" />
-                  <path d="M 470 200 L 530 230" fill="none" stroke="#0f172a" strokeWidth="1.2" />
+                  <path d="M 530 230 L 610 265" fill="none" stroke="#0891b2" strokeWidth="1.5" strokeDasharray="5,15" className="animate-circuit-flow" />
                 </g>
 
-                {/* 2. NEURAL NETWORK PATTERN / BACKGROUND SHADOW LINES */}
-                <g id="neural-net-bg" transform="translate(0, 10)" opacity="0.15">
-                  <line x1="170" y1="380" x2="250" y2="250" stroke="#0891b2" strokeWidth="0.8" strokeDasharray="2,4" />
-                  <line x1="290" y1="330" x2="350" y2="420" stroke="#0891b2" strokeWidth="0.8" strokeDasharray="2,4" />
-                  <line x1="410" y1="280" x2="470" y2="200" stroke="#0891b2" strokeWidth="0.8" strokeDasharray="2,4" />
-                  <line x1="530" y1="230" x2="610" y2="265" stroke="#0891b2" strokeWidth="0.8" strokeDasharray="2,4" />
-                </g>
-
-                {/* 3. NEON CONNECTING TREND LINE (Connects top centers of columns) */}
-                <g id="neon-trend-line">
-                  {/* Neon Glow underlay */}
-                  <path 
-                    d={trendLineD} 
-                    fill="none" 
-                    stroke="#00f2fe" 
-                    strokeWidth="5" 
-                    opacity="0.35"
-                    filter="url(#neon-glow-cyan)"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  {/* Crisp central neon line */}
-                  <path 
-                    d={trendLineD} 
-                    fill="none" 
-                    stroke="#00f2fe" 
-                    strokeWidth="2.5" 
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-
-                  {/* Arrow Head at the end */}
-                  <path 
-                    d={`M ${530 - 16} ${230 - h3 + 4} L 530 ${230 - h3} L 533 ${230 - h3 + 16}`}
-                    fill="none" 
-                    stroke="#00f2fe" 
-                    strokeWidth="2.5" 
-                    filter="url(#neon-glow-cyan)"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </g>
-
-                {/* 4. FLOATING PARTICLES NEAR CONNEXION-AI */}
-                <g id="floating-particles">
+                {/* 2. Rising Energy Particles around ConneXion-AI column */}
+                <g>
                   {particles.map((p, idx) => (
-                    <motion.circle
+                    <g 
                       key={idx}
-                      cx={p.x}
-                      cy={p.y}
-                      r={p.r}
-                      fill={p.color}
-                      filter={p.filter}
-                      animate={{
-                        y: [0, -32, 0],
-                        x: [0, 16, 0],
-                        opacity: [p.minOpacity, p.maxOpacity, p.minOpacity]
+                      className="animate-pulse-climb"
+                      style={{
+                        animationDelay: `${p.delay}s`,
+                        transformOrigin: `${p.x}px ${p.y}px`
                       }}
-                      transition={{
-                        duration: 5.5 + idx * 1.2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: p.delay
-                      }}
-                    />
+                    >
+                      <circle
+                        cx={p.x}
+                        cy={p.y}
+                        r={p.r}
+                        fill={p.color}
+                        filter={p.filter}
+                        style={{
+                          opacity: p.minOpacity
+                        }}
+                      />
+                    </g>
                   ))}
                 </g>
 
-                {/* 5. 3D ISOMETRIC COLUMNS */}
-                <g id="isometric-columns">
+                {/* 3. Isometric Columns (Benchmark Bars) */}
+                <g id="bars">
                   {benchmarkData.map((item, index) => {
                     const h = getAnimatedHeight(item);
-                    const cx = item.baseX;
-                    const cy = item.baseY;
-                    const w = 40; // width of column
+                    const bx = item.baseX;
+                    const by = item.baseY;
+                    const isHovered = hoveredIndex === index;
 
-                    // Vertices calculated based on base point and animated height
-                    const ptBaseLeft = `${cx - w/2},${cy}`;
-                    const ptBaseFront = `${cx},${cy + 10}`;
-                    const ptBaseRight = `${cx + w/2},${cy}`;
+                    // vertex coordinates for 3D boxes
+                    // Base points
+                    const pLeft = `${bx - 24},${by}`;
+                    const pBottom = `${bx},${by + 10}`;
+                    const pRight = `${bx + 24},${by}`;
                     
-                    const ptTopLeft = `${cx - w/2},${cy - h}`;
-                    const ptTopFront = `${cx},${cy + 10 - h}`;
-                    const ptTopRight = `${cx + w/2},${cy - h}`;
-                    const ptTopBack = `${cx},${cy - 10 - h}`;
-
-                    // Polygon path strings
-                    const leftFacePoints = `${ptBaseLeft} ${ptBaseFront} ${ptTopFront} ${ptTopLeft}`;
-                    const rightFacePoints = `${ptBaseFront} ${ptBaseRight} ${ptTopRight} ${ptTopFront}`;
-                    const topFacePoints = `${ptTopLeft} ${ptTopFront} ${ptTopRight} ${ptTopBack}`;
+                    // Top points
+                    const pTopLeft = `${bx - 24},${by - h}`;
+                    const pTopBottom = `${bx},${by + 10 - h}`;
+                    const pTopRight = `${bx + 24},${by - h}`;
+                    const pTopBack = `${bx},${by - 10 - h}`;
 
                     return (
                       <g 
-                        key={index}
-                        className="cursor-pointer group/col"
+                        key={item.name}
                         onMouseEnter={() => setHoveredIndex(index)}
                         onMouseLeave={() => setHoveredIndex(null)}
+                        className="cursor-pointer"
                       >
-                        {/* Glow underlay (Only for primary/ConneXion-AI) */}
-                        {item.isPrimary && (
-                          <polygon
-                            points={leftFacePoints}
-                            fill="#10b981"
-                            opacity="0.12"
-                            filter="url(#neon-glow-emerald)"
-                          />
-                        )}
-
-                        {/* Column Left Face */}
+                        {/* Left Face */}
                         <polygon
-                          points={leftFacePoints}
+                          points={`${pLeft} ${pBottom} ${pTopBottom} ${pTopLeft}`}
                           fill={item.colorLeft}
-                          stroke={item.isPrimary ? '#10b981' : '#334155'}
-                          strokeWidth="0.5"
-                          opacity={item.isPrimary ? '1' : '0.85'}
-                          className="transition-all duration-300 group-hover/col:brightness-110"
+                          className="transition-all duration-300"
+                          style={{
+                            filter: isHovered ? 'brightness(1.15) saturate(1.1)' : 'none',
+                          }}
                         />
-
-                        {/* Column Right Face */}
+                        {/* Right Face */}
                         <polygon
-                          points={rightFacePoints}
+                          points={`${pBottom} ${pRight} ${pTopRight} ${pTopBottom}`}
                           fill={item.colorRight}
-                          stroke={item.isPrimary ? '#059669' : '#1e293b'}
-                          strokeWidth="0.5"
-                          opacity={item.isPrimary ? '1' : '0.85'}
-                          className="transition-all duration-300 group-hover/col:brightness-110"
+                          className="transition-all duration-300"
+                          style={{
+                            filter: isHovered ? 'brightness(1.15) saturate(1.1)' : 'none',
+                          }}
                         />
-
-                        {/* Column Top Face */}
+                        {/* Top Face */}
                         <polygon
-                          points={topFacePoints}
+                          points={`${pTopLeft} ${pTopBottom} ${pTopRight} ${pTopBack}`}
                           fill={item.colorTop}
-                          stroke={item.isPrimary ? '#6ee7b7' : '#475569'}
-                          strokeWidth="0.5"
-                          className="transition-all duration-300 group-hover/col:brightness-125"
+                          className="transition-all duration-300"
+                          style={{
+                            filter: isHovered ? 'brightness(1.25) saturate(1.1)' : 'none',
+                          }}
                         />
 
-                        {/* 3D Pulse Ring at the base of primary column */}
+                        {/* Pulsing base ring for ConneXion-AI (Primary) */}
                         {item.isPrimary && (
-                          <ellipse
-                            cx={cx}
-                            cy={cy + 5}
-                            rx="28"
-                            ry="14"
-                            fill="none"
-                            stroke="#10b981"
-                            strokeWidth="1.5"
-                            className="animate-pulse-ring"
-                            style={{
-                              transformOrigin: `${cx}px ${cy + 5}px`,
-                            }}
+                          <ellipse 
+                            cx={bx} 
+                            cy={by + 5} 
+                            rx="32" 
+                            ry="14" 
+                            fill="none" 
+                            stroke="#10b981" 
+                            strokeWidth="1.5" 
+                            className="animate-pulse-ring" 
+                            style={{ pointerEvents: 'none' }}
                           />
                         )}
-
-                        {/* Light Pulse Climbing up ConneXion-AI */}
-                        {item.isPrimary && (
-                          <polygon
-                            points={`
-                              ${cx - w/2} ${cy}
-                              ${cx} ${cy + 10}
-                              ${cx + w/2} ${cy}
-                              ${cx} ${cy - 10}
-                            `}
-                            fill="none"
-                            stroke="#34d399"
-                            strokeWidth="2.5"
-                            filter="url(#neon-glow-emerald)"
-                            className="animate-pulse-climb"
-                            style={{
-                              transformOrigin: `${cx}px ${cy}px`,
-                            }}
-                          />
-                        )}
-
-                        {/* Text Label on top of the bar */}
-                        <text
-                          x={cx}
-                          y={cy - h - 18}
-                          textAnchor="middle"
-                          fill={item.isPrimary ? '#34d399' : '#94a3b8'}
-                          className="font-mono font-bold text-[11px] tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
-                        >
-                          {item.name}
-                        </text>
-
                       </g>
                     );
                   })}
                 </g>
+
+                {/* 4. Trend Line representing cost/token growth */}
+                <g id="trendline" style={{ pointerEvents: 'none' }}>
+                  <path 
+                    d={trendLineD}
+                    fill="none" 
+                    stroke="#f43f5e" 
+                    strokeWidth="3.5" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                    className="opacity-90"
+                    style={{ filter: 'drop-shadow(0 0 8px rgba(244, 63, 94, 0.75))' }}
+                  />
+
+                  {/* Trend line nodes */}
+                  {benchmarkData.map((item, index) => {
+                    const h = getAnimatedHeight(item);
+                    return (
+                      <circle
+                        key={`node-${index}`}
+                        cx={item.baseX}
+                        cy={item.baseY - h}
+                        r="5.5"
+                        fill="#ffffff"
+                        stroke="#f43f5e"
+                        strokeWidth="3"
+                        className="transition-all duration-300"
+                        style={{
+                          transform: hoveredIndex === index ? 'scale(1.3)' : 'scale(1)',
+                          transformOrigin: `${item.baseX}px ${item.baseY - h}px`
+                        }}
+                      />
+                    );
+                  })}
+                </g>
+
               </svg>
 
-              {/* OVERLAY TOOLTIP AND LIVE COUNT-UP PERCENTAGES */}
-              
-              {/* Dynamic Live percentages floating above bars */}
-              {benchmarkData.map((item, index) => {
-                const h = getAnimatedHeight(item);
-                return (
-                  <div
-                    key={index}
-                    className="absolute pointer-events-none text-center select-none"
-                    style={{
-                      left: `${(item.baseX / 720) * 100}%`,
-                      top: `${((item.baseY - h - 38) / 540) * 100}%`,
-                      transform: 'translateX(-50%)',
-                    }}
-                  >
-                    <span className={`text-[10px] font-mono font-black border rounded px-1.5 py-0.5 shadow-md ${
-                      item.isPrimary 
-                        ? 'bg-emerald-950/90 text-emerald-400 border-emerald-500/30' 
-                        : 'bg-slate-950/80 text-slate-400 border-slate-800'
-                    }`}>
-                      <CountUp to={item.percentage} />
-                    </span>
-                  </div>
-                );
-              })}
-
-              {/* INTERACTIVE TOOLTIPS ON HOVER (Turkish translation) */}
-              <AnimatePresence>
-                {hoveredIndex !== null && (() => {
-                  const item = benchmarkData[hoveredIndex];
-                  const h = getAnimatedHeight(item);
-                  
-                  // Calculate absolute percentage coordinate mapping
-                  const xPercent = (item.baseX / 720) * 100;
-                  const yPercent = ((item.baseY - h - 50) / 540) * 100;
-
+              {/* Dynamic Tooltip / Stats HUD overlay */}
+              <div className="absolute bottom-[0.75%] left-[2%] right-[2%] bg-slate-950/85 border border-slate-800 rounded-xl py-2.5 px-4 backdrop-blur-md z-20 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 transition-all duration-300">
+                {(() => {
+                  const activeItem = hoveredIndex !== null ? benchmarkData[hoveredIndex] : benchmarkData[0];
                   return (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute z-30 bg-[#070c17]/95 border border-slate-800 rounded-xl p-4 shadow-2xl text-[10px] sm:text-[11px] w-64 pointer-events-none font-sans"
-                      style={{
-                        left: `${xPercent}%`,
-                        top: `${yPercent}%`,
-                        transform: 'translate(-50%, -100%)',
-                      }}
-                    >
-                      {/* Top Arrow of Tooltip */}
-                      <div className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 bg-[#070c17] rotate-45 border-r border-b border-slate-800" />
-                      
-                      <div className="space-y-2 text-left relative z-10">
-                        {/* Header */}
-                        <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
-                          <span className={`font-mono font-bold text-xs uppercase tracking-wider ${
-                            item.isPrimary ? 'text-emerald-400' : 'text-slate-400'
-                          }`}>
-                            {item.name}
+                    <>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className={`h-2.5 w-2.5 rounded-full ${activeItem.isPrimary ? 'bg-emerald-400' : 'bg-slate-400'}`} />
+                          <h4 className="text-sm font-bold text-white tracking-wide">{activeItem.name}</h4>
+                          <span className="text-[10px] font-mono bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded">
+                            {activeItem.savings}
                           </span>
-                          <span className="text-[10px] font-mono text-slate-500">Kullanım: %{item.percentage}</span>
                         </div>
-
-                        {/* Details */}
-                        <div className="space-y-1 text-slate-300 font-mono text-[10px]">
-                          <div className="flex justify-between">
-                            <span className="text-slate-500">Ort. Token:</span>
-                            <span className="text-white font-bold">{item.avgTokens}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-500">Ort. Gecikme:</span>
-                            <span className="text-white font-bold">{item.avgLatency}</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span className="text-slate-500">Ort. Maliyet:</span>
-                            <span className="text-white font-bold">{item.avgCost}</span>
-                          </div>
-                          <div className="border-t border-slate-850 pt-1.5 mt-1 flex justify-between items-center">
-                            <span className="text-slate-500 uppercase tracking-tight">Durum:</span>
-                            <span className={`font-bold px-1.5 py-0.5 rounded text-[9px] ${
-                              item.isPrimary 
-                                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
-                                : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
-                            }`}>
-                              {item.savings}
-                            </span>
-                          </div>
-                        </div>
-
+                        <p className="text-[10px] text-slate-400">
+                          {activeItem.isPrimary 
+                            ? "ConneXion-AI akıllı motoru sayesinde minimum token kullanımı."
+                            : "Yüksek hacimli genel veri gönderimi ve gereksiz bağlam şişmesi."}
+                        </p>
                       </div>
-                    </motion.div>
+
+                      <div className="flex flex-wrap gap-4 font-mono text-[10px] w-full sm:w-auto justify-between sm:justify-end border-t sm:border-t-0 border-slate-800 pt-3 sm:pt-0">
+                        <div className="text-right">
+                          <span className="text-slate-500 block text-[9px] uppercase tracking-wider font-bold">Token Tüketimi</span>
+                          <span className={`text-xs font-bold ${activeItem.isPrimary ? 'text-emerald-400' : 'text-slate-200'}`}>
+                            {activeItem.avgTokens}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-slate-500 block text-[9px] uppercase tracking-wider font-bold">Tahmini Maliyet</span>
+                          <span className={`text-xs font-bold ${activeItem.isPrimary ? 'text-emerald-400' : 'text-slate-200'}`}>
+                            {activeItem.avgCost}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="text-slate-500 block text-[9px] uppercase tracking-wider font-bold">Gecikme Süresi</span>
+                          <span className={`text-xs font-bold ${activeItem.isPrimary ? 'text-emerald-400' : 'text-slate-200'}`}>
+                            {activeItem.avgLatency}
+                          </span>
+                        </div>
+                      </div>
+                    </>
                   );
                 })()}
-              </AnimatePresence>
+              </div>
 
             </div>
           </div>
-
         </div>
+
       </div>
     </section>
   );

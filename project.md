@@ -1,550 +1,65 @@
-# Project Overview
+# ConneXion-AI: Müşteri İletişiminin Geleceğine Hoş Geldiniz
 
-## Project Name
+Günümüzün rekabetçi iş dünyasında, müşterileriniz sadece kaliteli bir ürün değil, aynı zamanda anında ve kusursuz bir destek deneyimi bekliyor. Geleneksel yöntemlerle yönetilen müşteri hizmetleri, dağınık iletişim kanalları ve yavaş yanıt süreleri nedeniyle markanıza zarar verebilir.
 
-AI Chatbot – AI Customer Service Platform
-
----
-
-# Project Description
-
-AI Chatbot is a modern multi-tenant SaaS platform that enables businesses to deploy AI-powered customer support directly on their websites through an embedded live chat widget.
-
-Instead of communicating through multiple external platforms, customers interact with businesses exclusively through the website chatbot using text and voice messages.
-
-Businesses configure their AI assistant, manage conversations, organize customers, build knowledge bases, automate support workflows, supervise teams, and monitor performance through a centralized administration dashboard.
-
-This project is built as a frontend-only MVP using React and JSON Server with realistic business data.
+İşte tam bu noktada **ConneXion-AI** devreye giriyor.
 
 ---
 
-# Vision
+## 🌟 ConneXion-AI Nedir?
 
-Build a production-quality enterprise SaaS platform that demonstrates how modern AI customer support software operates.
+ConneXion-AI, işletmenizin tüm müşteri iletişimini tek bir merkezde toplayan, yapay zeka destekli, modern ve akıllı bir **B2B Müşteri Hizmetleri ve İletişim Platformudur.**
 
-The platform should emphasize usability, scalability, role-based management, and professional dashboard experiences while remaining frontend-only.
-
----
-
-# Target Users
-
-## Businesses
-
-- E-commerce Stores
-- SaaS Companies
-- Service Businesses
-- Healthcare Clinics
-- Educational Institutions
-- Agencies
-- Enterprise Companies
+Web sitenizden, mobil uygulamanızdan veya sosyal medya hesaplarınızdan gelen tüm mesajları ve destek taleplerini (ticket) tek bir "Akıllı Gelen Kutusu" (Inbox) üzerinde birleştiriyoruz. Temsilcileriniz ekranlar veya sekmeler arasında kaybolmadan, yapay zekanın sağladığı "Akıllı Yanıt Önerileri" ile müşterilerinize saniyeler içinde dönüş yapabilir.
 
 ---
 
-## Platform Users
+## 🎯 Misyonumuz ve Vizyonumuz
 
-- Platform Admin
-- Workspace Admin
-- Manager
-- Support Agent
+**Misyonumuz:**  
+İşletmelerin müşteri destek operasyonlarındaki karmaşayı ortadan kaldırarak, teknolojinin ve yapay zekanın gücüyle iletişim süreçlerini basitleştirmek, hızlandırmak ve operasyonel maliyetleri düşürmek.
 
----
-
-## End Users
-
-Customers visiting a business website who need customer support through the embedded AI chatbot.
+**Vizyonumuz:**  
+Geleceğin müşteri deneyimi standartlarını belirleyen, her büyüklükteki şirketin zahmetsizce entegre olabileceği, dünyanın en akıllı ve erişilebilir Müşteri İlişkileri ekosistemi olmak.
 
 ---
 
-# Product Structure
+## 🛑 Hangi Sorunları Çözüyoruz?
 
-The application consists of three major sections.
-
----
-
-## 1. Marketing Website
-
-The public website introduces the platform and explains its capabilities.
-
-Purpose
-
-- Product presentation
-- Feature showcase
-- Pricing
-- Frequently Asked Questions
-- Contact
-- Authentication
-- Lead generation
-
-Pages
-
-- Home
-- Features
-- Solutions
-- Pricing
-- FAQ
-- About
-- Contact
-- Login
-- Register
+* **Kanal Karmaşası:** "Müşteri bize mailden mi ulaştı, sitedeki canlı destekten mi?" karmaşasını bitiriyoruz. Tüm iletişim tek bir ekranda.
+* **Yavaş Yanıt Süreleri:** Müşterileriniz beklemeyi sevmez. Yapay zekamız, gelen mesajı okur ve temsilcinize tek tıkla gönderebileceği en uygun yanıtı hazırlar.
+* **Operasyonel Körlük:** Hangi temsilci ne kadar hızlı yanıt veriyor? Müşteri memnuniyetiniz ne durumda? Bu soruları gelişmiş Dashboard ve Raporlama araçlarımızla anında yanıtlıyoruz.
+* **Veri Dağınıklığı:** Tüm müşteri geçmişini, yapılan görüşmeleri ve dahili ekip notlarını müşteri profilinde kalıcı olarak güvenle arşivliyoruz.
 
 ---
 
-## 2. AI Chatbot Demo
+## 💎 Neden ConneXion-AI'ı Seçmelisiniz?
 
-The AI Chatbot Demo allows visitors to experience the product from a customer's perspective.
+### 1. Yapay Zeka Destekli Kusursuz Deneyim
+Tekrar eden sorulara aynı cevapları yazmaktan sıkılmadınız mı? ConneXion-AI, içeriği anlar ve en doğru yanıtı önerir. Ekibiniz sadece onaylar ve gönderir. Zaman kazanır, müşteri memnuniyetini artırırsınız.
 
-The demo is included inside the same React application.
+### 2. Saniyeler İçinde Entegrasyon (Widget)
+Web sitenize ConneXion-AI yeteneklerini eklemek sadece bir satır koddan ibaret! Modern Chat Widget'ımız sayesinde müşterileriniz sitenizden ayrılmadan size ulaşabilir, temsilcileriniz anında panele düşen mesajı yanıtlayabilir.
 
-It simulates a real company website where the chatbot has already been embedded.
+### 3. Ekip İçi Kesintisiz Koordinasyon
+Bir müşteri talebi birden fazla departmanı ilgilendiriyorsa, temsilcileriniz konuşma geçmişine **Sarı Renkli Dahili Notlar** bırakarak (sadece şirketinizin görebileceği şekilde) talebi bir diğer ekip arkadaşına anında atayabilir.
 
-### Demo Experience
-
-Visitors initially see a floating circular chatbot launcher located in the bottom-right corner.
-
-When clicked:
-
-- Opens the chatbot
-- Keeps the webpage visible
-- Supports minimizing
-- Preserves conversation history
-
-Visitors can:
-
-- Start conversations
-- Send text messages
-- Send voice messages
-- Receive simulated AI responses
-- Experience AI-to-human handoff
-
-The demo uses JSON Server and simulated AI responses.
+### 4. Güçlü ve Güvenli (Tenant Mimarisi)
+Kurumsal verileriniz bizimle güvende. Sisteme eklediğiniz her bir işletme, bayi veya şube tamamen izole edilmiş veri alanlarında çalışır. Bilgiler asla birbirine karışmaz.
 
 ---
 
-## 3. Administration Dashboard
+## 🎯 Kimler İçin İdeal?
 
-The dashboard allows businesses to manage their AI customer support operations.
-
----
-
-# Dashboard Modules
-
-## Dashboard
-
-Provides a real-time overview of customer support performance.
-
-Includes
-
-- KPI cards
-- Active conversations
-- Waiting conversations
-- AI Resolution Rate
-- Customer Satisfaction
-- Average Response Time
-- Recent conversations
-- Team overview
-- Performance charts
+* **E-Ticaret Firmaları:** İade, kargo takibi ve sipariş sorularını saniyeler içinde yanıtlamak isteyenler.
+* **SaaS ve Teknoloji Şirketleri:** Kullanıcılarına teknik desteği profesyonel ve takip edilebilir bir arayüzle sunmak isteyen girişimler.
+* **Sağlık ve Güzellik Merkezleri:** Randevu taleplerini ve müşteri iletişimini tek merkezden kolayca yönetmek isteyen modern klinikler.
+* **Kurumsal Şirketler:** Çağrı merkezi veya çoklu destek ekibi bulunduran büyük organizasyonlar.
 
 ---
 
-## Inbox
+## 📈 Büyümeye Hazır Mısınız?
 
-Central workspace for customer conversations.
+Müşterilerinizin sizden beklentisi her geçen gün artıyor. Müşteri deneyimini bir maliyet kalemi olarak değil, marka sadakatini artıran stratejik bir araç olarak konumlandırın. 
 
-Layout
-
-- Conversation List
-- Conversation Thread
-- Customer Information
-
-Features
-
-- Search
-- Filters
-- Assign conversation
-- Internal notes
-- Conversation status
-- AI suggestions
-- Human handoff
-- Message composer
-
----
-
-## Contacts
-
-Customer management system.
-
-Features
-
-- Customer list
-- Customer profiles
-- Conversation history
-- Notes
-- Tags
-- Search
-- Filters
-- Customer summaries
-
----
-
-## AI Agent Studio
-
-Configuration interface for AI behavior.
-
-Includes
-
-- General Settings
-- Instructions
-- Knowledge Sources
-- Guardrails
-- Handoff Rules
-- Test Playground
-- AI Logs
-
-Only the interface is implemented.
-
-No real AI configuration exists.
-
----
-
-## Knowledge Base
-
-Content management system used by the AI.
-
-Supports
-
-- FAQs
-- Products
-- Services
-- Policies
-- Documents
-- Categories
-
----
-
-## Workflows
-
-Business automation builder.
-
-Includes
-
-- Trigger
-- Conditions
-- Actions
-- Workflow templates
-- Status management
-
-Workflow execution is simulated using JSON Server.
-
----
-
-## Team & Queues
-
-Support team management.
-
-Includes
-
-- Team members
-- Queues
-- Assignments
-- Availability
-- Performance overview
-
----
-
-## Reports
-
-Business analytics dashboard.
-
-Includes
-
-- Conversation Reports
-- AI Performance
-- Response Times
-- Customer Satisfaction
-- Team Performance
-- Trends
-
----
-
-## Settings
-
-Workspace configuration.
-
-Includes
-
-- Workspace
-- Users
-- Roles
-- Business Hours
-- Widget Configuration
-- Notifications
-- Integrations
-- Audit Logs
-
-Widget configuration includes
-
-- Logo
-- Brand colors
-- Welcome message
-- Suggested questions
-- Widget position
-- Business hours
-
----
-
-# Website Chat Widget
-
-The embedded website chat widget is the only communication channel supported by the platform.
-
-Customers can
-
-- Send text messages
-- Send voice messages
-- Receive AI responses
-- Request a human support agent
-
-Businesses configure the widget through the Settings module.
-
----
-
-# User Roles
-
-The platform uses role-based access control.
-
----
-
-## Platform Admin
-
-Responsible for the entire SaaS platform.
-
-Permissions
-
-- View all workspaces
-- Global reports
-- Global settings
-- Platform monitoring
-- Tenant overview
-
----
-
-## Workspace Admin
-
-Responsible for one company workspace.
-
-Permissions
-
-- Full workspace management
-- User management
-- AI Agent management
-- Knowledge Base
-- Workflows
-- Reports
-- Settings
-
----
-
-## Manager
-
-Responsible for supervising support operations.
-
-Permissions
-
-- Team conversations
-- Team reports
-- Team assignments
-- AI testing
-- Team performance
-
-Managers cannot modify global workspace settings.
-
----
-
-## Support Agent
-
-Responsible for handling assigned conversations.
-
-Permissions
-
-- Assigned conversations
-- Assigned customers
-- Notes
-- Tags
-- Personal dashboard
-- Personal performance
-
-Agents cannot configure AI or workspace settings.
-
----
-
-# Permission Model
-
-Every dashboard page respects the active user's role.
-
-The interface adapts by:
-
-- Showing permitted navigation items
-- Restricting editing capabilities
-- Displaying only accessible data
-- Limiting available actions
-
-This creates a realistic enterprise SaaS experience.
-
----
-
-# Customer Journey
-
-1. Visitor opens a business website.
-
-2. A floating AI chatbot launcher appears.
-
-3. Visitor opens the chatbot.
-
-4. AI greets the visitor.
-
-5. Customer sends a text or voice message.
-
-6. AI searches the configured Knowledge Base.
-
-7. AI responds.
-
-8. If necessary, the conversation is transferred to a support agent.
-
-9. The assigned agent continues the conversation inside the Inbox.
-
-10. Conversation history becomes available for reporting.
-
----
-
-# AI Capabilities
-
-The project simulates AI-assisted customer support.
-
-Capabilities include
-
-- FAQ answering
-- Knowledge Base search
-- Suggested replies
-- Customer summaries
-- Conversation summaries
-- AI confidence indicators
-- Human handoff suggestions
-- Voice transcription (mock)
-- AI activity logs
-
-No real AI model is connected.
-
----
-
-# Data Management
-
-The project uses JSON Server exclusively.
-
-Mock data includes
-
-- Users
-- Roles
-- Permissions
-- Customers
-- Teams
-- Conversations
-- Messages
-- AI Agents
-- Dashboard Metrics
-- Reports
-- Knowledge Base
-- Workflows
-- Widget Settings
-- Workspace Settings
-
----
-
-# Design Principles
-
-The interface follows a modern enterprise SaaS dashboard.
-
-Characteristics
-
-- Fixed sidebar
-- Top navigation
-- White workspace
-- Dark navigation
-- Card-based layouts
-- Professional analytics
-- Rounded components
-- Soft shadows
-- Spacious layouts
-- Clear typography
-
-Dashboard pages should emphasize clarity and productivity.
-
----
-
-# MVP Scope
-
-Included
-
-- Marketing Website
-- AI Chatbot Demo
-- Embedded Website Chat Widget
-- Administration Dashboard
-- Dashboard Analytics
-- Inbox
-- Contacts
-- AI Agent Studio
-- Knowledge Base
-- Workflows
-- Team & Queues
-- Reports
-- Settings
-- Role-based access control
-- JSON Server
-
----
-
-# Out of Scope
-
-The MVP intentionally excludes
-
-- Backend
-- Authentication services
-- Database implementation
-- Real AI models
-- OpenAI APIs
-- Real-time communication
-- CRM integrations
-- External messaging platforms
-- Payment processing
-- Subscription management
-- Production deployment
-
----
-
-# Future Expansion
-
-The architecture allows future support for
-
-- Authentication
-- PostgreSQL
-- OpenAI-compatible LLMs
-- Real-time messaging
-- CRM integrations
-- Third-party APIs
-- Voice AI
-- Advanced analytics
-- Additional automation features
-
----
-
-# Success Criteria
-
-The project is considered successful if it delivers
-
-- Production-quality UI
-- Realistic enterprise dashboard
-- Consistent design system
-- Role-based permissions
-- Reusable React architecture
-- Responsive marketing pages
-- Interactive AI chatbot demo
-- Scalable frontend structure
-- Realistic JSON Server data
+**ConneXion-AI** ile kontrolü elinize alın, ekibinizi yapay zeka ile güçlendirin ve müşterilerinize hak ettikleri premium desteği sağlayın.

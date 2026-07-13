@@ -36,7 +36,7 @@ function AgentStack({ agents = [] }) {
  * QueuesTab — support queues.
  * queue: { id, name, description, status, waiting, agents: [{ id, name }] }
  */
-export default function QueuesTab({ role, queues = [] }) {
+export default function QueuesTab({ role, queues = [], onCreate, onEdit, onDelete }) {
   const canManageQueue = canTeamQueues(role, TEAM_ACTION.MANAGE_QUEUE);
   const canAssign = canTeamQueues(role, TEAM_ACTION.MANAGE_ASSIGNMENT);
 
@@ -46,6 +46,7 @@ export default function QueuesTab({ role, queues = [] }) {
         <div className="mb-4 flex justify-end">
           <button
             type="button"
+            onClick={onCreate}
             className="inline-flex items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
           >
             <Plus className="h-4 w-4" />
@@ -109,6 +110,7 @@ export default function QueuesTab({ role, queues = [] }) {
                       <>
                         <button
                           type="button"
+                          onClick={() => onEdit?.(q)}
                           className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                           aria-label="Düzenle"
                         >
@@ -116,6 +118,7 @@ export default function QueuesTab({ role, queues = [] }) {
                         </button>
                         <button
                           type="button"
+                          onClick={() => onDelete?.(q.id)}
                           className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600"
                           aria-label="Sil"
                         >

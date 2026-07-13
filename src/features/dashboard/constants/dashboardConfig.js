@@ -5,6 +5,7 @@ import {
   Timer,
   Smile,
   Users,
+  Sparkles,
 } from "lucide-react";
 
 // "Operasyonun anlık özeti" — the six KPI tiles.
@@ -46,6 +47,12 @@ export const KPI_CARDS = [
     label: "Temsilci Yükü",
     icon: Users,
     tint: "bg-indigo-50 text-indigo-600",
+  },
+  {
+    id: "totalTokensUsed",
+    label: "Kalan AI Token Limiti",
+    icon: Sparkles,
+    tint: "bg-violet-50 text-violet-600",
   },
 ];
 

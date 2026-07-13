@@ -7,18 +7,18 @@ import { SENDER, MESSAGE_TYPE } from "../constants/inboxConfig";
  * message: { sender, type, text, duration, transcript, timestamp }
  * Customer messages align left; agent/AI align right.
  */
-export default function MessageBubble({ message }) {
-  const isCustomer = message.sender === SENDER.CUSTOMER;
+export default function MessageBubble({ message, self }) {
+  const isSelf = self !== undefined ? self : message.sender === "agent";
   const isAi = message.sender === SENDER.AI;
 
-  const bubbleStyle = isCustomer
-    ? "bg-white border border-slate-200 text-slate-700"
+  const bubbleStyle = isSelf
+    ? "bg-primary text-white"
     : isAi
     ? "bg-primary-50 text-slate-700"
-    : "bg-primary text-white";
+    : "bg-white border border-slate-200 text-slate-700";
 
   return (
-    <div className={`flex ${isCustomer ? "justify-start" : "justify-end"}`}>
+    <div className={`flex w-full ${isSelf ? "justify-end" : "justify-start"}`}>
       <div className="max-w-[78%]">
         {isAi && (
           <span className="mb-1 flex items-center gap-1 font-mono text-[10px] uppercase tracking-wide text-primary-600">
@@ -31,7 +31,7 @@ export default function MessageBubble({ message }) {
             <div className="flex items-center gap-3">
               <span
                 className={`inline-flex h-8 w-8 items-center justify-center rounded-full ${
-                  isCustomer ? "bg-slate-100 text-slate-600" : "bg-white/20 text-current"
+                  !isSelf ? "bg-slate-100 text-slate-600" : "bg-white/20 text-current"
                 }`}
               >
                 <Play className="h-4 w-4" />
@@ -42,7 +42,7 @@ export default function MessageBubble({ message }) {
                   <span
                     key={i}
                     className={`w-0.5 rounded-full ${
-                      isCustomer ? "bg-slate-300" : "bg-white/60"
+                      !isSelf ? "bg-slate-300" : "bg-white/60"
                     }`}
                     style={{ height: `${h}px` }}
                   />
@@ -53,13 +53,13 @@ export default function MessageBubble({ message }) {
               </span>
             </div>
           ) : (
-            <p className="whitespace-pre-wrap">{message.text}</p>
+            <p className="whitespace-pre-wrap break-words">{message.text}</p>
           )}
         </div>
 
         <span
           className={`mt-1 block font-mono text-[10px] text-slate-400 ${
-            isCustomer ? "text-left" : "text-right"
+            !isSelf ? "text-left" : "text-right"
           }`}
         >
           {message.timestamp}

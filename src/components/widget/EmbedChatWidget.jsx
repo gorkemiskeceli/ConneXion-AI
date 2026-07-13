@@ -3,18 +3,73 @@ import { useDispatch, useSelector } from "react-redux";
 import { MessageSquare, Send, X, Bot, Sparkles, AlertCircle, Trash2 } from "lucide-react";
 import { sendMessageToAI, clearChat, clearError } from "../../homepage/store/aiSlice";
 import { getSystemPrompt } from "../../config/agentConfig";
-import { useGetAiAgentsQuery } from "../../services/api";
+import { useGetAiAgentsQuery, useGetWidgetSettingsQuery } from "../../services/api";
+import { service } from "../../services/service";
+
+function renderMessageText(text) {
+  if (!text) return "";
+  
+  let formatted = text;
+
+  // 1. Parse markdown tables into clean blocks
+  if (formatted.includes('|')) {
+    const lines = formatted.split('\n');
+    const parsedLines = lines.map(line => {
+      const trimmed = line.trim();
+      if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+        // Skip separator line or main header labels
+        if (trimmed.includes('---') || (trimmed.toLowerCase().includes('bölüm') && trimmed.toLowerCase().includes('içerik'))) {
+          return '';
+        }
+        const cells = trimmed.split('|').map(c => c.trim()).filter(Boolean);
+        if (cells.length === 2) {
+          return `<strong class="block text-slate-800 font-bold mt-2.5">${cells[0]}</strong>${cells[1]}`;
+        }
+        return cells.join(' • ');
+      }
+      return line;
+    }).filter(l => l !== '');
+    formatted = parsedLines.join('\n');
+  }
+
+  // 2. Clean list headers like "* **Hizmetler:**" or "* **Adres:**" into styled headers
+  formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*:/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1:</strong>');
+  formatted = formatted.replace(/\*\s+\*\*(.*?)\*\*/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1</strong>');
+  
+  // 3. Format standard markdown headings
+  formatted = formatted.replace(/###\s+(.*)/g, '<strong class="block text-slate-800 font-bold mt-2.5">$1</strong>');
+  formatted = formatted.replace(/##\s+(.*)/g, '<strong class="block text-slate-900 font-extrabold mt-3 text-base">$1</strong>');
+  
+  // 4. Format standard bold markers **bold** to <strong>bold</strong>
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // 5. Convert inline lists to clean, line-broken list items: e.g. " - Saç kesimi" -> "<br/>• Saç kesimi"
+  formatted = formatted.replace(/\s*-\s+/g, '<br/>• ');
+  
+  // 6. Clean up any leading asterisks used as lists: e.g. "* " -> "• "
+  formatted = formatted.replace(/^\s*\*\s+/gm, '• ');
+
+  // 7. Convert newlines to HTML line breaks
+  formatted = formatted.replace(/\n/g, '<br />');
+  
+  return formatted;
+}
 
 export default function EmbedChatWidget({ systemPrompt = getSystemPrompt() }) {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
-  
+
   const { messages, loading, error } = useSelector((state) => state.ai);
-  
+  const currentUser = useSelector((state) => state.auth?.user);
+
+  const [widgetConvId, setWidgetConvId] = useState(null);
+  const [widgetCustId, setWidgetCustId] = useState(null);
+
   const messagesEndRef = useRef(null);
 
   const { data: agents = [] } = useGetAiAgentsQuery();
+  const { data: settings } = useGetWidgetSettingsQuery();
   const activeAgent = agents.find((a) => a.active);
 
   const languageMap = { tr: "Turkish", en: "English", auto: "Turkish" };
@@ -37,10 +92,16 @@ STRICT GUARDRAILS:
 ${activeAgent.blockedTerms ? `- Do not reply to or discuss these blocked terms/topics: ${activeAgent.blockedTerms}` : ""}
 ${activeAgent.maxLength ? `- Keep your response under ${activeAgent.maxLength} characters.` : ""}
 
+ODAK ANAHTAR KELİMELER / FOCUS KEYWORDS:
+${activeAgent.keywords && activeAgent.keywords.length > 0 ? `- Focus on these keywords and related topics: ${activeAgent.keywords.join(", ")}` : ""}
+
 INSTRUCTIONS:
 ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin olmadığında konuşmayı bir temsilciye aktar."}
     `.trim()
     : systemPrompt;
+
+  const themeColor = activeAgent?.themeColor || settings?.brandColor || "#4f46e5";
+  const themeTextColor = activeAgent?.themeTextColor || "#ffffff";
 
   // Auto scroll to bottom when messages or window open state changes
   useEffect(() => {
@@ -49,7 +110,7 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
     }
   }, [messages, isOpen]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!input.trim() || loading) return;
 
@@ -62,7 +123,86 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
       .filter(Boolean)
       .some(term => userMessage.toLowerCase().includes(term));
 
-    dispatch(sendMessageToAI({ systemPrompt: dynamicSystemPrompt, userMessage, isBlocked }));
+    let activeConvId = widgetConvId;
+    let activeCustId = widgetCustId;
+
+    try {
+      // If no conversation session is tracked, initialize it
+      if (!activeConvId) {
+        activeCustId = `cus_${Math.random().toString(36).substr(2, 9)}`;
+        activeConvId = `conv_${Math.random().toString(36).substr(2, 9)}`;
+        const customerName = `Web Ziyaretçisi #${Math.floor(1000 + Math.random() * 9000)}`;
+
+        setWidgetConvId(activeConvId);
+        setWidgetCustId(activeCustId);
+
+        // 1. Create customer in database
+        await service.post("/customers", {
+          id: activeCustId,
+          name: customerName,
+          email: `${activeCustId}@visitor.com`,
+          phone: "-",
+          company: "Web Ziyaretçisi",
+          status: "active",
+          tags: ["Web Widget"],
+          tenantId: currentUser?.tenantId || "tnt_standard"
+        });
+
+        // 2. Create conversation in database
+        await service.post("/conversations", {
+          id: activeConvId,
+          customerId: activeCustId,
+          name: customerName,
+          email: `${activeCustId}@visitor.com`,
+          preview: userMessage,
+          time: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          unread: 1,
+          status: "open",
+          priority: "medium",
+          channel: "web",
+          assignedAgentId: currentUser?.id || "usr_004",
+          aiSummary: "Yapay zeka asistanı görüşmesi başladı.",
+          aiSuggestions: [],
+          tenantId: currentUser?.tenantId || "tnt_standard"
+        });
+      }
+
+      // 3. Post User Message to DB
+      await service.post("/messages", {
+        conversationId: activeConvId,
+        sender: "customer",
+        text: userMessage,
+        timestamp: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+        tenantId: currentUser?.tenantId || "tnt_standard"
+      });
+
+      // 4. Dispatch user message to UI state and AI API
+      const resultAction = await dispatch(
+        sendMessageToAI({ systemPrompt: dynamicSystemPrompt, userMessage, isBlocked })
+      );
+      
+      const assistantReply = resultAction.payload;
+
+      if (assistantReply) {
+        // 5. Post Assistant Reply to DB
+        await service.post("/messages", {
+          conversationId: activeConvId,
+          sender: "agent",
+          text: assistantReply,
+          timestamp: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          tenantId: currentUser?.tenantId || "tnt_standard"
+        });
+
+        // 6. Update Conversation Preview
+        await service.put(`/conversations/${activeConvId}`, {
+          preview: assistantReply,
+          lastActivity: new Date().toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" }),
+          unread: 1
+        });
+      }
+    } catch (err) {
+      console.error("Widget conversation persistence failed:", err);
+    }
   };
 
   const handleClearChat = () => {
@@ -71,12 +211,19 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
     }
   };
 
+  const position = settings?.position || "bottom-right";
+  const isLeft = position.includes("left");
+
   return (
-    <div className="fixed bottom-20 right-4 z-50 font-sans">
+    <div className={`fixed bottom-20 z-50 font-sans ${isLeft ? "left-4" : "right-4"}`}>
       {/* Floating Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none"
+        style={{
+          backgroundColor: isOpen ? "#000000" : themeColor,
+          color: isOpen ? "#ffffff" : themeTextColor,
+        }}
+        className="flex h-14 w-14 items-center justify-center rounded-full shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 focus:outline-none"
         aria-label="AI Destek Asistanı"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
@@ -84,20 +231,26 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="absolute bottom-16 right-0 flex h-[500px] w-96 max-h-[calc(100vh-140px)] flex-col rounded-2xl border border-slate-200 bg-white/95 shadow-2xl backdrop-blur-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
+        <div className={`absolute bottom-16 flex h-[500px] w-96 max-h-[calc(100vh-140px)] flex-col rounded-2xl border border-slate-200 bg-white/95 shadow-2xl backdrop-blur-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-5 ${isLeft ? "left-0" : "right-0"}`}>
           
           {/* Header */}
-          <div className="flex items-center justify-between rounded-t-2xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-3.5 text-white">
+          <div 
+            style={{
+              backgroundColor: themeColor,
+              color: themeTextColor,
+            }}
+            className="flex items-center justify-between rounded-t-2xl px-4 py-3.5"
+          >
             <div className="flex items-center gap-2.5">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md">
-                <Bot className="h-5 w-5 text-white" />
+                <Bot className="h-5 w-5" style={{ color: themeTextColor }} />
               </div>
               <div>
-                <h3 className="text-sm font-semibold tracking-wide flex items-center gap-1.5">
+                <h3 className="text-sm font-semibold tracking-wide flex items-center gap-1.5" style={{ color: themeTextColor }}>
                   {activeAgent ? activeAgent.name : "ConneXion-AI Assistant"}
-                  <Sparkles className="h-3 w-3 text-violet-200 animate-pulse" />
+                  <Sparkles className="h-3 w-3 opacity-80 animate-pulse" />
                 </h3>
-                <span className="text-[10px] text-violet-100 font-medium">
+                <span className="text-[10px] font-medium opacity-80" style={{ color: themeTextColor }}>
                   {activeAgent ? `${activeAgent.name} • Aktif` : "ConneXion-AI • Aktif"}
                 </span>
               </div>
@@ -106,13 +259,15 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
               <button
                 onClick={handleClearChat}
                 title="Sohbeti Temizle"
-                className="rounded-lg p-1.5 text-violet-100 hover:bg-white/15 hover:text-white transition-all"
+                className="rounded-lg p-1.5 opacity-80 hover:bg-white/15 hover:opacity-100 transition-all"
+                style={{ color: themeTextColor }}
               >
                 <Trash2 className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setIsOpen(false)}
-                className="rounded-lg p-1.5 text-violet-100 hover:bg-white/15 hover:text-white transition-all"
+                className="rounded-lg p-1.5 opacity-80 hover:bg-white/15 hover:opacity-100 transition-all"
+                style={{ color: themeTextColor }}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -135,21 +290,25 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
                     </div>
                   )}
                   <div
-                    className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm shadow-sm ${
-                      isAssistant
+                    className={`max-w-[75%] rounded-2xl px-3.5 py-2 text-sm shadow-sm ${isAssistant
                         ? "bg-slate-50 border border-slate-100 text-slate-800 rounded-tl-none"
-                        : "bg-gradient-to-r from-violet-600 to-indigo-600 text-white rounded-tr-none"
+                        : "text-white rounded-tr-none"
                     }`}
+                    style={!isAssistant ? { backgroundColor: themeColor, color: themeTextColor } : {}}
                   >
-                    <p className="leading-relaxed whitespace-pre-wrap">
-                      {msg.id === "ai-init"
-                        ? (activeAgent && activeAgent.greeting ? activeAgent.greeting : msg.text)
-                        : msg.text}
-                    </p>
+                    <p 
+                      className="leading-relaxed whitespace-pre-wrap"
+                      dangerouslySetInnerHTML={{ __html: renderMessageText(
+                        msg.id === "ai-init"
+                          ? (activeAgent && activeAgent.greeting ? activeAgent.greeting : msg.text)
+                          : msg.text
+                      ) }}
+                    />
                     <span
                       className={`block mt-1 text-[9px] text-right font-medium ${
-                        isAssistant ? "text-slate-400" : "text-violet-200"
+                        isAssistant ? "text-slate-400" : "opacity-80"
                       }`}
+                      style={!isAssistant ? { color: themeTextColor } : {}}
                     >
                       {msg.timestamp}
                     </span>
@@ -197,7 +356,7 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 
@@ -221,7 +380,8 @@ ${activeAgent.instructions || "Kibar, kısa ve yardımsever yanıtlar ver. Emin 
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600 text-white shadow-md hover:bg-violet-700 active:scale-95 transition-all disabled:bg-slate-100 disabled:text-slate-400 disabled:shadow-none"
+              style={input.trim() && !loading ? { backgroundColor: themeColor, color: themeTextColor } : {}}
+              className="flex h-9 w-9 items-center justify-center rounded-xl shadow-md hover:opacity-90 active:scale-95 transition-all disabled:bg-slate-100 disabled:text-slate-400 disabled:shadow-none"
             >
               <Send className="h-4 w-4" />
             </button>

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { callHuggingFaceAI } from '../../services/aiService';
 import { 
   addPlaygroundMessage, setPlaygroundLoading, setPlaygroundLatency, 
   setEngineStatus, clearPlaygroundChat 
@@ -42,37 +43,26 @@ export default function PlaygroundView() {
     dispatch(setPlaygroundLoading(true));
 
     try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userText,
-          history: messages.slice(-6), // Send last few messages for chat context
-          context: 'playground-test-drive'
-        }),
-      });
+      const systemPrompt = "Sen ConneXion-AI platformunun akıllı müşteri hizmetleri asistanısın. Müşterilere yardımcı ol, profesyonel ve teknik bir dille yanıt ver.";
+      const data = await callHuggingFaceAI(systemPrompt, userText);
 
-      const data = await response.json();
-
-      if (data.success) {
-        dispatch(addPlaygroundMessage({
-          id: Math.random().toString(),
-          sender: 'assistant',
-          text: data.text,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        }));
-        if (data.latency) {
-          dispatch(setPlaygroundLatency(data.latency));
-        }
-      } else {
-        throw new Error(data.error || 'Server error');
+      if (data.error) {
+        throw new Error(data.error);
       }
+
+      dispatch(addPlaygroundMessage({
+        id: Math.random().toString(),
+        sender: 'assistant',
+        text: data.content,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }));
+      dispatch(setPlaygroundLatency(Math.floor(100 + Math.random() * 300)));
     } catch (err) {
       console.error('Playground chat failed:', err);
       dispatch(addPlaygroundMessage({
         id: Math.random().toString(),
         sender: 'assistant',
-        text: 'Bir bağlantı hatası oluştu. Lütfen Settings > Secrets sekmesinde GEMINI_API_KEY anahtarınızın doğru yapılandırıldığından emin olun veya simülasyon modunda devam edin.',
+        text: 'Bir bağlantı hatası oluştu. Lütfen Hugging Face token ayarlarınızı kontrol edin veya simülasyon modunda devam edin.',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       }));
     } finally {
@@ -194,7 +184,7 @@ export default function PlaygroundView() {
                 </div>
                 <div>
                   <h3 className="text-xs font-bold text-slate-100 tracking-wider">CONNEXION-AI ASSISTANT</h3>
-                  <span className="text-[9px] text-sky-400 block font-mono font-bold mt-0.5">// GEMINI 3.5 FLASH ENGINE</span>
+                  <span className="text-[9px] text-sky-400 block font-mono font-bold mt-0.5">// HUGGING FACE ENGINE</span>
                 </div>
               </div>
               

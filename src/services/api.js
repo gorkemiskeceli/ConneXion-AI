@@ -1,7 +1,42 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { service } from "./service";
 
-// Base URL comes from .env (VITE_API_URL or VITE_JSON_SERVER_URL), falls back to local JSON Server port 3000.
-const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_JSON_SERVER_URL || "http://localhost:3000";
+const customBaseQuery = async (args) => {
+  let url = typeof args === "string" ? args : args.url;
+  let method = typeof args === "string" ? "GET" : args.method || "GET";
+  let body = typeof args === "string" ? undefined : args.body;
+  let params = typeof args === "string" ? undefined : args.params;
+
+  if (params) {
+    const searchParams = new URLSearchParams(params);
+    url += (url.includes("?") ? "&" : "?") + searchParams.toString();
+  }
+
+  try {
+    let data;
+    const cleanMethod = method.toUpperCase();
+    if (cleanMethod === "GET") {
+      data = await service.get(url);
+    } else if (cleanMethod === "POST") {
+      data = await service.post(url, body);
+    } else if (cleanMethod === "PUT" || cleanMethod === "PATCH") {
+      data = await service.put(url, body);
+    } else if (cleanMethod === "DELETE") {
+      data = await service.delete(url);
+    } else {
+      throw new Error(`Unsupported method: ${method}`);
+    }
+    return { data };
+  } catch (error) {
+    console.error("[Custom Base Query Error]:", error);
+    return {
+      error: {
+        status: error.status || 500,
+        data: error.message || "An error occurred",
+      },
+    };
+  }
+};
 
 /**
  * api — the single RTK Query service for all server state.
@@ -11,7 +46,7 @@ const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_JSON_SERVER
  */
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl }),
+  baseQuery: customBaseQuery,
   tagTypes: [
     "Dashboard",
     "Reports",
@@ -71,6 +106,14 @@ export const api = createApi({
 
     // AI Agent Studio
     getAiAgents: builder.query({ query: () => "/aiAgents", providesTags: ["AiAgent"] }),
+    createAiAgent: builder.mutation({
+      query: (agent) => ({
+        url: "/aiAgents",
+        method: "POST",
+        body: agent,
+      }),
+      invalidatesTags: ["AiAgent"],
+    }),
     updateAiAgent: builder.mutation({
       query: (agent) => ({
         url: `/aiAgents/${agent.id}`,
@@ -81,6 +124,14 @@ export const api = createApi({
     }),
     getAiLogs: builder.query({ query: () => "/aiLogs", providesTags: ["AiLog"] }),
     getHandoffRules: builder.query({ query: () => "/handoffRules", providesTags: ["HandoffRule"] }),
+    createAiAgent: builder.mutation({
+      query: (agent) => ({
+        url: "/aiAgents",
+        method: "POST",
+        body: agent,
+      }),
+      invalidatesTags: ["AiAgent"],
+    }),
     addHandoffRule: builder.mutation({
       query: (rule) => ({
         url: "/handoffRules",
@@ -109,8 +160,199 @@ export const api = createApi({
     getAuditLogs: builder.query({ query: () => "/auditLogs", providesTags: ["AuditLog"] }),
     getWorkspaceSettings: builder.query({ query: () => "/workspaceSettings", providesTags: ["Settings"] }),
     getWidgetSettings: builder.query({ query: () => "/widgetSettings", providesTags: ["Settings"] }),
+    updateWidgetSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/widgetSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
     getBusinessHours: builder.query({ query: () => "/businessHours", providesTags: ["Settings"] }),
     getNotificationSettings: builder.query({ query: () => "/notificationSettings", providesTags: ["Settings"] }),
+
+    // Customer Mutations
+    createCustomer: builder.mutation({
+      query: (customer) => ({
+        url: "/customers",
+        method: "POST",
+        body: customer,
+      }),
+      invalidatesTags: ["Customer"],
+    }),
+    updateCustomer: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/customers/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => ["Customer", { type: "Customer", id }],
+    }),
+    deleteCustomer: builder.mutation({
+      query: (id) => ({
+        url: `/customers/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Customer"],
+    }),
+
+    // Knowledge Article Mutations
+    createKnowledgeArticle: builder.mutation({
+      query: (article) => ({
+        url: "/knowledgeArticles",
+        method: "POST",
+        body: article,
+      }),
+      invalidatesTags: ["Article"],
+    }),
+    updateKnowledgeArticle: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/knowledgeArticles/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Article"],
+    }),
+    deleteKnowledgeArticle: builder.mutation({
+      query: (id) => ({
+        url: `/knowledgeArticles/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Article"],
+    }),
+
+    // Workflow Mutations
+    createWorkflow: builder.mutation({
+      query: (workflow) => ({
+        url: "/workflows",
+        method: "POST",
+        body: workflow,
+      }),
+      invalidatesTags: ["Workflow"],
+    }),
+    updateWorkflow: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/workflows/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Workflow"],
+    }),
+    deleteWorkflow: builder.mutation({
+      query: (id) => ({
+        url: `/workflows/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Workflow"],
+    }),
+
+    // User/Member Mutations
+    createUser: builder.mutation({
+      query: (user) => ({
+        url: "/users",
+        method: "POST",
+        body: user,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/users/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/users/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    // Queue Mutations
+    createQueue: builder.mutation({
+      query: (queue) => ({
+        url: "/queues",
+        method: "POST",
+        body: queue,
+      }),
+      invalidatesTags: ["Queue"],
+    }),
+    updateQueue: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/queues/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Queue"],
+    }),
+    deleteQueue: builder.mutation({
+      query: (id) => ({
+        url: `/queues/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Queue"],
+    }),
+
+    // Inbox Mutations
+    createMessage: builder.mutation({
+      query: (message) => ({
+        url: "/messages",
+        method: "POST",
+        body: message,
+      }),
+      invalidatesTags: ["Message"],
+    }),
+    createConversation: builder.mutation({
+      query: (conversation) => ({
+        url: "/conversations",
+        method: "POST",
+        body: conversation,
+      }),
+      invalidatesTags: ["Conversation"],
+    }),
+    updateConversation: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/conversations/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Conversation"],
+    }),
+    updateWorkspaceSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/workspaceSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
+    updateWidgetSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/widgetSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
+    updateBusinessHours: builder.mutation({
+      query: (hours) => ({
+        url: "/businessHours",
+        method: "PUT",
+        body: hours,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
+    updateNotificationSettings: builder.mutation({
+      query: (settings) => ({
+        url: "/notificationSettings",
+        method: "PUT",
+        body: settings,
+      }),
+      invalidatesTags: ["Settings"],
+    }),
   }),
 });
 
@@ -136,6 +378,30 @@ export const {
   useGetWidgetSettingsQuery,
   useGetBusinessHoursQuery,
   useGetNotificationSettingsQuery,
+  // Mutation hooks
+  useCreateCustomerMutation,
+  useUpdateCustomerMutation,
+  useDeleteCustomerMutation,
+  useCreateKnowledgeArticleMutation,
+  useUpdateKnowledgeArticleMutation,
+  useDeleteKnowledgeArticleMutation,
+  useCreateWorkflowMutation,
+  useUpdateWorkflowMutation,
+  useDeleteWorkflowMutation,
+  useCreateUserMutation,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
+  useCreateQueueMutation,
+  useUpdateQueueMutation,
+  useDeleteQueueMutation,
+  useCreateMessageMutation,
+  useCreateConversationMutation,
+  useUpdateConversationMutation,
+  useUpdateWorkspaceSettingsMutation,
+  useUpdateWidgetSettingsMutation,
+  useUpdateBusinessHoursMutation,
+  useUpdateNotificationSettingsMutation,
+  useCreateAiAgentMutation,
   useUpdateAiAgentMutation,
   useAddKnowledgeSourceMutation,
   useDeleteKnowledgeSourceMutation,

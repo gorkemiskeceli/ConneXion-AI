@@ -131,6 +131,15 @@
       "lastLogin": "Dün 13:23",
       "queue": "İade & İptal",
       "activeCount": 2
+    },
+    {
+      "name": "Hasan Doğan",
+      "email": "hasan@example.com",
+      "role": "support_agent",
+      "availability": "online",
+      "queue": "Teknik Destek",
+      "activeCount": 0,
+      "id": "IUARZx7"
     }
   ],
   "customers": [
@@ -986,6 +995,42 @@
           "date": "8 Nis 2024"
         }
       ]
+    },
+    {
+      "id": "cus_4l36isskq",
+      "name": "Web Ziyaretçisi #1641",
+      "email": "cus_4l36isskq@visitor.com",
+      "phone": "-",
+      "company": "Web Ziyaretçisi",
+      "status": "active",
+      "tags": [
+        "Web Widget"
+      ],
+      "tenantId": "tnt_jvhnvhfal"
+    },
+    {
+      "id": "cus_m6itxn1bn",
+      "name": "Web Ziyaretçisi #5915",
+      "email": "cus_m6itxn1bn@visitor.com",
+      "phone": "-",
+      "company": "Web Ziyaretçisi",
+      "status": "active",
+      "tags": [
+        "Web Widget"
+      ],
+      "tenantId": "usr_oo56kqutk"
+    },
+    {
+      "id": "cus_y7qc5lcx4",
+      "name": "Web Ziyaretçisi #6435",
+      "email": "cus_y7qc5lcx4@visitor.com",
+      "phone": "-",
+      "company": "Web Ziyaretçisi",
+      "status": "active",
+      "tags": [
+        "Web Widget"
+      ],
+      "tenantId": "usr_nsl6t1qxg"
     }
   ],
   "conversations": [
@@ -1013,34 +1058,17 @@
       }
     },
     {
-      "id": "conv_002",
       "customerId": "cus_003",
       "name": "Umut Aslan",
-      "email": "umut.aslan@example.com",
-      "preview": "Ürünüm hasarlı geldi.",
-      "time": "12 dk",
-      "unread": 1,
       "status": "pending",
-      "priority": "medium",
-      "channel": "web",
-      "assignedAgentId": "usr_008",
       "aiSummary": "Fatura kopyası talep edildi; e-posta ile iletilecek.",
       "aiSuggestions": [
         "Siparişiniz yola çıktı, takip numaranız:",
         "Bir temsilciye aktarıyorum."
       ],
-      "customer": {
-        "name": "Umut Aslan",
-        "email": "umut.aslan@example.com",
-        "phone": "+90 539 651 27 95",
-        "location": "İzmir, Türkiye",
-        "since": "11 Oca 2024",
-        "tags": [
-          "Kurumsal",
-          "Teknik",
-          "Öncelikli"
-        ]
-      }
+      "preview": "Bir temsilciye aktarıyorum.",
+      "lastActivity": "19:10",
+      "id": "conv_002"
     },
     {
       "id": "conv_003",
@@ -1859,6 +1887,132 @@
           "Teknik"
         ]
       }
+    },
+    {
+      "id": "conv_2moqmn22j",
+      "customerId": "cus_4l36isskq",
+      "name": "Web Ziyaretçisi #1641",
+      "email": "cus_4l36isskq@visitor.com",
+      "preview": "Saç kesimi ve boyama fiyat listemizi sizinle paylaşabilirim.",
+      "time": "00:50",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "web",
+      "assignedAgentId": "usr_oo56kqutk",
+      "aiSummary": "Yapay zeka asistanı görüşmesi başladı.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_jvhnvhfal",
+      "lastActivity": "01:34"
+    },
+    {
+      "id": "conv_qg21noeir",
+      "customerId": "cus_m6itxn1bn",
+      "name": "Canlı Sohbet",
+      "email": "cus_m6itxn1bn@visitor.com",
+      "preview": "Saç kesimi ve boyama fiyat listemizi sizinle paylaşabilirim.",
+      "time": "01:42",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "web",
+      "assignedAgentId": "usr_004",
+      "aiSummary": "Yapay zeka asistanı görüşmesi başladı.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_jvhnvhfal",
+      "lastActivity": "01:42"
+    },
+    {
+      "id": "TKT-7450",
+      "customerId": "usr_oo56kqutk",
+      "name": "Acme Corp",
+      "email": "test@gmail.com",
+      "subject": "test",
+      "category": "Integration",
+      "preview": "test test",
+      "time": "13.07.2026",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "ticket",
+      "assignedAgentId": "usr_005",
+      "aiSummary": "Kullanıcı yeni destek talebi oluşturdu.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_admin",
+      "lastActivity": "07:24"
+    },
+    {
+      "id": "TKT-2689",
+      "customerId": "usr_oo56kqutk",
+      "name": "Acme Corp",
+      "email": "test@gmail.com",
+      "subject": "test test",
+      "category": "Genel",
+      "preview": "test",
+      "time": "13.07.2026",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "ticket",
+      "assignedAgentId": "usr_005",
+      "aiSummary": "Kullanıcı yeni destek talebi oluşturdu.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_admin"
+    },
+    {
+      "id": "TKT-6102",
+      "customerId": "usr_oo56kqutk",
+      "name": "Acme Corp",
+      "email": "test@gmail.com",
+      "subject": "test user",
+      "category": "Genel",
+      "preview": "merhaba",
+      "time": "13.07.2026",
+      "unread": 1,
+      "status": "closed",
+      "priority": "medium",
+      "channel": "ticket",
+      "assignedAgentId": "usr_005",
+      "aiSummary": "Kullanıcı yeni destek talebi oluşturdu.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_admin",
+      "lastActivity": "07:26"
+    },
+    {
+      "id": "conv_b9wzq95dv",
+      "customerId": "cus_y7qc5lcx4",
+      "name": "Web Ziyaretçisi #6435",
+      "email": "cus_y7qc5lcx4@visitor.com",
+      "preview": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "time": "09:52",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "web",
+      "assignedAgentId": "usr_004",
+      "aiSummary": "Yapay zeka asistanı görüşmesi başladı.",
+      "aiSuggestions": [],
+      "tenantId": "usr_nsl6t1qxg",
+      "lastActivity": "09:59"
+    },
+    {
+      "id": "TKT-5900",
+      "customerId": "usr_nsl6t1qxg",
+      "name": "Acme Corp",
+      "email": "gorkem@gmail.com",
+      "subject": "gorkem test",
+      "category": "Genel",
+      "preview": "merhaba",
+      "time": "13.07.2026",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "ticket",
+      "assignedAgentId": "usr_005",
+      "aiSummary": "Kullanıcı yeni destek talebi oluşturdu.",
+      "aiSuggestions": [],
+      "tenantId": "tnt_admin",
+      "lastActivity": "10:06"
     }
   ],
   "messages": [
@@ -3445,6 +3599,291 @@
       "type": "text",
       "text": "İşleminizi oluşturdum, birkaç dakika içinde tamamlanacak.",
       "timestamp": "14:29"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "19:10",
+      "id": "ZOiTlHO"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "Siparişiniz yola çıktı, takip numaranız:",
+      "timestamp": "19:10",
+      "id": "5ycd7ll"
+    },
+    {
+      "conversationId": "conv_002",
+      "sender": "agent",
+      "text": "Bir temsilciye aktarıyorum.",
+      "timestamp": "19:10",
+      "id": "eF2gEVj"
+    },
+    {
+      "conversationId": "conv_2moqmn22j",
+      "sender": "customer",
+      "text": "bu panel ne paneli",
+      "timestamp": "00:50",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "laMXQgy"
+    },
+    {
+      "conversationId": "conv_2moqmn22j",
+      "sender": "agent",
+      "text": "Saç kesimi ve boyama fiyat listemizi sizinle paylaşabilirim.",
+      "timestamp": "01:34",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "4atREh1"
+    },
+    {
+      "conversationId": "conv_qg21noeir",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "01:42",
+      "tenantId": "usr_oo56kqutk",
+      "id": "kmJRmlm"
+    },
+    {
+      "conversationId": "conv_qg21noeir",
+      "sender": "agent",
+      "text": "Saç kesimi ve boyama fiyat listemizi sizinle paylaşabilirim.",
+      "timestamp": "01:42",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "VX75xLj"
+    },
+    {
+      "conversationId": "conv_qg21noeir",
+      "sender": "customer",
+      "text": "roselia hakkında bilgi ver",
+      "timestamp": "01:43",
+      "tenantId": "usr_oo56kqutk",
+      "id": "R9iWWAC"
+    },
+    {
+      "conversationId": "conv_qg21noeir",
+      "sender": "customer",
+      "text": "roseliyo genel olarak bir tanıt çalışma saatlerini ya da iletişimini görmek sitemiyorum roselia ne iş yapar onu anlat kısaca",
+      "timestamp": "01:43",
+      "tenantId": "usr_oo56kqutk",
+      "id": "pZRz502"
+    },
+    {
+      "conversationId": "conv_qg21noeir",
+      "sender": "customer",
+      "text": "ana sayfada yazan mesaj nedir",
+      "timestamp": "01:44",
+      "tenantId": "usr_oo56kqutk",
+      "id": "WM1NdqU"
+    },
+    {
+      "conversationId": "conv_qg21noeir",
+      "sender": "agent",
+      "text": "Ana sayfada şu mesaj bulunuyor:  \n\n**“Roselia — Hayalindeki görüntüye ulaş”**  \n\nAyrıca sayfada “Roselia'ya hoş geldiniz. Özenle seçilmiş profesyonel bakım ve güzellik hizmetlerimizle, sıcak ve zarif bir ortamda doğal güzelliğinizi ortaya çıkarıyoruz. Kendinizi iyi hissetmek için gereken her şey burada.” diye yer alıyor.",
+      "timestamp": "01:44",
+      "tenantId": "usr_oo56kqutk",
+      "id": "iIIqUgV"
+    },
+    {
+      "conversationId": "conv_qg21noeir",
+      "sender": "customer",
+      "text": "nasıl randevu alırım",
+      "timestamp": "01:45",
+      "tenantId": "usr_oo56kqutk",
+      "id": "MokHihp"
+    },
+    {
+      "conversationId": "TKT-7450",
+      "sender": "customer",
+      "text": "test 123",
+      "timestamp": "13.07.2026 10:00",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "Icwo9ef"
+    },
+    {
+      "conversationId": "TKT-7450",
+      "sender": "agent",
+      "text": "Destek talebiniz başarıyla oluşturulmuştur. Destek ekibimiz en kısa sürede inceleyip dönüş sağlayacaktır.",
+      "timestamp": "13.07.2026 10:01",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "vMBq4rW"
+    },
+    {
+      "conversationId": "TKT-7450",
+      "sender": "customer",
+      "text": "merhaba test",
+      "timestamp": "07:23",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "F5hoWds"
+    },
+    {
+      "conversationId": "TKT-7450",
+      "sender": "agent",
+      "text": "nasıl yardımcı olabilirim?",
+      "timestamp": "07:23",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "6KHUT-p"
+    },
+    {
+      "conversationId": "TKT-7450",
+      "sender": "customer",
+      "text": "test test",
+      "timestamp": "07:23",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "MIxuw6H"
+    },
+    {
+      "conversationId": "TKT-7450",
+      "sender": "agent",
+      "text": "abov test",
+      "timestamp": "07:23",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "fcS4ezV"
+    },
+    {
+      "conversationId": "TKT-7450",
+      "sender": "agent",
+      "text": "test test",
+      "timestamp": "07:24",
+      "tenantId": "tnt_admin",
+      "id": "EFXpCjZ"
+    },
+    {
+      "conversationId": "TKT-2689",
+      "sender": "customer",
+      "text": "test",
+      "timestamp": "13.07.2026 10:00",
+      "tenantId": "tnt_admin",
+      "id": "3IExKN_"
+    },
+    {
+      "conversationId": "TKT-2689",
+      "sender": "agent",
+      "text": "Destek talebiniz başarıyla oluşturulmuştur. Destek ekibimiz en kısa sürede inceleyip dönüş sağlayacaktır.",
+      "timestamp": "13.07.2026 10:01",
+      "tenantId": "tnt_admin",
+      "id": "MWOPK1T"
+    },
+    {
+      "conversationId": "TKT-6102",
+      "sender": "customer",
+      "text": "test user",
+      "timestamp": "13.07.2026 10:00",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "SqlWMrU"
+    },
+    {
+      "conversationId": "TKT-6102",
+      "sender": "agent",
+      "text": "Destek talebiniz başarıyla oluşturulmuştur. Destek ekibimiz en kısa sürede inceleyip dönüş sağlayacaktır.",
+      "timestamp": "13.07.2026 10:01",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "lA_BeMp"
+    },
+    {
+      "conversationId": "TKT-6102",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "07:26",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "L43EcGh"
+    },
+    {
+      "conversationId": "TKT-6102",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "07:26",
+      "tenantId": "tnt_jvhnvhfal",
+      "id": "LWpMDC3"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "09:52",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "BWJgaGc"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "09:52",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "oZ85dVA"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "roselia hakkında bilgi ver",
+      "timestamp": "09:54",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "hT2wnBQ"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia, İstanbul Huzur Caddesi No:123’de bulunan, profesyonel bakım ve güzellik hizmeti sunan bir salon. Zarafet ve uzmanlığın buluştuğu bir ortamda, saç kesimi, saç boyama, cilt bakımı, makyaj, el & tırnak bakımı ve masaj gibi geniş bir hizmet yelpazesi sunuyor. 08:00‑18:00 arası & Pazartesi‑Cuma açık, Pazar kapalı. Detaylı randevu ve iletişim için sayfada yer alan telefon +90 212 555 0123 veya e‑posta hello@roselia.com’ı kullanabilirsiniz. 🚺✂️✨",
+      "timestamp": "09:54",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "gRLYXNa"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "09:59",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "T-_jNwz"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "09:59",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "g6yqi0e"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "10:01",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "S3kDYsF"
+    },
+    {
+      "conversationId": "conv_b9wzq95dv",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "10:01",
+      "tenantId": "usr_nsl6t1qxg",
+      "id": "Jl1aceu"
+    },
+    {
+      "conversationId": "TKT-5900",
+      "sender": "customer",
+      "text": "gorkem test\n",
+      "timestamp": "13.07.2026 10:00",
+      "tenantId": "tnt_wf1z9f75f",
+      "id": "mGzuUqJ"
+    },
+    {
+      "conversationId": "TKT-5900",
+      "sender": "agent",
+      "text": "Destek talebiniz başarıyla oluşturulmuştur. Destek ekibimiz en kısa sürede inceleyip dönüş sağlayacaktır.",
+      "timestamp": "13.07.2026 10:01",
+      "tenantId": "tnt_wf1z9f75f",
+      "id": "mHt579l"
+    },
+    {
+      "conversationId": "TKT-5900",
+      "sender": "agent",
+      "text": "merhaba",
+      "timestamp": "10:06",
+      "tenantId": "tnt_admin",
+      "id": "vo7-fNG"
     }
   ],
   "teamPerformance": [
@@ -3630,7 +4069,7 @@
       "id": "kb_001",
       "title": "Siparişimi nasıl takip ederim?",
       "excerpt": "Detaylı açıklama.",
-      "content": "Siparişimi nasıl takip ederim?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "Siparişimi nasıl takip ederim?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nE-postanıza gönderilen kargo takip linkine tıklayarak veya web sitemizdeki 'Hesabım > Siparişlerim' sekmesinden siparişinizin durumunu anlık olarak takip edebilirsiniz.",
       "category": "faq",
       "status": "archived",
       "author": "Pınar Şen",
@@ -3640,7 +4079,7 @@
       "id": "kb_002",
       "title": "İade süreci nasıl işler?",
       "excerpt": "Detaylı açıklama.",
-      "content": "İade süreci nasıl işler?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.",
+      "content": "İade süreci nasıl işler?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.\n\nÖrnek Yanıt:\nÜrünü teslim aldıktan sonraki 14 gün içinde, hesabınızdan iade talebi oluşturup anlaşmalı kargomuz ile ücretsiz olarak geri gönderebilirsiniz. İadeniz onaylandığında 3 iş günü içinde paranız iade edilir.",
       "category": "faq",
       "status": "published",
       "author": "Seda Doğan",
@@ -3650,7 +4089,7 @@
       "id": "kb_003",
       "title": "Ödeme yöntemleri nelerdir?",
       "excerpt": "Sık sorulan soru.",
-      "content": "Ödeme yöntemleri nelerdir?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "Ödeme yöntemleri nelerdir?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nTüm kredi ve banka kartları (Visa, Mastercard, Troy), havale/EFT ve kapıda ödeme seçeneklerimiz mevcuttur. Kart ödemelerinde 12 aya varan taksit seçenekleri sunulmaktadır.",
       "category": "faq",
       "status": "published",
       "author": "Yasemin Aksoy",
@@ -3660,7 +4099,7 @@
       "id": "kb_004",
       "title": "Şifremi nasıl sıfırlarım?",
       "excerpt": "Detaylı açıklama.",
-      "content": "Şifremi nasıl sıfırlarım?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.",
+      "content": "Şifremi nasıl sıfırlarım?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.\n\nÖrnek Yanıt:\nGiriş sayfasındaki 'Şifremi Unuttum' bağlantısına tıklayıp e-posta adresinizi yazarak şifre sıfırlama linki talep edebilirsiniz. Linke tıklayarak yeni şifrenizi belirleyebilirsiniz.",
       "category": "faq",
       "status": "published",
       "author": "Seda Doğan",
@@ -3670,7 +4109,7 @@
       "id": "kb_005",
       "title": "Kargo süreleri ne kadar?",
       "excerpt": "Politika özeti.",
-      "content": "Kargo süreleri ne kadar?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.",
+      "content": "Kargo süreleri ne kadar?\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.\n\nÖrnek Yanıt:\nHafta içi saat 16:00'ya kadar verilen siparişler aynı gün kargoya verilir. Teslimat süresi bulunduğunuz şehre bağlı olarak genellikle 1-3 iş günü arasındadır.",
       "category": "faq",
       "status": "draft",
       "author": "Mustafa Aksoy",
@@ -3680,7 +4119,7 @@
       "id": "kb_006",
       "title": "Pro Plan Özellikleri",
       "excerpt": "Politika özeti.",
-      "content": "Pro Plan Özellikleri\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.",
+      "content": "Pro Plan Özellikleri\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.\n\nÖrnek Yanıt:\nPro Plan; sınırsız canlı destek temsilcisi, gelişmiş yapay zeka asistanı, aylık 50.000 mesaj hakkı, detaylı raporlama arayüzü ve API entegrasyon desteği içerir.",
       "category": "products",
       "status": "published",
       "author": "Mehmet Kaya",
@@ -3690,7 +4129,7 @@
       "id": "kb_007",
       "title": "Başlangıç Paketi Detayları",
       "excerpt": "Adım adım rehber.",
-      "content": "Başlangıç Paketi Detayları\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "Başlangıç Paketi Detayları\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nBaşlangıç paketi; 3 canlı destek temsilcisi, temel yapay zeka sohbet botu, aylık 5.000 mesaj hakkı ve e-posta ile destek hizmetlerini içerir. Küçük işletmeler için idealdir.",
       "category": "products",
       "status": "archived",
       "author": "Pınar Şen",
@@ -3700,7 +4139,7 @@
       "id": "kb_008",
       "title": "Kurumsal Çözümler",
       "excerpt": "Politika özeti.",
-      "content": "Kurumsal Çözümler\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Süreç ve koşullar bu belgede yer alır.",
+      "content": "Kurumsal Çözümler\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Süreç ve koşullar bu belgede yer alır.\n\nÖrnek Yanıt:\nKurumsal müşterilerimiz için özel sunucu kurulumu, sınırsız mesajlaşma, 7/24 özel SLA desteği, gelişmiş güvenlik maskelemesi (HIPAA/GDPR) ve özel entegrasyon danışmanlığı sağlıyoruz.",
       "category": "products",
       "status": "published",
       "author": "Mustafa Aksoy",
@@ -3710,7 +4149,7 @@
       "id": "kb_009",
       "title": "Mobil Uygulama Rehberi",
       "excerpt": "Sık sorulan soru.",
-      "content": "Mobil Uygulama Rehberi\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "Mobil Uygulama Rehberi\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nConneXion-AI iOS ve Android mobil uygulamalarını indirerek, nerede olursanız olun gelen müşteri mesajlarını anında yanıtlayabilir ve destek biletlerini yönetebilirsiniz.",
       "category": "products",
       "status": "draft",
       "author": "Yasemin Aksoy",
@@ -3720,7 +4159,7 @@
       "id": "kb_010",
       "title": "Kurulum Hizmeti",
       "excerpt": "Detaylı açıklama.",
-      "content": "Kurulum Hizmeti\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Süreç ve koşullar bu belgede yer alır.",
+      "content": "Kurulum Hizmeti\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Süreç ve koşullar bu belgede yer alır.\n\nÖrnek Yanıt:\nUzman ekibimiz, widget kodunun web sitenize eklenmesinden, yapay zeka asistanınızın firmanıza göre eğitilmesine kadar tüm kurulum süreçlerinde size rehberlik eder ve tamamlar.",
       "category": "services",
       "status": "draft",
       "author": "Pınar Şen",
@@ -3730,7 +4169,7 @@
       "id": "kb_011",
       "title": "7/24 Öncelikli Destek",
       "excerpt": "Adım adım rehber.",
-      "content": "7/24 Öncelikli Destek\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "7/24 Öncelikli Destek\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nBu pakete sahip müşterilerimiz, tüm teknik ve operasyonel sorunları için gecikmesiz olarak telefon veya özel Slack kanalı üzerinden 7 gün 24 saat mühendis ekibimize ulaşabilir.",
       "category": "services",
       "status": "published",
       "author": "Merve Çetin",
@@ -3740,7 +4179,7 @@
       "id": "kb_012",
       "title": "Danışmanlık Paketi",
       "excerpt": "Adım adım rehber.",
-      "content": "Danışmanlık Paketi\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Süreç ve koşullar bu belgede yer alır.",
+      "content": "Danışmanlık Paketi\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Süreç ve koşullar bu belgede yer alır.\n\nÖrnek Yanıt:\nDestek operasyonlarınızı optimize etmek için uzman ekibimiz tarafından iş akışı analizi, yapay zeka verimlilik ölçümü ve çağrı merkezi eğitimi danışmanlığı sağlanır.",
       "category": "services",
       "status": "published",
       "author": "Leyla Şen",
@@ -3750,7 +4189,7 @@
       "id": "kb_013",
       "title": "İade ve İptal Politikası",
       "excerpt": "Adım adım rehber.",
-      "content": "İade ve İptal Politikası\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "İade ve İptal Politikası\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nAlınan hizmetlerin iptal talebi fatura kesim tarihinden önceki 7 gün içinde yapılmalıdır. Yazılım lisansları ve kurulumu tamamlanmış projelerin iadesi yapılmamaktadır.",
       "category": "policies",
       "status": "published",
       "author": "Mehmet Öztürk",
@@ -3760,7 +4199,7 @@
       "id": "kb_014",
       "title": "Gizlilik Politikası",
       "excerpt": "Sık sorulan soru.",
-      "content": "Gizlilik Politikası\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.",
+      "content": "Gizlilik Politikası\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.\n\nÖrnek Yanıt:\nMüşteri ve temsilci verileriniz uçtan uca şifrelenir. Kişisel verilerinizin korunması kapsamında üçüncü taraflarla paylaşım kesinlikle yapılmaz ve verileriniz gizli tutulur.",
       "category": "policies",
       "status": "draft",
       "author": "Leyla Şen",
@@ -3770,7 +4209,7 @@
       "id": "kb_015",
       "title": "Kullanım Koşulları",
       "excerpt": "Adım adım rehber.",
-      "content": "Kullanım Koşulları\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "Kullanım Koşulları\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nPlatformumuzun yasa dışı amaçlarla veya spam mesaj gönderimi için kullanılması yasaktır. İhlal durumunda hesapların askıya alınma yetkisi saklı tutulur.",
       "category": "policies",
       "status": "published",
       "author": "Seda Doğan",
@@ -3780,7 +4219,7 @@
       "id": "kb_016",
       "title": "Teslimat Politikası",
       "excerpt": "Detaylı açıklama.",
-      "content": "Teslimat Politikası\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.",
+      "content": "Teslimat Politikası\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.\n\nÖrnek Yanıt:\nDijital hizmetler ve lisanslar ödeme onayının ardından anında e-posta ile teslim edilir. Donanım veya fiziksel ürün gönderimleri kargo ile teslim edilir.",
       "category": "policies",
       "status": "archived",
       "author": "Seda Doğan",
@@ -3790,7 +4229,7 @@
       "id": "kb_017",
       "title": "Entegrasyon Kılavuzu",
       "excerpt": "Sık sorulan soru.",
-      "content": "Entegrasyon Kılavuzu\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.",
+      "content": "Entegrasyon Kılavuzu\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. İlgili tüm bilgiler burada bulunur.\n\nÖrnek Yanıt:\nWidget'ımızı web sitenize eklemek için size verilen tek satırlık JavaScript kodunu HTML dosyanızın </body> etiketinden hemen önce yapıştırmanız yeterlidir.",
       "category": "documents",
       "status": "published",
       "author": "Cem Kara",
@@ -3800,7 +4239,7 @@
       "id": "kb_018",
       "title": "API Dokümantasyonu",
       "excerpt": "Adım adım rehber.",
-      "content": "API Dokümantasyonu\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.",
+      "content": "API Dokümantasyonu\n\nBu makale müşteri destek asistanı tarafından yanıt üretmek için kullanılır. Detaylı adımlar aşağıda açıklanmıştır.\n\nÖrnek Yanıt:\nGeliştiricilerimiz için hazırlanan REST API'miz sayesinde rehber kayıtları, sohbet geçmişleri ve yapay zeka loglarına programatik olarak erişebilir ve işlem yapabilirsiniz.",
       "category": "documents",
       "status": "published",
       "author": "Mehmet Kaya",
@@ -3815,221 +4254,111 @@
     "policies": 4,
     "documents": 2
   },
-  "knowledgeSources": [
-    {
-      "id": "ks_001",
-      "name": "Ürün SSS",
-      "type": "FAQ",
-      "itemCount": 21,
-      "status": "active"
-    },
-    {
-      "id": "ks_002",
-      "name": "Politika Belgeleri",
-      "type": "Doküman",
-      "itemCount": 12,
-      "status": "active"
-    },
-    {
-      "id": "ks_003",
-      "name": "Ürün Kataloğu",
-      "type": "Ürün",
-      "itemCount": 36,
-      "status": "active"
-    },
-    {
-      "id": "ks_004",
-      "name": "Hizmet Açıklamaları",
-      "type": "Hizmet",
-      "itemCount": 5,
-      "status": "inactive"
-    }
-  ],
+  "knowledgeSources": [],
   "aiAgents": [
     {
-      "id": "agt_001",
-      "name": "Destek Asistanı",
+      "id": "agt_1783925000577",
+      "tenantId": "tnt_admin",
+      "name": "ConneXion Assistant",
       "status": "active",
-      "description": "Genel müşteri destek asistanı.",
+      "description": "Varsayılan müşteri destek asistanı.",
       "language": "tr",
       "tone": "friendly",
       "active": true,
-      "instructions": "Sen Acme'nin müşteri destek asistanısın. Kibar, kısa ve yardımsever yanıtlar ver. Emin olmadığında konuşmayı bir temsilciye aktar.",
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
       "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
-      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum."
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
     },
     {
-      "id": "agt_002",
-      "name": "Satış Asistanı",
-      "status": "paused",
-      "description": "Satış öncesi soruları yanıtlar.",
+      "id": "agt_1783925000578",
+      "tenantId": "tnt_admin",
+      "name": "ConneXion Assistant",
+      "status": "active",
+      "description": "Varsayılan müşteri destek asistanı.",
       "language": "tr",
-      "tone": "professional",
-      "active": false,
-      "instructions": "",
-      "greeting": "",
-      "fallback": ""
+      "tone": "friendly",
+      "active": true,
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
+      "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
+    },
+    {
+      "id": "agt_1783925077459",
+      "tenantId": "tnt_wf1z9f75f",
+      "name": "ConneXion Assistant",
+      "status": "active",
+      "description": "Varsayılan müşteri destek asistanı.",
+      "language": "tr",
+      "tone": "friendly",
+      "active": true,
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
+      "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
+    },
+    {
+      "id": "agt_1783925077458",
+      "tenantId": "tnt_wf1z9f75f",
+      "name": "ConneXion Assistant",
+      "status": "active",
+      "description": "Varsayılan müşteri destek asistanı.",
+      "language": "tr",
+      "tone": "friendly",
+      "active": true,
+      "instructions": "Kibar, kısa ve yardımsever yanıtlar ver.",
+      "greeting": "Merhaba! Size nasıl yardımcı olabilirim?",
+      "fallback": "Bu konuda sizi bir temsilciye aktarıyorum.",
+      "guardrailFlags": {
+        "profanityFilter": true
+      },
+      "blockedTerms": "",
+      "maxLength": "",
+      "keywords": [
+        "yardım",
+        "fiyat",
+        "destek"
+      ],
+      "themeColor": "",
+      "themeTextColor": ""
     }
   ],
-  "aiLogs": [
-    {
-      "id": "ail_001",
-      "time": "20 May 2024 10:04",
-      "event": "Duygu analizi",
-      "confidence": 47,
-      "action": "Aktarıldı"
-    },
-    {
-      "id": "ail_002",
-      "time": "18 May 2024 19:03",
-      "event": "Bilgi tabanı araması",
-      "confidence": 82,
-      "action": "Yanıtlandı"
-    },
-    {
-      "id": "ail_003",
-      "time": "23 May 2024 11:04",
-      "event": "Handoff önerisi",
-      "confidence": 64,
-      "action": "Aktarıldı"
-    },
-    {
-      "id": "ail_004",
-      "time": "19 May 2024 20:34",
-      "event": "Yanıt üretildi",
-      "confidence": 58,
-      "action": "Yanıtlandı"
-    },
-    {
-      "id": "ail_005",
-      "time": "22 May 2024 17:01",
-      "event": "Yanıt üretildi",
-      "confidence": 73,
-      "action": "Yanıtlandı"
-    },
-    {
-      "id": "ail_006",
-      "time": "22 May 2024 08:33",
-      "event": "Handoff önerisi",
-      "confidence": 45,
-      "action": "Aktarıldı"
-    },
-    {
-      "id": "ail_007",
-      "time": "17 May 2024 09:58",
-      "event": "Duygu analizi",
-      "confidence": 80,
-      "action": "Eskalasyon"
-    },
-    {
-      "id": "ail_008",
-      "time": "24 May 2024 15:10",
-      "event": "Duygu analizi",
-      "confidence": 51,
-      "action": "Eskalasyon"
-    },
-    {
-      "id": "ail_009",
-      "time": "24 May 2024 10:02",
-      "event": "Duygu analizi",
-      "confidence": 46,
-      "action": "Yanıtlandı"
-    },
-    {
-      "id": "ail_010",
-      "time": "19 May 2024 08:20",
-      "event": "Yanıt üretildi",
-      "confidence": 55,
-      "action": "Yanıtlandı"
-    },
-    {
-      "id": "ail_011",
-      "time": "17 May 2024 13:46",
-      "event": "Handoff önerisi",
-      "confidence": 70,
-      "action": "Yanıtlandı"
-    },
-    {
-      "id": "ail_012",
-      "time": "22 May 2024 19:21",
-      "event": "Yanıt üretildi",
-      "confidence": 47,
-      "action": "Bilgi bulundu"
-    },
-    {
-      "id": "ail_013",
-      "time": "22 May 2024 12:37",
-      "event": "Duygu analizi",
-      "confidence": 53,
-      "action": "Eskalasyon"
-    },
-    {
-      "id": "ail_014",
-      "time": "21 May 2024 20:28",
-      "event": "Yanıt üretildi",
-      "confidence": 93,
-      "action": "Aktarıldı"
-    },
-    {
-      "id": "ail_015",
-      "time": "22 May 2024 15:05",
-      "event": "Bilgi tabanı araması",
-      "confidence": 89,
-      "action": "Bilgi bulundu"
-    },
-    {
-      "id": "ail_016",
-      "time": "20 May 2024 17:33",
-      "event": "Otomatik yanıt",
-      "confidence": 85,
-      "action": "Bilgi bulundu"
-    },
-    {
-      "id": "ail_017",
-      "time": "18 May 2024 11:19",
-      "event": "Otomatik yanıt",
-      "confidence": 98,
-      "action": "Aktarıldı"
-    },
-    {
-      "id": "ail_018",
-      "time": "23 May 2024 12:55",
-      "event": "Handoff önerisi",
-      "confidence": 70,
-      "action": "Aktarıldı"
-    },
-    {
-      "id": "ail_019",
-      "time": "20 May 2024 14:35",
-      "event": "Duygu analizi",
-      "confidence": 61,
-      "action": "Eskalasyon"
-    },
-    {
-      "id": "ail_020",
-      "time": "17 May 2024 12:54",
-      "event": "Otomatik yanıt",
-      "confidence": 47,
-      "action": "Eskalasyon"
-    }
-  ],
-  "handoffRules": [
-    {
-      "id": "hr_001",
-      "condition": "Güven skoru %60 altında",
-      "target": "Teknik Destek"
-    },
-    {
-      "id": "hr_002",
-      "condition": "Müşteri temsilci istedi",
-      "target": "Genel Destek"
-    },
-    {
-      "id": "hr_003",
-      "condition": "Olumsuz duygu algılandı",
-      "target": "VIP Müşteriler"
-    }
-  ],
+  "aiLogs": [],
+  "handoffRules": [],
   "workflows": [
     {
       "id": "wf_001",
@@ -4371,6 +4700,11 @@
         "value": "%72",
         "deltaLabel": "9% dünden",
         "deltaType": "up"
+      },
+      "totalTokensUsed": {
+        "value": "167812",
+        "deltaLabel": "347.6K limit kaldı",
+        "deltaType": "neutral"
       }
     },
     "recentActivity": [

@@ -1,6 +1,8 @@
-import { Plus, Bot } from "lucide-react";
+import { Bot } from "lucide-react";
+import { useSelector } from "react-redux";
 
 import useAiAgentStudio from "../hooks/useAiAgentStudio";
+import EmbedCodeSection from "../../../components/widget/EmbedCodeSection";
 import StudioTabs from "../components/StudioTabs";
 import GeneralSection from "../components/sections/GeneralSection";
 import InstructionsSection from "../components/sections/InstructionsSection";
@@ -9,70 +11,105 @@ import GuardrailsSection from "../components/sections/GuardrailsSection";
 import HandoffRulesSection from "../components/sections/HandoffRulesSection";
 import TestPlaygroundSection from "../components/sections/TestPlaygroundSection";
 import AiLogsSection from "../components/sections/AiLogsSection";
-import Select from "../../../shared/components/ui/Select";
 import { ROLES } from "../../../constants/navigation";
 import { canAiStudio, AI_STUDIO_ACTION } from "../../../constants/permissions";
+import { useToast } from "../../../shared/components/ui/Toast";
 
 /**
  * AiAgentStudioPage — configuration interface for the AI assistant.
- *
- * Header (agent selector + gated "Yeni Agent") → a card with a vertical
- * section nav and the active section on the right.
- *
- * Permissions: admins get full edit; Manager is view-only but keeps the Test
- * Playground; Support Agent has no access (excluded from navigation).
- * Interface only — no real AI. Empty by design.
+ * Wired with fully functioning Create Agent modal, Embed code snippet, and Section Save triggers.
  */
 export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
+  const { showToast } = useToast();
+  const currentUser = useSelector((state) => state.auth?.user);
+  const tenantId = currentUser?.id || "usr_001";
+
   const {
     activeTab,
     setActiveTab,
-    agents,
     selectedAgent,
-    selectedAgentId,
-    setSelectedAgentId,
     knowledgeSources,
     handoffRules,
     logs,
     queues,
+    resetKey,
+    handleGlobalReset,
+    updateDraftAgent,
+    handleSaveAgent,
   } = useAiAgentStudio();
 
   const canEdit = canAiStudio(role, AI_STUDIO_ACTION.EDIT);
-  const canCreate = canAiStudio(role, AI_STUDIO_ACTION.CREATE_AGENT);
   const canPlayground = canAiStudio(role, AI_STUDIO_ACTION.PLAYGROUND);
 
   const renderSection = () => {
     switch (activeTab) {
       case "general":
-        return <GeneralSection canEdit={canEdit} agent={selectedAgent} />;
+        return (
+          <GeneralSection
+            key={resetKey}
+            canEdit={canEdit}
+            agent={selectedAgent}
+            onReset={handleGlobalReset}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
+          />
+        );
       case "instructions":
-        return <InstructionsSection canEdit={canEdit} agent={selectedAgent} />;
+        return (
+          <InstructionsSection
+            key={resetKey}
+            canEdit={canEdit}
+            agent={selectedAgent}
+            onReset={handleGlobalReset}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
+          />
+        );
       case "knowledge":
         return (
-          <KnowledgeSourcesSection canEdit={canEdit} sources={knowledgeSources} />
+          <KnowledgeSourcesSection
+            key={resetKey}
+            canEdit={canEdit}
+            sources={knowledgeSources}
+            onReset={handleGlobalReset}
+            onSave={handleSaveAgent}
+          />
         );
       case "guardrails":
-        return <GuardrailsSection canEdit={canEdit} agent={selectedAgent} />;
+        return (
+          <GuardrailsSection
+            key={resetKey}
+            canEdit={canEdit}
+            agent={selectedAgent}
+            onReset={handleGlobalReset}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
+          />
+        );
       case "handoff":
         return (
           <HandoffRulesSection
+            key={resetKey}
             canEdit={canEdit}
             rules={handoffRules}
             agent={selectedAgent}
             queues={queues}
+            onReset={handleGlobalReset}
+            onChange={updateDraftAgent}
+            onSave={handleSaveAgent}
           />
         );
       case "playground":
-        return <TestPlaygroundSection enabled={canPlayground} agent={selectedAgent} />;
+        return <TestPlaygroundSection key={resetKey} enabled={canPlayground} agent={selectedAgent} />;
       case "logs":
-        return <AiLogsSection logs={logs} />;
+        return <AiLogsSection key={resetKey} logs={logs} />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="mx-auto max-w-[1600px]">
+    <div className="mx-auto max-w-[1600px] space-y-6">
       {/* Header */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -83,34 +120,6 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
             Yapay zeka asistanınızın davranışını yapılandırın.
           </p>
         </div>
-
-        <div className="flex items-center gap-3">
-          <div className="w-52">
-            <Select
-              value={selectedAgentId || ""}
-              onChange={(e) => setSelectedAgentId(e.target.value)}
-              aria-label="Agent seç"
-            >
-              <option value="" disabled>
-                {agents.length ? "Agent seçin" : "Agent yok"}
-              </option>
-              {agents.map((a) => (
-                <option key={a.id} value={a.id}>
-                  {a.name}
-                </option>
-              ))}
-            </Select>
-          </div>
-          {canCreate && (
-            <button
-              type="button"
-              className="inline-flex w-fit shrink-0 items-center gap-2 rounded-lg bg-primary px-3.5 py-2.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-primary-600"
-            >
-              <Plus className="h-4 w-4" strokeWidth={2} />
-              Yeni Agent
-            </button>
-          )}
-        </div>
       </div>
 
       {/* Studio card */}
@@ -118,6 +127,9 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
         <StudioTabs active={activeTab} onChange={setActiveTab} />
         <div className="min-w-0 flex-1">{renderSection()}</div>
       </div>
+
+      {/* Embed Code Widget Section */}
+      <EmbedCodeSection tenantId={tenantId} />
 
       {/* View-only hint for non-editors */}
       {!canEdit && (
@@ -127,6 +139,8 @@ export default function AiAgentStudioPage({ role = ROLES.PLATFORM_ADMIN }) {
           kullanabilirsiniz.
         </p>
       )}
+
+
     </div>
   );
 }

@@ -6,19 +6,14 @@ import ConversationThread from "../components/ConversationThread";
 import CustomerPanel from "../components/CustomerPanel";
 import EmptyState from "../../../shared/components/ui/EmptyState";
 import { ROLES } from "../../../constants/navigation";
+import {
+  useCreateMessageMutation,
+  useUpdateConversationMutation,
+} from "../../../services/api";
 
 /**
  * InboxPage — the most important page in the app.
- *
- * Fixed three-column layout (never changes):
- *   1. Conversation List   2. Conversation Thread   3. Customer Information
- *
- * The whole workspace is one tall card that fills the viewport; each column
- * scrolls independently. With no data (template), the list and customer panel
- * show empty states and the center prompts to select a conversation.
- *
- * `role` drives which thread actions and composer modes appear — passed from
- * the session in a real app; defaults to Platform Admin here.
+ * Wired with message sending and thread updating mutations.
  */
 export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
   const {
@@ -35,7 +30,13 @@ export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
     setFilter,
     search,
     setSearch,
-  } = useInbox();
+    onSendMessage,
+    onResolveTicket,
+  } = useInbox(role);
+
+  const handleSendMessage = (text) => {
+    onSendMessage?.(text);
+  };
 
   return (
     <div className="h-[calc(100vh-10rem)] min-h-[560px] overflow-hidden rounded-2xl bg-white shadow-card">
@@ -60,6 +61,8 @@ export default function InboxPage({ role = ROLES.PLATFORM_ADMIN }) {
               conversation={activeConversation}
               messages={messages}
               aiSuggestions={aiSuggestions}
+              onSend={handleSendMessage}
+              onResolveTicket={onResolveTicket}
             />
           ) : (
             <EmptyState

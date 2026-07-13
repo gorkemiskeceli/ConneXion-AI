@@ -77,12 +77,16 @@ export default function MessageComposer({
         }`}
       >
         <textarea
-          rows={2}
+          rows={1}
           value={value}
-          onChange={(e) => onChange?.(e.target.value)}
+          onChange={(e) => {
+            onChange?.(e.target.value);
+            e.target.style.height = 'auto';
+            e.target.style.height = e.target.scrollHeight + 'px';
+          }}
           onKeyDown={handleKeyDown}
           placeholder={isNote ? "Dahili not ekle..." : "Bir yanıt yaz..."}
-          className="w-full resize-none bg-transparent text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none"
+          className="w-full min-h-[44px] max-h-[120px] resize-none overflow-y-auto bg-transparent px-1 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none break-words"
         />
 
         <div className="mt-1 flex items-center justify-between">

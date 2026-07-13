@@ -44,24 +44,25 @@ const getInitialRegisteredUsers = () => {
   
   // Seed default users for testing convenience
   const demoUsers = [
-    { name: 'Ahmet Yılmaz', email: 'ahmet@sirketiniz.com', password: 'password123', role: 'platform_admin' },
-    { name: 'Platform Admini', email: 'admin@saasprecise.com', password: 'admin123', role: 'platform_admin' },
-    { name: 'İşletme Admini', email: 'isletme@saasprecise.com', password: 'isletme123', role: 'workspace_admin' },
-    { name: 'Müşteri Temsilcisi Yöneticisi', email: 'yonetici@saasprecise.com', password: 'yonetici123', role: 'manager' },
-    { name: 'Müşteri Temsilcisi', email: 'temsilci@saasprecise.com', password: 'temsilci123', role: 'support_agent' }
+    { id: 'usr_001', name: 'Ahmet Yılmaz', email: 'ahmet@sirketiniz.com', password: 'password123', role: 'admin', tenantId: 'tnt_admin' },
+    { id: 'usr_002', name: 'Platform Admini', email: 'admin@saasprecise.com', password: 'admin123', role: 'admin', tenantId: 'tnt_admin' },
+    { id: 'usr_003', name: 'İşletme Admini', email: 'isletme@saasprecise.com', password: 'isletme123', role: 'admin', tenantId: 'tnt_admin' },
+    { id: 'usr_004', name: 'Müşteri Temsilcisi Yöneticisi', email: 'yonetici@saasprecise.com', password: 'yonetici123', role: 'admin', tenantId: 'tnt_admin' },
+    { id: 'usr_005', name: 'Müşteri Temsilcisi', email: 'temsilci@saasprecise.com', password: 'temsilci123', role: 'admin', tenantId: 'tnt_admin' }
   ];
 
   let modified = false;
   demoUsers.forEach(demoUser => {
-    const exists = users.some(u => u.email.toLowerCase() === demoUser.email.toLowerCase());
-    if (!exists) {
+    const index = users.findIndex(u => u.email.toLowerCase() === demoUser.email.toLowerCase());
+    if (index === -1) {
       users.push(demoUser);
       modified = true;
     } else {
-      // Ensure existing demo users have the correct role mapped
-      const index = users.findIndex(u => u.email.toLowerCase() === demoUser.email.toLowerCase());
-      if (index !== -1 && !users[index].role) {
+      // Ensure existing demo users have the correct role and tenant mapping
+      if (users[index].role !== demoUser.role || !users[index].tenantId || !users[index].id) {
+        users[index].id = demoUser.id;
         users[index].role = demoUser.role;
+        users[index].tenantId = demoUser.tenantId;
         modified = true;
       }
     }
@@ -106,13 +107,17 @@ export const authSlice = createSlice({
       );
 
       if (found) {
-        state.user = { name: found.name, email: found.email, role: found.role || 'support_agent' };
+        state.user = { 
+          id: found.id || `usr_${Math.random().toString(36).substr(2, 9)}`,
+          name: found.name, 
+          email: found.email, 
+          role: found.role || 'user',
+          tenantId: found.tenantId || 'tnt_standard'
+        };
         state.loginModalOpen = false;
         state.authError = null;
         setSafeLocalItem('saasprecise_user', JSON.stringify(state.user));
-        if (found.role) {
-          setSafeLocalItem('saasprecise_active_role', found.role);
-        }
+        setSafeLocalItem('saasprecise_active_role', state.user.role);
       } else {
         state.authError = 'E-posta adresi veya şifre hatalı.';
       }
@@ -126,14 +131,34 @@ export const authSlice = createSlice({
       if (exists) {
         state.authError = 'Bu e-posta adresi zaten kayıtlı.';
       } else {
-        const newUser = { name, email, password, role: 'support_agent' };
+        const id = `usr_${Math.random().toString(36).substr(2, 9)}`;
+        const tenantId = `tnt_${Math.random().toString(36).substr(2, 9)}`;
+        const newUser = { id, name, email, password, role: 'workspace_admin', tenantId };
         state.registeredUsers.push(newUser);
-        state.user = { name, email, role: 'support_agent' };
+        state.user = { id, name, email, role: 'workspace_admin', tenantId };
         state.registerModalOpen = false;
         state.authError = null;
         setSafeLocalItem('saasprecise_registered_users', JSON.stringify(state.registeredUsers));
         setSafeLocalItem('saasprecise_user', JSON.stringify(state.user));
-        setSafeLocalItem('saasprecise_active_role', 'support_agent');
+        setSafeLocalItem('saasprecise_active_role', 'workspace_admin');
+      }
+    },
+    updateUserProfile: (state, action) => {
+      const { name, email, password } = action.payload;
+      if (state.user) {
+        if (name) state.user.name = name;
+        if (email) state.user.email = email;
+        setSafeLocalItem('saasprecise_user', JSON.stringify(state.user));
+        
+        const idx = state.registeredUsers.findIndex(
+          (u) => u.id === state.user.id || u.email.toLowerCase() === state.user.email.toLowerCase()
+        );
+        if (idx !== -1) {
+          if (name) state.registeredUsers[idx].name = name;
+          if (email) state.registeredUsers[idx].email = email;
+          if (password) state.registeredUsers[idx].password = password;
+          setSafeLocalItem('saasprecise_registered_users', JSON.stringify(state.registeredUsers));
+        }
       }
     },
     logoutUser: (state) => {
@@ -157,6 +182,7 @@ export const {
   registerUser,
   logoutUser,
   clearAuthError,
+  updateUserProfile,
 } = authSlice.actions;
 
 export default authSlice.reducer;

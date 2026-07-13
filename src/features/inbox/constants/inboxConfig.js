@@ -1,4 +1,4 @@
-import { Globe } from "lucide-react";
+// Config constants for Inbox.
 
 // Conversation status → Badge variant + label.
 export const CONVERSATION_STATUS = {
@@ -29,9 +29,12 @@ export const MESSAGE_TYPE = {
   VOICE: "voice",
 };
 
+import { Globe, HelpCircle } from "lucide-react";
+
 // Website chat is the only channel in this platform.
 export const CHANNEL = {
   web: { label: "Web Chat", icon: Globe },
+  ticket: { label: "Destek Talebi", icon: HelpCircle },
 };
 
 // Composer modes.

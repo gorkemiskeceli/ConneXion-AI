@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Plus, GitBranch, Trash2 } from "lucide-react";
 
 import StudioSection from "../StudioSection";
@@ -8,60 +8,61 @@ import Select from "../../../../shared/components/ui/Select";
 import Toggle from "../../../../shared/components/ui/Toggle";
 import EmptyState from "../../../../shared/components/ui/EmptyState";
 import { HANDOFF_CONDITIONS } from "../../constants/aiStudioConfig";
-import { useUpdateAiAgentMutation, useAddHandoffRuleMutation, useDeleteHandoffRuleMutation } from "../../../../services/api";
+import { useAddHandoffRuleMutation, useDeleteHandoffRuleMutation } from "../../../../services/api";
+import { useToast } from "../../../../shared/components/ui/Toast";
 
 /**
  * HandoffRulesSection — when and how to transfer to a human agent.
  * rules: { id, condition, target }
  */
-export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [] }) {
-  const [flags, setFlags] = useState({});
-  const [confidence, setConfidence] = useState("");
-  const [targetTeam, setTargetTeam] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false);
+export default function HandoffRulesSection({ canEdit, rules = [], agent, queues = [], onChange, onSave, onReset }) {
+  const { showToast } = useToast();
+  const [confirmData, setConfirmData] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Custom rule form state
   const [isAdding, setIsAdding] = useState(false);
   const [condition, setCondition] = useState("");
   const [target, setTarget] = useState("");
 
-  const [updateAiAgent, { isLoading, isSuccess, isError }] = useUpdateAiAgentMutation();
   const [addHandoffRule] = useAddHandoffRuleMutation();
   const [deleteHandoffRule] = useDeleteHandoffRuleMutation();
 
-  // Sync state with incoming agent prop
-  useEffect(() => {
-    if (agent) {
-      setFlags(agent.handoffFlags || {});
-      setConfidence(agent.handoffConfidence || "");
-      setTargetTeam(agent.handoffTargetTeam || "");
-    }
-  }, [agent]);
+  if (!agent) {
+    return (
+      <div className="flex h-full items-center justify-center p-6 text-slate-400">
+        Yükleniyor veya seçili asistan bulunamadı...
+      </div>
+    );
+  }
 
-  // Show success alert temporarily
-  useEffect(() => {
-    if (isSuccess) {
-      setShowSuccess(true);
-      const timer = setTimeout(() => setShowSuccess(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [isSuccess]);
+  const flags = agent.handoffFlags || {};
+  const confidence = agent.handoffConfidence || "";
+  const targetTeam = agent.handoffTargetTeam || "";
 
   const setFlag = (id, value) => {
-    setFlags((prev) => ({ ...prev, [id]: value }));
+    onChange({
+      handoffFlags: {
+        ...flags,
+        [id]: value,
+      },
+    });
   };
 
   const handleSave = async () => {
-    if (!agent) return;
     try {
-      await updateAiAgent({
-        id: agent.id,
+      setIsSaving(true);
+      await onSave({
         handoffFlags: flags,
         handoffConfidence: confidence !== "" ? Number(confidence) : "",
         handoffTargetTeam: targetTeam,
-      }).unwrap();
+      });
+      showToast("Aktarım ayarları başarıyla kaydedildi.", "success");
     } catch (err) {
+      showToast("Ayarlar kaydedilirken hata oluştu.", "error");
       console.error("Failed to save handoff rules config:", err);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -79,28 +80,27 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
       setCondition("");
       setTarget("");
       setIsAdding(false);
+      showToast("Özel aktarım kuralı başarıyla eklendi.", "success");
     } catch (err) {
+      showToast("Kural eklenirken hata oluştu.", "error");
       console.error("Failed to add custom rule:", err);
     }
   };
 
-  const handleDeleteRule = async (id) => {
-    if (window.confirm("Bu özel aktarım kuralını silmek istediğinize emin misiniz?")) {
-      try {
-        await deleteHandoffRule(id).unwrap();
-      } catch (err) {
-        console.error("Failed to delete custom rule:", err);
-      }
-    }
+  const handleDeleteRule = (id) => {
+    setConfirmData({
+      message: "Bu özel aktarım kuralını silmek istediğinize emin misiniz?",
+      onConfirm: async () => {
+        try {
+          await deleteHandoffRule(id).unwrap();
+          showToast("Aktarım kuralı silindi.", "success");
+        } catch (err) {
+          showToast("Kural silinirken hata oluştu.", "error");
+          console.error("Failed to delete custom rule:", err);
+        }
+      },
+    });
   };
-
-  if (!agent) {
-    return (
-      <div className="flex h-full items-center justify-center p-6 text-slate-400">
-        Yükleniyor veya seçili asistan bulunamadı...
-      </div>
-    );
-  }
 
   return (
     <StudioSection
@@ -108,39 +108,16 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
       description="Konuşmanın ne zaman bir temsilciye devredileceğini tanımlayın."
       canEdit={canEdit}
       onSave={handleSave}
+      onReset={onReset}
     >
       <div className="max-w-2xl space-y-5">
-        {/* Success Alert Banner */}
-        {showSuccess && (
-          <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3.5 text-sm text-emerald-800 transition-all duration-300 animate-in fade-in slide-in-from-top-2">
-            <div className="flex items-center gap-2">
-              <svg className="h-4 w-4 text-emerald-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="font-medium">Aktarım ayarları başarıyla kaydedildi!</span>
-            </div>
-          </div>
-        )}
-
-        {/* Error Alert Banner */}
-        {isError && (
-          <div className="rounded-xl bg-rose-50 border border-rose-200 p-3.5 text-sm text-rose-800 animate-in fade-in">
-            <div className="flex items-center gap-2">
-              <svg className="h-4 w-4 text-rose-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <span className="font-medium">Kaydedilirken bir hata oluştu. Lütfen tekrar deneyin.</span>
-            </div>
-          </div>
-        )}
-
         <div className="divide-y divide-slate-100 rounded-xl border border-slate-100 bg-white">
           {HANDOFF_CONDITIONS.map((opt) => (
             <div key={opt.id} className="p-4">
               <Toggle
                 checked={Boolean(flags[opt.id])}
                 onChange={(v) => setFlag(opt.id, v)}
-                disabled={!canEdit || isLoading}
+                disabled={!canEdit || isSaving}
                 label={opt.label}
                 description={opt.description}
               />
@@ -160,9 +137,9 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
               min={0}
               max={100}
               placeholder="Örn. 60"
-              disabled={!canEdit || isLoading}
+              disabled={!canEdit || isSaving}
               value={confidence}
-              onChange={(e) => setConfidence(e.target.value)}
+              onChange={(e) => onChange({ handoffConfidence: e.target.value })}
             />
           </FormField>
 
@@ -170,8 +147,8 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
             <Select
               id="target-team"
               value={targetTeam}
-              onChange={(e) => setTargetTeam(e.target.value)}
-              disabled={!canEdit || isLoading}
+              onChange={(e) => onChange({ handoffTargetTeam: e.target.value })}
+              disabled={!canEdit || isSaving}
             >
               <option value="" disabled>
                 Ekip seçin
@@ -244,7 +221,7 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
                 </button>
                 <button
                   type="submit"
-                  className="rounded-lg bg-primary px-3 py-1.5 font-medium text-white hover:bg-primary-600 transition-colors"
+                  className="rounded-lg bg-primary px-3 py-1.5 font-semibold text-white hover:bg-primary-600 transition-colors"
                 >
                   Ekle
                 </button>
@@ -255,38 +232,72 @@ export default function HandoffRulesSection({ canEdit, rules = [], agent, queues
           {rules.length === 0 ? (
             <EmptyState
               icon={GitBranch}
-              title="Özel kural yok"
-              description="Koşula bağlı aktarım kuralları burada listelenir."
+              title="Özel kural bulunamadı"
+              description="Belirli durumlar veya tetikleyiciler için özel insan temsilciye aktarım kuralları oluşturun."
             />
           ) : (
-            <ul className="space-y-2">
-              {rules.map((rule) => (
-                <li
-                  key={rule.id}
-                  className="flex items-center justify-between rounded-xl border border-slate-100 px-4 py-2 bg-white"
-                >
-                  <div className="min-w-0 flex-1 flex items-center">
-                    <span className="text-slate-700 text-sm font-medium">{rule.condition}</span>
-                    <span className="ml-2 font-mono text-xs text-slate-400">
-                      → {rule.target}
-                    </span>
-                  </div>
-                  {canEdit && (
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteRule(rule.id)}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors"
-                      aria-label="Kuralı Sil"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-hidden rounded-xl border border-slate-100 bg-white">
+              <table className="min-w-full divide-y divide-slate-100">
+                <thead className="bg-slate-50/50">
+                  <tr className="text-left text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    <th className="px-4 py-2">Koşul</th>
+                    <th className="px-4 py-2">Hedef Ekip</th>
+                    {canEdit && <th className="px-4 py-2 text-right">İşlemler</th>}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
+                  {rules.map((rule) => (
+                    <tr key={rule.id} className="hover:bg-slate-50/30">
+                      <td className="px-4 py-3 font-medium">{rule.condition}</td>
+                      <td className="px-4 py-3">{rule.target}</td>
+                      {canEdit && (
+                        <td className="px-4 py-3 text-right">
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteRule(rule.id)}
+                            className="text-slate-400 hover:text-red-600 transition-colors"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </div>
+
+      {/* Confirmation Dialog overlay */}
+      {confirmData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl animate-in scale-in duration-200">
+            <h3 className="text-sm font-bold text-slate-800 mb-2">Emin misiniz?</h3>
+            <p className="text-xs text-slate-500 mb-5">{confirmData.message}</p>
+            <div className="flex justify-end gap-3 text-xs">
+              <button
+                type="button"
+                onClick={() => setConfirmData(null)}
+                className="rounded-lg border border-slate-200 px-4 py-2 font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+              >
+                Vazgeç
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  await confirmData.onConfirm();
+                  setConfirmData(null);
+                }}
+                className="rounded-lg bg-red-600 px-4 py-2 font-semibold text-white hover:bg-red-700 transition-colors"
+              >
+                Evet, Sil
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </StudioSection>
   );
 }

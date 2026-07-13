@@ -7,7 +7,7 @@ import { NOTIFICATION_OPTIONS } from "../../constants/settingsConfig";
 /**
  * NotificationsSection — per-event notification toggles.
  */
-export default function NotificationsSection({ canEdit }) {
+export default function NotificationsSection({ canEdit, onSave }) {
   const [flags, setFlags] = useState({});
   const setFlag = (id, value) => setFlags((prev) => ({ ...prev, [id]: value }));
 
@@ -16,7 +16,7 @@ export default function NotificationsSection({ canEdit }) {
       title="Bildirimler"
       description="Hangi olaylarda bildirim almak istediğinizi seçin."
       canEdit={canEdit}
-      onSave={() => {}}
+      onSave={onSave}
     >
       <div className="max-w-2xl divide-y divide-slate-100 rounded-xl border border-slate-100">
         {NOTIFICATION_OPTIONS.map((opt) => (

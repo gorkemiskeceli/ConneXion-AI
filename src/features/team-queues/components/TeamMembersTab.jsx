@@ -16,6 +16,9 @@ export default function TeamMembersTab({
   members = [],
   search = "",
   onSearch,
+  onInvite,
+  onEdit,
+  onDelete,
 }) {
   const canManageTeam = canTeamQueues(role, TEAM_ACTION.MANAGE_TEAM);
   const colSpan = MEMBER_COLUMNS.length + 1;
@@ -37,6 +40,7 @@ export default function TeamMembersTab({
         {canManageTeam && (
           <button
             type="button"
+            onClick={onInvite}
             className="inline-flex w-fit items-center gap-2 rounded-lg bg-primary px-3.5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-600"
           >
             <UserPlus className="h-4 w-4" />
@@ -91,10 +95,11 @@ export default function TeamMembersTab({
                   <td className="px-5 py-3">{m.activeCount ?? 0}</td>
                   <td className="px-5 py-3">
                     <div className="flex items-center justify-end gap-1">
-                      {canManageTeam ? (
+                      {canManageTeam && (m.role !== "platform_admin" || role === "platform_admin") ? (
                         <>
                           <button
                             type="button"
+                            onClick={() => onEdit?.(m)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600"
                             aria-label="Düzenle"
                           >
@@ -102,6 +107,7 @@ export default function TeamMembersTab({
                           </button>
                           <button
                             type="button"
+                            onClick={() => onDelete?.(m.id)}
                             className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600"
                             aria-label="Kaldır"
                           >

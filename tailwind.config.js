@@ -17,13 +17,13 @@ export default {
         },
         // Accent — blue / indigo (used for active nav, links, primary actions)
         primary: {
-          DEFAULT: "#5B63F0",
-          50: "#EEF0FE",
-          100: "#E0E3FD",
-          200: "#C7CBFB",
-          500: "#5B63F0",
-          600: "#4B53E8",
-          700: "#3E45CC",
+          DEFAULT: "#2F6FEE",
+          50: "#F0F5FF",
+          100: "#E1EBFF",
+          200: "#BCD2FF",
+          500: "#2F6FEE",
+          600: "#1E50C5",
+          700: "#13358F",
         },
         // Neutral working surface
         surface: "#F5F7FB",

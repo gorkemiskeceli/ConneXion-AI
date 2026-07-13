@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleFloatingChat, setFloatingChatOpen } from '../store/uiSlice.js';
 import { addFloatingMessage, setFloatingLoading } from '../store/chatSlice.js';
+import { callHuggingFaceAI } from '../../services/aiService';
 import { MessageSquare, X, Send, Sparkles, Loader2, Bot } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -38,29 +39,19 @@ export default function FloatingChat() {
     dispatch(setFloatingLoading(true));
 
     try {
-      // API call to Express backend which proxies Gemini API
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message: userText,
-          history: messages.slice(-5), // send last few messages for context
-          context: 'floating-support-chat'
-        }),
-      });
-
-      const data = await response.json();
+      const systemPrompt = "Sen ConneXion-AI canlı destek asistanısın. Müşterilerin platform ile ilgili canlı yardım sorularına kısa ve net yanıtlar ver.";
+      const data = await callHuggingFaceAI(systemPrompt, userText);
       
-      if (data.success) {
-        dispatch(addFloatingMessage({
-          id: Math.random().toString(),
-          sender: 'assistant',
-          text: data.text,
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        }));
-      } else {
-        throw new Error(data.error || 'Server error');
+      if (data.error) {
+        throw new Error(data.error);
       }
+
+      dispatch(addFloatingMessage({
+        id: Math.random().toString(),
+        sender: 'assistant',
+        text: data.content,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      }));
     } catch (err) {
       console.error('Chat failed:', err);
       dispatch(addFloatingMessage({
