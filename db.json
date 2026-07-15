@@ -1055,6 +1055,18 @@
         "Web Widget"
       ],
       "tenantId": "usr_001"
+    },
+    {
+      "id": "cus_p2rpyvajb",
+      "name": "Web Ziyaretçisi #7334",
+      "email": "cus_p2rpyvajb@visitor.com",
+      "phone": "-",
+      "company": "Web Ziyaretçisi",
+      "status": "active",
+      "tags": [
+        "Web Widget"
+      ],
+      "tenantId": "usr_001"
     }
   ],
   "conversations": [
@@ -2071,6 +2083,23 @@
       "aiSuggestions": [],
       "tenantId": "tnt_admin",
       "lastActivity": "10:41"
+    },
+    {
+      "id": "conv_f1nt11xss",
+      "customerId": "cus_p2rpyvajb",
+      "name": "Web Ziyaretçisi #7334",
+      "email": "cus_p2rpyvajb@visitor.com",
+      "preview": "Merhaba! Randevu oluşturmak için aşağıdaki adımları izleyebilirsiniz:\n\n1️⃣ **Tarih Seçin** – Görünen takvimden uygun bir tarih belirleyin.  \n2️⃣ **Saat Seçin** – 08:00 – 17:00 arası saat dilimlerinden bir zamanı seçin.  \n3️⃣ **Hizmet Seçin** – Saç Kesimi & Şekillendirme, Saç Boyama, Cilt Bakımı, Makyaj, El & Tırnak Bakımı veya Masaj seçeneklerinden ihtiyacınıza uygun olanı seçebilirsiniz.\n\nEğer bir tarih, saat veya hizmet tercihiniz var ise lütfen paylaşın, size yardımcı olmak için buradayım! 📅✨\n\n*Adres:* Huzur Caddesi No:123, İstanbul, Türkiye  \n*Telefon:* +90 212 555 0123  \n*Email:* hello@roselia.com",
+      "time": "12:00",
+      "unread": 1,
+      "status": "open",
+      "priority": "medium",
+      "channel": "web",
+      "assignedAgentId": "usr_004",
+      "aiSummary": "Yapay zeka asistanı görüşmesi başladı.",
+      "aiSuggestions": [],
+      "tenantId": "usr_001",
+      "lastActivity": "12:01"
     }
   ],
   "messages": [
@@ -4070,6 +4099,54 @@
       "timestamp": "10:41",
       "tenantId": "tnt_admin",
       "id": "kfqxh8W"
+    },
+    {
+      "conversationId": "conv_f1nt11xss",
+      "sender": "customer",
+      "text": "merhaba",
+      "timestamp": "12:00",
+      "tenantId": "usr_001",
+      "id": "jVpFqVi"
+    },
+    {
+      "conversationId": "conv_f1nt11xss",
+      "sender": "agent",
+      "text": "Merhaba! Roselia'ya hoş geldiniz. Size nasıl yardımcı olabilirim?",
+      "timestamp": "12:00",
+      "tenantId": "usr_001",
+      "id": "YV0Mdbu"
+    },
+    {
+      "conversationId": "conv_f1nt11xss",
+      "sender": "customer",
+      "text": "bilgi ver",
+      "timestamp": "12:00",
+      "tenantId": "usr_001",
+      "id": "K-V90OZ"
+    },
+    {
+      "conversationId": "conv_f1nt11xss",
+      "sender": "agent",
+      "text": "Merhaba! Roselia salonumuzla ilgili temel bilgileri burada bulabilirsiniz:\n\n| **Kategoriler** | **Detaylar** |\n|-----------------|--------------|\n| **Kampanya** | Hayalindeki görüntüye ulaşma hizmetimiz |\n| **Hizmetler** | • Saç Kesimi & Şekillendirme<br>• Saç Boyama<br>• Cilt Bakımı<br>• Makyaj (doğal, gelinlik, özel davet)<br>• El & Tırnak Bakımı (manikür, pedikür, tasarımlar)<br>• Masaj (teknolojik terapötik seviyesi) |\n| **Adres** | Huzur Caddesi No:123, İstanbul, Türkiye |\n| **Telefon** | +90 212 555 0123 |\n| **E‑posta** | hello@roselia.com |\n| **Çalışma Saatleri** | Pazartesi–Çarşamba: 08:00 – 18:00<br>Perşembe–Cumartesi: 08:00 – 18:00<br>Pazar: Kapalı |\n| **Randevu** | Randevu almak için “Randevu Al” sayfasına girip saat, tarih ve hizmet seçerek online planlama yapabilirsiniz. |\n\nBu bilgilerle ilgili herhangi bir sorunuz varsa ya da randevu ayarlamak isterseniz, size yardımcı olmaktan memnuniyet duyarız! İstediğiniz başka bir detay var mı?",
+      "timestamp": "12:00",
+      "tenantId": "usr_001",
+      "id": "9pV3i-Y"
+    },
+    {
+      "conversationId": "conv_f1nt11xss",
+      "sender": "customer",
+      "text": "randevu al",
+      "timestamp": "12:01",
+      "tenantId": "usr_001",
+      "id": "9UOX9TK"
+    },
+    {
+      "conversationId": "conv_f1nt11xss",
+      "sender": "agent",
+      "text": "Merhaba! Randevu oluşturmak için aşağıdaki adımları izleyebilirsiniz:\n\n1️⃣ **Tarih Seçin** – Görünen takvimden uygun bir tarih belirleyin.  \n2️⃣ **Saat Seçin** – 08:00 – 17:00 arası saat dilimlerinden bir zamanı seçin.  \n3️⃣ **Hizmet Seçin** – Saç Kesimi & Şekillendirme, Saç Boyama, Cilt Bakımı, Makyaj, El & Tırnak Bakımı veya Masaj seçeneklerinden ihtiyacınıza uygun olanı seçebilirsiniz.\n\nEğer bir tarih, saat veya hizmet tercihiniz var ise lütfen paylaşın, size yardımcı olmak için buradayım! 📅✨\n\n*Adres:* Huzur Caddesi No:123, İstanbul, Türkiye  \n*Telefon:* +90 212 555 0123  \n*Email:* hello@roselia.com",
+      "timestamp": "12:01",
+      "tenantId": "usr_001",
+      "id": "mSu3Vgi"
     }
   ],
   "teamPerformance": [
@@ -5074,7 +5151,7 @@
         "deltaType": "up"
       },
       "totalTokensUsed": {
-        "value": "167812",
+        "value": "172365",
         "deltaLabel": "347.6K limit kaldı",
         "deltaType": "neutral"
       }
